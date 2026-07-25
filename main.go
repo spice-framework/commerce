@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -13,6 +14,8 @@ import (
 
 	"github.com/StevenBuglione/spice/config"
 	commerce "github.com/StevenBuglione/spice/internal/spicegen/commerce"
+	"github.com/StevenBuglione/spice/management"
+	"github.com/StevenBuglione/spice/web"
 )
 
 const shutdownTimeout = 10 * time.Second
@@ -36,12 +39,19 @@ func run(arguments []string, stdout io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("configure environment source: %w", err)
 	}
+	metrics := management.NewHTTPMetrics()
 	application, err := commerce.NewApplicationWithOptions(
 		context.Background(),
-		commerce.ApplicationOptions{Sources: []config.Source{environment}},
+		commerce.ApplicationOptions{
+			Sources:       []config.Source{environment},
+			HTTPObservers: []web.HTTPObserver{metrics},
+		},
 	)
 	if err != nil {
 		return fmt.Errorf("construct application: %w", err)
+	}
+	if err := configureManagement(application, metrics); err != nil {
+		return err
 	}
 	if *check {
 		if err := application.Stop(context.Background()); err != nil {
@@ -65,4 +75,44 @@ func run(arguments []string, stdout io.Writer) error {
 	return application.Run(runContext, func() (context.Context, context.CancelFunc) {
 		return context.WithTimeout(context.Background(), shutdownTimeout)
 	})
+}
+
+func configureManagement(
+	application *commerce.Application,
+	metrics *management.HTTPMetrics,
+) error {
+	checks, err := management.LifecycleChecks(
+		"commerce",
+		"github.com/StevenBuglione/spice/examples/commerce/platform",
+		application.State,
+	)
+	if err != nil {
+		return fmt.Errorf("configure lifecycle checks: %w", err)
+	}
+	manager, err := management.New(checks...)
+	if err != nil {
+		return fmt.Errorf("configure management checks: %w", err)
+	}
+	handler, err := management.NewHandler(management.HandlerOptions{
+		Manager: manager,
+		Metrics: metrics,
+		Info: map[string]string{
+			"application": "commerce",
+			"framework":   "Spice",
+		},
+	})
+	if err != nil {
+		return fmt.Errorf("configure management handler: %w", err)
+	}
+	mux, ok := application.Handler().(*http.ServeMux)
+	if !ok {
+		return fmt.Errorf(
+			"configure management handler: generated handler is %T, want *http.ServeMux",
+			application.Handler(),
+		)
+	}
+	if err := web.Register(mux, handler.Pattern(), handler); err != nil {
+		return fmt.Errorf("register management handler: %w", err)
+	}
+	return nil
 }

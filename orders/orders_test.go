@@ -3,10 +3,12 @@ package orders
 import (
 	"context"
 	"errors"
+	"net/http"
 	"testing"
 
 	"github.com/StevenBuglione/spice/examples/commerce/inventory"
 	"github.com/StevenBuglione/spice/examples/commerce/payments"
+	"github.com/StevenBuglione/spice/web"
 )
 
 func TestServicePlacesOrderAcrossModules(t *testing.T) {
@@ -62,6 +64,59 @@ func TestServiceRejectsCanceledOrderWithoutSideEffects(t *testing.T) {
 	}
 	if got := len(payment.Approved()); got != 0 {
 		t.Fatalf("len(Approved()) = %d, want 0", got)
+	}
+}
+
+func TestControllerReturnsSafePaymentProblem(t *testing.T) {
+	t.Parallel()
+	service, _, _ := newTestService(t, 2, 1000)
+	controller := NewController(service)
+
+	_, err := controller.Place(
+		context.Background(),
+		PlaceOrderRequest{Body: PlaceOrderBody{Quantity: 1}},
+	)
+	var carrier web.ProblemCarrier
+	if !errors.As(err, &carrier) {
+		t.Fatalf("Place() error = %v, want ProblemCarrier", err)
+	}
+	problem := carrier.Problem()
+	if problem.Status != http.StatusConflict ||
+		problem.Type != "https://spice.dev/problems/payment-declined" ||
+		problem.Detail != "" {
+		t.Fatalf("Place() problem = %#v", problem)
+	}
+}
+
+func TestPlaceOrderRequestValidation(t *testing.T) {
+	t.Parallel()
+	err := (PlaceOrderRequest{}).Validate(context.Background())
+	var carrier web.ProblemCarrier
+	if !errors.As(err, &carrier) || carrier.Problem().Status != http.StatusBadRequest {
+		t.Fatalf("Validate() error = %v, want safe bad-request problem", err)
+	}
+}
+
+func TestControllerGetsCompletedOrder(t *testing.T) {
+	t.Parallel()
+	service, _, _ := newTestService(t, 2, 5000)
+	controller := NewController(service)
+	placed, err := controller.Place(
+		context.Background(),
+		PlaceOrderRequest{Body: PlaceOrderBody{Quantity: 1}},
+	)
+	if err != nil {
+		t.Fatalf("Place() error = %v", err)
+	}
+	got, err := controller.Get(context.Background(), GetOrderRequest{ID: placed.ID})
+	if err != nil {
+		t.Fatalf("Get() error = %v", err)
+	}
+	if got != placed {
+		t.Fatalf("Get() = %#v, want %#v", got, placed)
+	}
+	if _, err := controller.Get(context.Background(), GetOrderRequest{ID: "missing"}); err == nil {
+		t.Fatal("Get(missing) error = nil")
 	}
 }
 

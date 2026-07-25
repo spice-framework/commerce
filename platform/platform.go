@@ -25,21 +25,11 @@ type Settings struct {
 	IdleTimeout       time.Duration `spice:"idle-timeout,default=60s"`
 }
 
-// Router is the application-owned HTTP route table.
-type Router struct {
-	mux *http.ServeMux
-}
-
-// NewRouter supplies an isolated commerce route table.
+// Mux supplies the route table populated by generated controller adapters.
 //
 // @Bean
-func NewRouter() *Router {
-	return &Router{mux: http.NewServeMux()}
-}
-
-// ServeHTTP dispatches a request through the commerce route table.
-func (router *Router) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	router.mux.ServeHTTP(writer, request)
+func Mux() *http.ServeMux {
+	return http.NewServeMux()
 }
 
 // Server owns the commerce HTTP listener and graceful-drain lifecycle.
@@ -54,7 +44,7 @@ type Server struct {
 // NewServer constructs a lifecycle-managed server with bounded timeouts.
 //
 // @Bean
-func NewServer(settings Settings, handler *Router) (*Server, error) {
+func NewServer(settings Settings, handler *http.ServeMux) (*Server, error) {
 	if strings.TrimSpace(settings.Address) == "" {
 		return nil, errors.New("construct commerce server: address is empty")
 	}

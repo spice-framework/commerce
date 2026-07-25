@@ -25,3 +25,16 @@ The server binds `127.0.0.1:8081` by default. Set
 `SPICE_COMMERCE_ADDRESS=127.0.0.1:0` for an ephemeral test listener. The command
 explicitly opts into the environment source; reusable generated constructors
 read no environment or files on their own.
+
+The generated public API is:
+
+- `POST /orders` with a strict `{"quantity": 2}` JSON body;
+- `GET /orders/{id}`;
+- deterministic RFC 9457 errors for invalid, unavailable, declined, and missing
+  orders;
+- `/actuator/health`, `/actuator/health/liveness`,
+  `/actuator/health/readiness`, `/actuator/info`, and `/actuator/metrics`.
+
+The generated OpenAPI 3.1 contract is
+`internal/spicegen/commerce/openapi.json`. Route metrics use compiler-owned
+method, pattern, symbol, and module labels rather than raw request paths.

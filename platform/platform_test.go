@@ -3,13 +3,14 @@ package platform
 import (
 	"context"
 	"errors"
+	"net/http"
 	"testing"
 	"time"
 )
 
 func TestServerStartsAndDrains(t *testing.T) {
 	t.Parallel()
-	server, err := NewServer(testSettings(), NewRouter())
+	server, err := NewServer(testSettings(), http.NewServeMux())
 	if err != nil {
 		t.Fatalf("NewServer() error = %v", err)
 	}
@@ -32,10 +33,10 @@ func TestServerRejectsUnsafeConfiguration(t *testing.T) {
 	tests := []struct {
 		name     string
 		settings Settings
-		handler  *Router
+		handler  *http.ServeMux
 	}{
-		{name: "empty address", settings: Settings{}, handler: NewRouter()},
-		{name: "missing timeout", settings: Settings{Address: "127.0.0.1:0"}, handler: NewRouter()},
+		{name: "empty address", settings: Settings{}, handler: http.NewServeMux()},
+		{name: "missing timeout", settings: Settings{Address: "127.0.0.1:0"}, handler: http.NewServeMux()},
 		{name: "nil handler", settings: testSettings()},
 	}
 	for _, test := range tests {
@@ -47,7 +48,7 @@ func TestServerRejectsUnsafeConfiguration(t *testing.T) {
 
 func TestServerHonorsCanceledStart(t *testing.T) {
 	t.Parallel()
-	server, err := NewServer(testSettings(), NewRouter())
+	server, err := NewServer(testSettings(), http.NewServeMux())
 	if err != nil {
 		t.Fatalf("NewServer() error = %v", err)
 	}

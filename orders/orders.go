@@ -133,3 +133,15 @@ func (service *Service) Orders() []Order {
 	defer service.mu.RUnlock()
 	return append([]Order(nil), service.orders...)
 }
+
+// Order returns one completed order by its stable ID.
+func (service *Service) Order(id string) (Order, bool) {
+	service.mu.RLock()
+	defer service.mu.RUnlock()
+	for _, order := range service.orders {
+		if order.ID == id {
+			return order, true
+		}
+	}
+	return Order{}, false
+}
