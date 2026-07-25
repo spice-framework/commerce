@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -14,20 +15,26 @@ import (
 
 	"github.com/StevenBuglione/spice/config"
 	commerce "github.com/StevenBuglione/spice/internal/spicegen/commerce"
+	"github.com/StevenBuglione/spice/lifecycle"
 	"github.com/StevenBuglione/spice/management"
+	"github.com/StevenBuglione/spice/observability"
 	"github.com/StevenBuglione/spice/web"
 )
 
 const shutdownTimeout = 10 * time.Second
 
 func main() {
-	if err := run(os.Args[1:], os.Stdout); err != nil {
-		log.Printf("Spice commerce example failed: %v", err)
+	logger := slog.New(slog.NewJSONHandler(os.Stderr, nil))
+	if err := run(os.Args[1:], os.Stdout, logger); err != nil {
+		logger.Error("Spice commerce example failed", slog.Any("error", err))
 		os.Exit(1) // Entrypoint exception: return a non-zero status when the server cannot run.
 	}
 }
 
-func run(arguments []string, stdout io.Writer) error {
+func run(arguments []string, stdout io.Writer, logger *slog.Logger) error {
+	if logger == nil {
+		return errors.New("run commerce: logger is nil")
+	}
 	flags := flag.NewFlagSet("commerce", flag.ContinueOnError)
 	flags.SetOutput(stdout)
 	check := flags.Bool("check", false, "construct the generated application and exit")
@@ -39,12 +46,21 @@ func run(arguments []string, stdout io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("configure environment source: %w", err)
 	}
+	httpLogs, err := observability.NewSlogHTTPObserver(logger)
+	if err != nil {
+		return fmt.Errorf("configure HTTP logging: %w", err)
+	}
+	lifecycleLogs, err := observability.NewSlogLifecycleObserver(logger)
+	if err != nil {
+		return fmt.Errorf("configure lifecycle logging: %w", err)
+	}
 	metrics := management.NewHTTPMetrics()
 	application, err := commerce.NewApplicationWithOptions(
 		context.Background(),
 		commerce.ApplicationOptions{
 			Sources:       []config.Source{environment},
-			HTTPObservers: []web.HTTPObserver{metrics},
+			HTTPObservers: []web.HTTPObserver{metrics, httpLogs},
+			Observers:     []lifecycle.Observer{lifecycleLogs},
 		},
 	)
 	if err != nil {

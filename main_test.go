@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -20,7 +21,7 @@ import (
 
 func TestRunCheckConstructsCommerceApplication(t *testing.T) {
 	var stdout bytes.Buffer
-	if err := run([]string{"-check"}, &stdout); err != nil {
+	if err := run([]string{"-check"}, &stdout, discardLogger()); err != nil {
 		t.Fatalf("run() error = %v", err)
 	}
 	if got := strings.TrimSpace(stdout.String()); got !=
@@ -32,7 +33,7 @@ func TestRunCheckConstructsCommerceApplication(t *testing.T) {
 func TestRunReportsInvalidEnvironmentConfiguration(t *testing.T) {
 	t.Setenv("SPICE_COMMERCE_SERVER_READ_HEADER_TIMEOUT", "not-a-duration")
 	var stdout bytes.Buffer
-	err := run([]string{"-check"}, &stdout)
+	err := run([]string{"-check"}, &stdout, discardLogger())
 	if err == nil || !strings.Contains(err.Error(), "commerce.server.read-header-timeout") {
 		t.Fatalf("run() error = %v, want property-specific configuration failure", err)
 	}
@@ -179,7 +180,11 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 func TestRunRejectsUnknownFlag(t *testing.T) {
 	t.Parallel()
 	var stdout bytes.Buffer
-	if err := run([]string{"-unknown"}, &stdout); err == nil {
+	if err := run([]string{"-unknown"}, &stdout, discardLogger()); err == nil {
 		t.Fatal("run() error = nil")
 	}
+}
+
+func discardLogger() *slog.Logger {
+	return slog.New(slog.DiscardHandler)
 }
