@@ -28,8 +28,8 @@ From the repository root:
 
 ```text
 go run ./cmd/spice generate --check --target Commerce ./examples/commerce/...
-go run ./examples/commerce -check
-go run ./examples/commerce
+go run ./cmd/spice run --target Commerce ./examples/commerce/... -- -check
+go run ./cmd/spice run --target Commerce ./examples/commerce/...
 ```
 
 The server binds `127.0.0.1:8081` by default. Set
