@@ -2,10 +2,11 @@ package main
 
 import (
 	"os"
-
-	commerce "github.com/StevenBuglione/spice/internal/spicegen/commerce"
 )
 
+// @Application
+// @management.Enable(expose=["health", "liveness", "readiness", "info", "metrics", "configprops", "modules"])
+// @observability.Logging
 func main() {
-	os.Exit(commerce.Main(os.Args[1:]))
+	os.Exit(spiceMain(os.Args[1:]))
 }

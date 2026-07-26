@@ -8,7 +8,7 @@ uses four explicit application modules:
 - `orders` declares and uses only the inventory and payment default APIs;
 - `platform` owns the safely configured HTTP server lifecycle.
 
-`bootstrap.Commerce` is a compile-time-only application marker. Its explicit
+The ordinary `main.go` is the compile-time application marker. Its explicit
 `@management.Enable` allowlist exposes health, liveness, readiness, info, and
 metrics plus redacted configuration and generated module reports;
 `@observability.Logging` installs structured lifecycle and HTTP observers. The
@@ -21,14 +21,13 @@ caching. Its first successful lookup publishes a typed `OrderViewed` event to
 the provider-owned `ViewAudit` listener; a cache hit bypasses the controller
 and therefore does not publish again. Spice generates ordinary direct
 construction, command, lifecycle, scheduling, asynchronous, cache, and event
-code in
-`internal/spicegen/commerce`; no runtime scan, reflection, or service locator
-is used. Marker bodies are never executed.
+code beside `main.go`; no runtime scan, reflection, service locator, dummy
+module import, or marker execution is used.
 
 From the repository root:
 
 ```text
-go run ./cmd/spice generate --check --target Commerce ./examples/commerce/bootstrap ./examples/commerce/inventory ./examples/commerce/orders ./examples/commerce/payments ./examples/commerce/platform
+go run ./cmd/spice generate --check --target Commerce ./examples/commerce/...
 go run ./examples/commerce -check
 go run ./examples/commerce
 ```
@@ -58,11 +57,11 @@ The generated public API is:
   unassigned-package report.
 
 The generated OpenAPI 3.1 contract is
-`internal/spicegen/commerce/openapi.json`. Route metrics use compiler-owned
+`examples/commerce/openapi.json`. Route metrics use compiler-owned
 method, pattern, symbol, and module labels rather than raw request paths.
 
 The handwritten `main.go` only calls
-`os.Exit(commerce.Main(os.Args[1:]))`. Generated `Main` returns the exit code
+`os.Exit(spiceMain(os.Args[1:]))`. Generated `spiceMain` returns the exit code
 and owns signals; it never exits the process itself. Tests and embedded
 processes can instead use `RunCommand`, `NewApplication`,
 `NewApplicationWithOptions`, `Start`, `Stop`, or `Run` with caller-owned
