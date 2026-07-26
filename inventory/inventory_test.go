@@ -58,3 +58,31 @@ func TestServiceHonorsCancellation(t *testing.T) {
 		t.Fatalf("Available() = %d, want unchanged stock 1", got)
 	}
 }
+
+func TestServiceAuditsInventoryInvariants(t *testing.T) {
+	t.Parallel()
+	service, err := NewService(Settings{SKU: "widget", InitialStock: 1})
+	if err != nil {
+		t.Fatalf("NewService() error = %v", err)
+	}
+	if err := service.Audit(context.Background()); err != nil {
+		t.Fatalf("Audit() error = %v", err)
+	}
+
+	service.stock["widget"] = -1
+	if err := service.Audit(context.Background()); !errors.Is(
+		err,
+		ErrInvalidReservation,
+	) {
+		t.Fatalf(
+			"Audit(invalid) error = %v, want ErrInvalidReservation",
+			err,
+		)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if err := service.Audit(ctx); !errors.Is(err, context.Canceled) {
+		t.Fatalf("Audit(canceled) error = %v, want context.Canceled", err)
+	}
+}

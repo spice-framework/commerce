@@ -97,6 +97,27 @@ func (service *Service) Release(sku string, quantity int) error {
 	return nil
 }
 
+// Audit verifies the module's stock invariants without mutating inventory.
+//
+// @schedule.FixedDelay(delay="5m", initialDelay="30s")
+func (service *Service) Audit(ctx context.Context) error {
+	if err := ctx.Err(); err != nil {
+		return fmt.Errorf("audit inventory: %w", err)
+	}
+	service.mu.RLock()
+	defer service.mu.RUnlock()
+	for sku, available := range service.stock {
+		if strings.TrimSpace(sku) == "" || available < 0 {
+			return fmt.Errorf(
+				"%w: invalid stock state for %q",
+				ErrInvalidReservation,
+				sku,
+			)
+		}
+	}
+	return nil
+}
+
 // Available returns the current stock for sku.
 func (service *Service) Available(sku string) int {
 	service.mu.RLock()

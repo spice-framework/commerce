@@ -11,9 +11,11 @@ uses four explicit application modules:
 `bootstrap.Commerce` is a compile-time-only application marker. Its explicit
 `@management.Enable` allowlist exposes health, liveness, readiness, info, and
 metrics; `@observability.Logging` installs structured lifecycle and HTTP
-observers. Spice generates ordinary direct construction, command, and lifecycle code in
-`internal/spicegen/commerce`; no runtime scan, reflection, or service locator is
-used. The marker body is never executed.
+observers. The inventory module's `@schedule.FixedDelay` audit demonstrates
+direct generated, lifecycle-owned scheduled work. Spice generates ordinary
+direct construction, command, lifecycle, and scheduling code in
+`internal/spicegen/commerce`; no runtime scan, reflection, or service locator
+is used. The marker body is never executed.
 
 From the repository root:
 
