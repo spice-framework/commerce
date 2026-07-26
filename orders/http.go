@@ -82,6 +82,7 @@ func (controller *Controller) Place(
 // Get returns one completed order.
 //
 // @Get("/orders/{id}")
+// @cache.Cacheable(name="commerce.orders.by-id")
 func (controller *Controller) Get(
 	_ context.Context,
 	request GetOrderRequest,

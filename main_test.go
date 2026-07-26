@@ -8,12 +8,14 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
 	"testing"
 	"time"
 
+	spicecache "github.com/StevenBuglione/spice/cache"
 	"github.com/StevenBuglione/spice/config"
 	"github.com/StevenBuglione/spice/examples/commerce/orders"
 	commerce "github.com/StevenBuglione/spice/internal/spicegen/commerce"
@@ -155,9 +157,17 @@ func TestGeneratedCommerceCommandCancellationUsesFreshShutdownContext(t *testing
 
 func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 	t.Parallel()
+	var cacheObservations []spicecache.Observation
 	application, err := commerce.NewApplicationWithOptions(
 		context.Background(),
-		commerce.ApplicationOptions{Logger: discardLogger()},
+		commerce.ApplicationOptions{
+			Logger: discardLogger(),
+			CacheObservers: []spicecache.Observer{
+				func(_ context.Context, observation spicecache.Observation) {
+					cacheObservations = append(cacheObservations, observation)
+				},
+			},
+		},
 	)
 	if err != nil {
 		t.Fatalf("NewApplicationWithOptions() error = %v", err)
@@ -177,15 +187,43 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 		t.Fatalf("POST /orders response = %#v", order)
 	}
 	assertGETStatus(t, server, "/orders/"+order.ID, http.StatusOK)
+	assertGETStatus(t, server, "/orders/"+order.ID, http.StatusOK)
 	assertProblem(t, server, `{"quantity":0}`, http.StatusBadRequest, "quantity must be positive")
 	assertGETStatus(t, server, "/orders/missing", http.StatusNotFound)
 
 	var snapshot management.HTTPMetricsSnapshot
 	decodeGET(t, server, "/actuator/metrics", &snapshot)
+	requestsByMethod := make(map[string]uint64, len(snapshot.Routes))
+	for _, route := range snapshot.Routes {
+		requestsByMethod[route.Route.Method] = route.Requests
+	}
 	if len(snapshot.Routes) != 2 ||
-		snapshot.Routes[0].Requests != 2 ||
-		snapshot.Routes[1].Requests != 2 {
+		requestsByMethod[http.MethodGet] != 3 ||
+		requestsByMethod[http.MethodPost] != 2 {
 		t.Fatalf("metrics snapshot = %#v", snapshot)
+	}
+	wantCacheOperations := []spicecache.Operation{
+		spicecache.OperationGet,
+		spicecache.OperationPut,
+		spicecache.OperationGet,
+		spicecache.OperationGet,
+	}
+	if len(cacheObservations) != len(wantCacheOperations) {
+		t.Fatalf("cache observations = %#v", cacheObservations)
+	}
+	if got := cacheOperations(cacheObservations); !slices.Equal(
+		got,
+		wantCacheOperations,
+	) {
+		t.Fatalf("cache operations = %v, want %v", got, wantCacheOperations)
+	}
+	if cacheObservations[0].Definition.ID != "commerce.orders.by-id" ||
+		cacheObservations[0].Definition.Module !=
+			"github.com/StevenBuglione/spice/examples/commerce/orders" ||
+		cacheObservations[0].Hit ||
+		!cacheObservations[2].Hit ||
+		cacheObservations[3].Hit {
+		t.Fatalf("cache observations = %#v", cacheObservations)
 	}
 	var info map[string]string
 	decodeGET(t, server, "/actuator/info", &info)
@@ -205,6 +243,16 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 		http.StatusServiceUnavailable,
 	)
 	assertGETStatus(t, server, "/actuator/env", http.StatusNotFound)
+}
+
+func cacheOperations(
+	observations []spicecache.Observation,
+) []spicecache.Operation {
+	result := make([]spicecache.Operation, len(observations))
+	for index, observation := range observations {
+		result[index] = observation.Operation
+	}
+	return result
 }
 
 func TestGeneratedCommandRejectsUnknownFlag(t *testing.T) {

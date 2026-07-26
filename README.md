@@ -12,10 +12,11 @@ uses four explicit application modules:
 `@management.Enable` allowlist exposes health, liveness, readiness, info, and
 metrics; `@observability.Logging` installs structured lifecycle and HTTP
 observers. The inventory module's `@schedule.FixedDelay` audit demonstrates
-direct generated, lifecycle-owned scheduled work. Spice generates ordinary
-direct construction, command, lifecycle, and scheduling code in
-`internal/spicegen/commerce`; no runtime scan, reflection, or service locator
-is used. The marker body is never executed.
+direct generated, lifecycle-owned scheduled work. The order lookup's
+`@cache.Cacheable` boundary demonstrates configured, bounded, typed response
+caching. Spice generates ordinary direct construction, command, lifecycle,
+scheduling, and cache code in `internal/spicegen/commerce`; no runtime scan,
+reflection, or service locator is used. The marker body is never executed.
 
 From the repository root:
 
@@ -30,7 +31,10 @@ The server binds `127.0.0.1:8081` by default. Set
 uses the conventional `SPICE_` environment source. Set
 `SPICE_SHUTDOWN_TIMEOUT` to override the typed `10s` shutdown default. Reusable
 generated constructors read no environment, files, or process signals on their
-own.
+own. Order lookup caching defaults to 256 entries and a five-minute TTL;
+`SPICE_CACHE_COMMERCE_ORDERS_BY_ID_CAPACITY` and
+`SPICE_CACHE_COMMERCE_ORDERS_BY_ID_TTL` override those generated typed
+properties.
 
 The generated public API is:
 
