@@ -68,6 +68,21 @@ func TestServiceAuditsInventoryInvariants(t *testing.T) {
 	if err := service.Audit(context.Background()); err != nil {
 		t.Fatalf("Audit() error = %v", err)
 	}
+	if err := service.VerifySKU(
+		context.Background(),
+		"widget",
+	); err != nil {
+		t.Fatalf("VerifySKU() error = %v", err)
+	}
+	if err := service.VerifySKU(
+		context.Background(),
+		"missing",
+	); !errors.Is(err, ErrInvalidReservation) {
+		t.Fatalf(
+			"VerifySKU(missing) error = %v, want ErrInvalidReservation",
+			err,
+		)
+	}
 
 	service.stock["widget"] = -1
 	if err := service.Audit(context.Background()); !errors.Is(
@@ -84,5 +99,14 @@ func TestServiceAuditsInventoryInvariants(t *testing.T) {
 	cancel()
 	if err := service.Audit(ctx); !errors.Is(err, context.Canceled) {
 		t.Fatalf("Audit(canceled) error = %v, want context.Canceled", err)
+	}
+	if err := service.VerifySKU(
+		ctx,
+		"widget",
+	); !errors.Is(err, context.Canceled) {
+		t.Fatalf(
+			"VerifySKU(canceled) error = %v, want context.Canceled",
+			err,
+		)
 	}
 }

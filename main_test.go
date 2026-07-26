@@ -15,6 +15,7 @@ import (
 	"testing"
 	"time"
 
+	spiceasync "github.com/StevenBuglione/spice/async"
 	spicecache "github.com/StevenBuglione/spice/cache"
 	"github.com/StevenBuglione/spice/config"
 	spiceevent "github.com/StevenBuglione/spice/event"
@@ -72,11 +73,17 @@ func TestGeneratedCommerceApplicationStartsAndStops(t *testing.T) {
 		"commerce.server.address": "127.0.0.1:0",
 		"spice.shutdown-timeout":  "250ms",
 	})
+	asyncResults := make(chan spiceasync.Result, 1)
 	application, err := commerce.NewApplicationWithOptions(
 		context.Background(),
 		commerce.ApplicationOptions{
 			Sources: []config.Source{overrides},
 			Logger:  discardLogger(),
+			AsyncObservers: []spiceasync.Observer{
+				func(_ context.Context, result spiceasync.Result) {
+					asyncResults <- result
+				},
+			},
 		},
 	)
 	if err != nil {
@@ -91,6 +98,12 @@ func TestGeneratedCommerceApplicationStartsAndStops(t *testing.T) {
 	if got := application.State(); got != lifecycle.StateReady {
 		t.Fatalf("State() = %s, want %s", got, lifecycle.StateReady)
 	}
+	if err := application.SubmitServiceVerifySKU(
+		context.Background(),
+		"SKU-RED",
+	); err != nil {
+		t.Fatalf("SubmitServiceVerifySKU() error = %v", err)
+	}
 
 	shutdownContext, cancelShutdown := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancelShutdown()
@@ -99,6 +112,21 @@ func TestGeneratedCommerceApplicationStartsAndStops(t *testing.T) {
 	}
 	if got := application.State(); got != lifecycle.StateStopped {
 		t.Fatalf("State() = %s, want %s", got, lifecycle.StateStopped)
+	}
+	result := <-asyncResults
+	if result.Err != nil ||
+		result.Panicked ||
+		result.Definition.Module !=
+			"github.com/StevenBuglione/spice/examples/commerce/inventory" ||
+		!strings.Contains(result.Definition.ID, "VerifySKU") {
+		t.Fatalf("async result = %#v", result)
+	}
+	if snapshot := application.AsyncSnapshot(); snapshot != (spiceasync.Snapshot{
+		Submitted: 1,
+		Completed: 1,
+		Closed:    true,
+	}) {
+		t.Fatalf("AsyncSnapshot() = %#v", snapshot)
 	}
 }
 
@@ -273,6 +301,7 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 	}
 	if properties["commerce.orders.sku"].Value != "SKU-RED" ||
 		!properties["commerce.orders.sku"].Default ||
+		properties["spice.async.max-concurrency"].Value != "16" ||
 		properties["spice.cache.commerce.orders.by-id.capacity"].Value !=
 			"256" ||
 		properties["spice.cache.commerce.orders.by-id.ttl"].Value != "5m" {

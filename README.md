@@ -12,14 +12,16 @@ uses four explicit application modules:
 `@management.Enable` allowlist exposes health, liveness, readiness, info, and
 metrics plus redacted configuration and generated module reports;
 `@observability.Logging` installs structured lifecycle and HTTP observers. The
-inventory module's
-`@schedule.FixedDelay` audit demonstrates
-direct generated, lifecycle-owned scheduled work. The order lookup's
+inventory module's `@schedule.FixedDelay` audit demonstrates direct generated,
+lifecycle-owned scheduled work. Its `@async.Execute` inventory verification
+demonstrates a readiness-gated typed generated submit method, bounded
+admission, and graceful drain before provider cleanup. The order lookup's
 `@cache.Cacheable` boundary demonstrates configured, bounded, typed response
 caching. Its first successful lookup publishes a typed `OrderViewed` event to
 the provider-owned `ViewAudit` listener; a cache hit bypasses the controller
 and therefore does not publish again. Spice generates ordinary direct
-construction, command, lifecycle, scheduling, cache, and event code in
+construction, command, lifecycle, scheduling, asynchronous, cache, and event
+code in
 `internal/spicegen/commerce`; no runtime scan, reflection, or service locator
 is used. Marker bodies are never executed.
 
@@ -39,7 +41,8 @@ generated constructors read no environment, files, or process signals on their
 own. Order lookup caching defaults to 256 entries and a five-minute TTL;
 `SPICE_CACHE_COMMERCE_ORDERS_BY_ID_CAPACITY` and
 `SPICE_CACHE_COMMERCE_ORDERS_BY_ID_TTL` override those generated typed
-properties.
+properties. Asynchronous execution defaults to 16 concurrent tasks;
+`SPICE_ASYNC_MAX_CONCURRENCY` overrides that positive bound.
 
 The generated public API is:
 
@@ -64,4 +67,6 @@ and owns signals; it never exits the process itself. Tests and embedded
 processes can instead use `RunCommand`, `NewApplication`,
 `NewApplicationWithOptions`, `Start`, `Stop`, or `Run` with caller-owned
 writers, loggers, sources, contexts, observers, middleware, error mapping, and
-shutdown policy.
+shutdown policy. The ready application exposes
+`SubmitServiceVerifySKU(admissionContext, sku)` and `AsyncSnapshot()` as its
+typed asynchronous boundary.

@@ -118,6 +118,30 @@ func (service *Service) Audit(ctx context.Context) error {
 	return nil
 }
 
+// VerifySKU asynchronously checks one configured stock record without
+// mutating inventory.
+//
+// @async.Execute
+func (service *Service) VerifySKU(
+	ctx context.Context,
+	sku string,
+) error {
+	if err := ctx.Err(); err != nil {
+		return fmt.Errorf("verify inventory SKU: %w", err)
+	}
+	service.mu.RLock()
+	defer service.mu.RUnlock()
+	available, known := service.stock[sku]
+	if !known || available < 0 {
+		return fmt.Errorf(
+			"%w: invalid stock state for %q",
+			ErrInvalidReservation,
+			sku,
+		)
+	}
+	return nil
+}
+
 // Available returns the current stock for sku.
 func (service *Service) Available(sku string) int {
 	service.mu.RLock()
