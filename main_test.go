@@ -257,6 +257,27 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 		len(info) != 3 {
 		t.Fatalf("management info = %#v", info)
 	}
+	var configuration management.ConfigurationReport
+	decodeGET(
+		t,
+		server,
+		"/actuator/configprops",
+		&configuration,
+	)
+	properties := make(
+		map[string]management.ConfigurationProperty,
+		len(configuration.Properties),
+	)
+	for _, property := range configuration.Properties {
+		properties[property.Key] = property
+	}
+	if properties["commerce.orders.sku"].Value != "SKU-RED" ||
+		!properties["commerce.orders.sku"].Default ||
+		properties["spice.cache.commerce.orders.by-id.capacity"].Value !=
+			"256" ||
+		properties["spice.cache.commerce.orders.by-id.ttl"].Value != "5m" {
+		t.Fatalf("configuration report = %#v", configuration)
+	}
 	for _, path := range []string{"/actuator/health", "/actuator/health/liveness"} {
 		assertGETStatus(t, server, path, http.StatusOK)
 	}

@@ -10,8 +10,9 @@ uses four explicit application modules:
 
 `bootstrap.Commerce` is a compile-time-only application marker. Its explicit
 `@management.Enable` allowlist exposes health, liveness, readiness, info, and
-metrics; `@observability.Logging` installs structured lifecycle and HTTP
-observers. The inventory module's `@schedule.FixedDelay` audit demonstrates
+metrics plus a redacted generated configuration report; `@observability.Logging`
+installs structured lifecycle and HTTP observers. The inventory module's
+`@schedule.FixedDelay` audit demonstrates
 direct generated, lifecycle-owned scheduled work. The order lookup's
 `@cache.Cacheable` boundary demonstrates configured, bounded, typed response
 caching. Its first successful lookup publishes a typed `OrderViewed` event to
@@ -47,6 +48,8 @@ The generated public API is:
   orders;
 - `/actuator/health`, `/actuator/health/liveness`,
   `/actuator/health/readiness`, `/actuator/info`, and `/actuator/metrics`.
+- `/actuator/configprops`, with generated key/type/module/provenance metadata
+  and mandatory secret redaction.
 
 The generated OpenAPI 3.1 contract is
 `internal/spicegen/commerce/openapi.json`. Route metrics use compiler-owned
