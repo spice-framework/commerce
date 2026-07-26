@@ -8,10 +8,12 @@ uses four explicit application modules:
 - `orders` declares and uses only the inventory and payment default APIs;
 - `platform` owns the safely configured HTTP server lifecycle.
 
-`bootstrap.Commerce` is a compile-time-only application marker. Spice generates
-ordinary direct construction and lifecycle code in
+`bootstrap.Commerce` is a compile-time-only application marker. Its explicit
+`@management.Enable` allowlist exposes health, liveness, readiness, info, and
+metrics; `@observability.Logging` installs structured lifecycle and HTTP
+observers. Spice generates ordinary direct construction, command, and lifecycle code in
 `internal/spicegen/commerce`; no runtime scan, reflection, or service locator is
-used.
+used. The marker body is never executed.
 
 From the repository root:
 
@@ -23,8 +25,10 @@ go run ./examples/commerce
 
 The server binds `127.0.0.1:8081` by default. Set
 `SPICE_COMMERCE_ADDRESS=127.0.0.1:0` for an ephemeral test listener. The command
-explicitly opts into the environment source; reusable generated constructors
-read no environment or files on their own.
+uses the conventional `SPICE_` environment source. Set
+`SPICE_SHUTDOWN_TIMEOUT` to override the typed `10s` shutdown default. Reusable
+generated constructors read no environment, files, or process signals on their
+own.
 
 The generated public API is:
 
@@ -38,3 +42,11 @@ The generated public API is:
 The generated OpenAPI 3.1 contract is
 `internal/spicegen/commerce/openapi.json`. Route metrics use compiler-owned
 method, pattern, symbol, and module labels rather than raw request paths.
+
+The handwritten `main.go` only calls
+`os.Exit(commerce.Main(os.Args[1:]))`. Generated `Main` returns the exit code
+and owns signals; it never exits the process itself. Tests and embedded
+processes can instead use `RunCommand`, `NewApplication`,
+`NewApplicationWithOptions`, `Start`, `Stop`, or `Run` with caller-owned
+writers, loggers, sources, contexts, observers, middleware, error mapping, and
+shutdown policy.
