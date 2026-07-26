@@ -9,7 +9,7 @@ import (
 // Commerce marks the HTTP server and order service as application roots.
 //
 // @Application
-// @management.Enable(expose=["health", "liveness", "readiness", "info", "metrics", "configprops"])
+// @management.Enable(expose=["health", "liveness", "readiness", "info", "metrics", "configprops", "modules"])
 // @observability.Logging
 func Commerce(*platform.Server, *orders.Service) {
 	panic("Spice application marker bodies are never executed")

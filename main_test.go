@@ -278,6 +278,19 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 		properties["spice.cache.commerce.orders.by-id.ttl"].Value != "5m" {
 		t.Fatalf("configuration report = %#v", configuration)
 	}
+	var modules management.ModuleReport
+	decodeGET(t, server, "/actuator/modules", &modules)
+	if modules.Schema != "spice.modules/v1" ||
+		len(modules.Modules) != 4 ||
+		len(modules.Edges) != 2 ||
+		!slices.Equal(
+			modules.UnassignedPackages,
+			[]string{
+				"github.com/StevenBuglione/spice/examples/commerce/bootstrap",
+			},
+		) {
+		t.Fatalf("module report = %#v", modules)
+	}
 	for _, path := range []string{"/actuator/health", "/actuator/health/liveness"} {
 		assertGETStatus(t, server, path, http.StatusOK)
 	}
