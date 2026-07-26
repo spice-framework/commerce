@@ -10,6 +10,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/StevenBuglione/spice/event"
 	"github.com/StevenBuglione/spice/examples/commerce/inventory"
 	"github.com/StevenBuglione/spice/examples/commerce/payments"
 )
@@ -49,6 +50,7 @@ type Service struct {
 	settings  Settings
 	inventory *inventory.Service
 	payments  *payments.Service
+	views     event.Publisher[OrderViewed]
 	orders    []Order
 	nextID    int
 }
@@ -60,6 +62,7 @@ func NewService(
 	settings Settings,
 	inventoryService *inventory.Service,
 	paymentService *payments.Service,
+	viewPublisher event.Publisher[OrderViewed],
 ) (*Service, error) {
 	if strings.TrimSpace(settings.SKU) == "" || settings.UnitPriceCents <= 0 {
 		return nil, fmt.Errorf(
@@ -70,10 +73,14 @@ func NewService(
 	if inventoryService == nil || paymentService == nil {
 		return nil, fmt.Errorf("%w: module dependencies must not be nil", ErrInvalidOrder)
 	}
+	if viewPublisher == nil {
+		return nil, fmt.Errorf("%w: order view publisher must not be nil", ErrInvalidOrder)
+	}
 	return &Service{
 		settings:  settings,
 		inventory: inventoryService,
 		payments:  paymentService,
+		views:     viewPublisher,
 	}, nil
 }
 
@@ -132,6 +139,22 @@ func (service *Service) Orders() []Order {
 	service.mu.RLock()
 	defer service.mu.RUnlock()
 	return append([]Order(nil), service.orders...)
+}
+
+// Find returns one completed order and publishes a typed view event. Missing
+// orders do not publish.
+func (service *Service) Find(
+	ctx context.Context,
+	id string,
+) (Order, bool, error) {
+	order, found := service.Order(id)
+	if !found {
+		return Order{}, false, nil
+	}
+	if err := service.views.Publish(ctx, OrderViewed{ID: order.ID}); err != nil {
+		return Order{}, false, fmt.Errorf("observe order %s view: %w", order.ID, err)
+	}
+	return order, true, nil
 }
 
 // Order returns one completed order by its stable ID.

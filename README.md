@@ -14,9 +14,12 @@ metrics; `@observability.Logging` installs structured lifecycle and HTTP
 observers. The inventory module's `@schedule.FixedDelay` audit demonstrates
 direct generated, lifecycle-owned scheduled work. The order lookup's
 `@cache.Cacheable` boundary demonstrates configured, bounded, typed response
-caching. Spice generates ordinary direct construction, command, lifecycle,
-scheduling, and cache code in `internal/spicegen/commerce`; no runtime scan,
-reflection, or service locator is used. The marker body is never executed.
+caching. Its first successful lookup publishes a typed `OrderViewed` event to
+the provider-owned `ViewAudit` listener; a cache hit bypasses the controller
+and therefore does not publish again. Spice generates ordinary direct
+construction, command, lifecycle, scheduling, cache, and event code in
+`internal/spicegen/commerce`; no runtime scan, reflection, or service locator
+is used. Marker bodies are never executed.
 
 From the repository root:
 

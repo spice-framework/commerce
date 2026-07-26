@@ -84,10 +84,16 @@ func (controller *Controller) Place(
 // @Get("/orders/{id}")
 // @cache.Cacheable(name="commerce.orders.by-id")
 func (controller *Controller) Get(
-	_ context.Context,
+	ctx context.Context,
 	request GetOrderRequest,
 ) (OrderResponse, error) {
-	order, found := controller.service.Order(strings.TrimSpace(request.ID))
+	order, found, err := controller.service.Find(
+		ctx,
+		strings.TrimSpace(request.ID),
+	)
+	if err != nil {
+		return OrderResponse{}, err
+	}
 	if !found {
 		return OrderResponse{}, web.NewError(web.Problem{
 			Type:   "https://spice.dev/problems/order-not-found",

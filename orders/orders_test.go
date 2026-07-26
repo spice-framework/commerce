@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/StevenBuglione/spice/event"
 	"github.com/StevenBuglione/spice/examples/commerce/inventory"
 	"github.com/StevenBuglione/spice/examples/commerce/payments"
 	"github.com/StevenBuglione/spice/web"
@@ -120,10 +121,100 @@ func TestControllerGetsCompletedOrder(t *testing.T) {
 	}
 }
 
+func TestServicePublishesOnlySuccessfulOrderViews(t *testing.T) {
+	t.Parallel()
+	audit := NewViewAudit()
+	publisher, err := event.NewTopic(
+		event.Definition{
+			ID:     "orders.OrderViewed",
+			Module: "example.com/commerce/orders",
+		},
+		[]event.Subscriber[OrderViewed]{
+			{
+				ID:     "orders.ViewAudit.Record",
+				Module: "example.com/commerce/orders",
+				Order:  10,
+				Handle: audit.Record,
+			},
+		},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	service, _, _ := newTestServiceWithPublisher(t, 2, 5000, publisher)
+	placed, err := service.Place(context.Background(), Request{Quantity: 1})
+	if err != nil {
+		t.Fatalf("Place() error = %v", err)
+	}
+	if _, found, findErr := service.Find(
+		context.Background(),
+		placed.ID,
+	); findErr != nil || !found {
+		t.Fatalf("Find() = (found=%t, err=%v)", found, findErr)
+	}
+	if _, found, findErr := service.Find(
+		context.Background(),
+		"missing",
+	); findErr != nil || found {
+		t.Fatalf("Find(missing) = (found=%t, err=%v)", found, findErr)
+	}
+	if got := audit.Views(placed.ID); got != 1 {
+		t.Fatalf("Views() = %d, want 1", got)
+	}
+	cancelled, cancel := context.WithCancel(context.Background())
+	cancel()
+	if _, found, findErr := service.Find(
+		cancelled,
+		placed.ID,
+	); !errors.Is(findErr, context.Canceled) || found {
+		t.Fatalf(
+			"Find(cancelled) = (found=%t, err=%v)",
+			found,
+			findErr,
+		)
+	}
+	if got := audit.Views(placed.ID); got != 1 {
+		t.Fatalf("cancelled Find changed Views() to %d", got)
+	}
+}
+
 func newTestService(
 	t *testing.T,
 	stockCount int,
 	maximumCents int,
+) (*Service, *inventory.Service, *payments.Service) {
+	t.Helper()
+	audit := NewViewAudit()
+	publisher, err := event.NewTopic(
+		event.Definition{
+			ID:     "orders.OrderViewed",
+			Module: "example.com/commerce/orders",
+		},
+		[]event.Subscriber[OrderViewed]{
+			{
+				ID:     "orders.ViewAudit.Record",
+				Module: "example.com/commerce/orders",
+				Order:  10,
+				Handle: audit.Record,
+			},
+		},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return newTestServiceWithPublisher(
+		t,
+		stockCount,
+		maximumCents,
+		publisher,
+	)
+}
+
+func newTestServiceWithPublisher(
+	t *testing.T,
+	stockCount int,
+	maximumCents int,
+	publisher event.Publisher[OrderViewed],
 ) (*Service, *inventory.Service, *payments.Service) {
 	t.Helper()
 	stock, err := inventory.NewService(inventory.Settings{SKU: "widget", InitialStock: stockCount})
@@ -138,6 +229,7 @@ func newTestService(
 		Settings{SKU: "widget", UnitPriceCents: 2500},
 		stock,
 		payment,
+		publisher,
 	)
 	if err != nil {
 		t.Fatalf("NewService() error = %v", err)

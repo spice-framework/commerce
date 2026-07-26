@@ -17,6 +17,7 @@ import (
 
 	spicecache "github.com/StevenBuglione/spice/cache"
 	"github.com/StevenBuglione/spice/config"
+	spiceevent "github.com/StevenBuglione/spice/event"
 	"github.com/StevenBuglione/spice/examples/commerce/orders"
 	commerce "github.com/StevenBuglione/spice/internal/spicegen/commerce"
 	"github.com/StevenBuglione/spice/lifecycle"
@@ -158,6 +159,7 @@ func TestGeneratedCommerceCommandCancellationUsesFreshShutdownContext(t *testing
 func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 	t.Parallel()
 	var cacheObservations []spicecache.Observation
+	eventObserver := &commerceEventObserver{}
 	application, err := commerce.NewApplicationWithOptions(
 		context.Background(),
 		commerce.ApplicationOptions{
@@ -167,6 +169,7 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 					cacheObservations = append(cacheObservations, observation)
 				},
 			},
+			EventObservers: []spiceevent.Observer{eventObserver},
 		},
 	)
 	if err != nil {
@@ -211,6 +214,27 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 	if len(cacheObservations) != len(wantCacheOperations) {
 		t.Fatalf("cache observations = %#v", cacheObservations)
 	}
+	if len(eventObserver.interactions) != 1 {
+		t.Fatalf("event observations = %#v", eventObserver)
+	}
+	eventInteraction := eventObserver.interactions[0]
+	if eventObserver.results != 1 ||
+		eventObserver.lastErr != nil ||
+		eventInteraction.Event.Module !=
+			"github.com/StevenBuglione/spice/examples/commerce/orders" ||
+		eventInteraction.Subscriber.Module !=
+			"github.com/StevenBuglione/spice/examples/commerce/orders" ||
+		eventInteraction.Subscriber.Order != 10 ||
+		!strings.Contains(
+			eventInteraction.Event.ID,
+			"OrderEvents",
+		) ||
+		!strings.Contains(
+			eventInteraction.Subscriber.ID,
+			"ViewAudit",
+		) {
+		t.Fatalf("event observations = %#v", eventObserver)
+	}
 	if got := cacheOperations(cacheObservations); !slices.Equal(
 		got,
 		wantCacheOperations,
@@ -243,6 +267,23 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 		http.StatusServiceUnavailable,
 	)
 	assertGETStatus(t, server, "/actuator/env", http.StatusNotFound)
+}
+
+type commerceEventObserver struct {
+	interactions []spiceevent.Interaction
+	results      int
+	lastErr      error
+}
+
+func (observer *commerceEventObserver) BeginEvent(
+	ctx context.Context,
+	interaction spiceevent.Interaction,
+) (context.Context, func(spiceevent.Result)) {
+	observer.interactions = append(observer.interactions, interaction)
+	return ctx, func(result spiceevent.Result) {
+		observer.results++
+		observer.lastErr = result.Err
+	}
 }
 
 func cacheOperations(
