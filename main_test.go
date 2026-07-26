@@ -3,13 +3,10 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"log/slog"
 	"net/http"
-	"net/http/httptest"
 	"os"
 	"slices"
-	"strconv"
 	"strings"
 	"sync"
 	"testing"
@@ -23,7 +20,7 @@ import (
 	commerce "github.com/StevenBuglione/spice/internal/spicegen/commerce"
 	"github.com/StevenBuglione/spice/lifecycle"
 	"github.com/StevenBuglione/spice/management"
-	"github.com/StevenBuglione/spice/web"
+	"github.com/StevenBuglione/spice/spicetest"
 )
 
 func TestGeneratedCommandCheckConstructsCommerceApplication(t *testing.T) {
@@ -188,30 +185,32 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 	t.Parallel()
 	var cacheObservations []spicecache.Observation
 	eventObserver := &commerceEventObserver{}
-	application, err := commerce.NewApplicationWithOptions(
+	server, err := spicetest.NewHTTP(
 		context.Background(),
-		commerce.ApplicationOptions{
-			Logger: discardLogger(),
-			CacheObservers: []spicecache.Observer{
-				func(_ context.Context, observation spicecache.Observation) {
-					cacheObservations = append(cacheObservations, observation)
+		func(ctx context.Context) (spicetest.HTTPApplication, error) {
+			return commerce.NewApplicationWithOptions(
+				ctx,
+				commerce.ApplicationOptions{
+					Logger: discardLogger(),
+					CacheObservers: []spicecache.Observer{
+						func(_ context.Context, observation spicecache.Observation) {
+							cacheObservations = append(cacheObservations, observation)
+						},
+					},
+					EventObservers: []spiceevent.Observer{eventObserver},
 				},
-			},
-			EventObservers: []spiceevent.Observer{eventObserver},
+			)
 		},
+		spicetest.HTTPOptions{ShutdownTimeout: time.Second},
 	)
 	if err != nil {
-		t.Fatalf("NewApplicationWithOptions() error = %v", err)
+		t.Fatalf("spicetest.NewHTTP() error = %v", err)
 	}
 	t.Cleanup(func() {
-		shutdownContext, cancel := context.WithTimeout(context.Background(), time.Second)
-		defer cancel()
-		if stopErr := application.Stop(shutdownContext); stopErr != nil {
-			t.Errorf("Stop() error = %v", stopErr)
+		if closeErr := server.Close(); closeErr != nil {
+			t.Errorf("HTTP test slice Close() error = %v", closeErr)
 		}
 	})
-	server := httptest.NewServer(application.Handler())
-	defer server.Close()
 
 	order := placeOrder(t, server, 2)
 	if order.ID != "order-000001" || order.Quantity != 2 || order.TotalCents != 5000 {
@@ -399,30 +398,28 @@ func TestCommerceMainIsOnlyTheProcessBoundary(t *testing.T) {
 	}
 }
 
-func placeOrder(t *testing.T, server *httptest.Server, quantity int) orders.OrderResponse {
+func placeOrder(
+	t *testing.T,
+	server *spicetest.HTTP,
+	quantity int,
+) orders.OrderResponse {
 	t.Helper()
-	body := `{"quantity":` + strconv.Itoa(quantity) + `}`
-	request, err := http.NewRequestWithContext(
+	response, err := server.Do(
 		context.Background(),
-		http.MethodPost,
-		server.URL+"/orders",
-		strings.NewReader(body),
+		spicetest.HTTPRequest{
+			Method: http.MethodPost,
+			Path:   "/orders",
+			JSON:   map[string]int{"quantity": quantity},
+		},
 	)
 	if err != nil {
 		t.Fatal(err)
 	}
-	request.Header.Set("Content-Type", "application/json")
-	request.Header.Set("Accept", "application/json")
-	response, err := server.Client().Do(request)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer response.Body.Close()
 	if response.StatusCode != http.StatusOK {
 		t.Fatalf("POST /orders status = %d, want %d", response.StatusCode, http.StatusOK)
 	}
 	var order orders.OrderResponse
-	if err := json.NewDecoder(response.Body).Decode(&order); err != nil {
+	if err := response.DecodeJSON(&order); err != nil {
 		t.Fatal(err)
 	}
 	return order
@@ -430,29 +427,28 @@ func placeOrder(t *testing.T, server *httptest.Server, quantity int) orders.Orde
 
 func assertProblem(
 	t *testing.T,
-	server *httptest.Server,
+	server *spicetest.HTTP,
 	body string,
 	status int,
 	detail string,
 ) {
 	t.Helper()
-	request, err := http.NewRequestWithContext(
+	response, err := server.Do(
 		context.Background(),
-		http.MethodPost,
-		server.URL+"/orders",
-		strings.NewReader(body),
+		spicetest.HTTPRequest{
+			Method: http.MethodPost,
+			Path:   "/orders",
+			Header: http.Header{
+				"Content-Type": []string{"application/json"},
+			},
+			Body: []byte(body),
+		},
 	)
 	if err != nil {
 		t.Fatal(err)
 	}
-	request.Header.Set("Content-Type", "application/json")
-	response, err := server.Client().Do(request)
+	problem, err := response.Problem()
 	if err != nil {
-		t.Fatal(err)
-	}
-	defer response.Body.Close()
-	var problem web.Problem
-	if err := json.NewDecoder(response.Body).Decode(&problem); err != nil {
 		t.Fatal(err)
 	}
 	if response.StatusCode != status || problem.Detail != detail {
@@ -462,41 +458,41 @@ func assertProblem(
 
 func assertGETStatus(
 	t *testing.T,
-	server *httptest.Server,
+	server *spicetest.HTTP,
 	path string,
 	status int,
 ) {
 	t.Helper()
-	request, err := http.NewRequestWithContext(
+	response, err := server.Do(
 		context.Background(),
-		http.MethodGet,
-		server.URL+path,
-		nil,
+		spicetest.HTTPRequest{Method: http.MethodGet, Path: path},
 	)
 	if err != nil {
 		t.Fatal(err)
 	}
-	response, err := server.Client().Do(request)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer response.Body.Close()
 	if response.StatusCode != status {
 		t.Fatalf("GET %s status = %d, want %d", path, response.StatusCode, status)
 	}
 }
 
-func decodeGET(t *testing.T, server *httptest.Server, path string, target any) {
+func decodeGET(
+	t *testing.T,
+	server *spicetest.HTTP,
+	path string,
+	target any,
+) {
 	t.Helper()
-	response, err := server.Client().Get(server.URL + path)
+	response, err := server.Do(
+		context.Background(),
+		spicetest.HTTPRequest{Method: http.MethodGet, Path: path},
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer response.Body.Close()
 	if response.StatusCode != http.StatusOK {
 		t.Fatalf("GET %s status = %d, want %d", path, response.StatusCode, http.StatusOK)
 	}
-	if err := json.NewDecoder(response.Body).Decode(target); err != nil {
+	if err := response.DecodeJSON(target); err != nil {
 		t.Fatal(err)
 	}
 }

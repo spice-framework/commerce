@@ -70,3 +70,7 @@ writers, loggers, sources, contexts, observers, middleware, error mapping, and
 shutdown policy. The ready application exposes
 `SubmitServiceVerifySKU(admissionContext, sku)` and `AsyncSnapshot()` as its
 typed asynchronous boundary.
+
+`main_test.go` demonstrates `spicetest.NewHTTP`, which constructs this
+generated application with explicit test options and exercises its controllers
+and management routes through a bounded loopback-only slice.
