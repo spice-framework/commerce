@@ -52,7 +52,7 @@ type Service struct {
 	mu        sync.RWMutex
 	settings  Settings
 	inventory *inventory.Service
-	payments  *payments.Service
+	payments  payments.Processor
 	views     event.Publisher[OrderViewed]
 	orders    []Order
 	nextID    int
@@ -64,7 +64,7 @@ type Service struct {
 func NewService(
 	settings Settings,
 	inventoryService *inventory.Service,
-	paymentService *payments.Service,
+	paymentService payments.Processor,
 	viewPublisher event.Publisher[OrderViewed],
 ) (*Service, error) {
 	if strings.TrimSpace(settings.SKU) == "" || settings.UnitPriceCents <= 0 {

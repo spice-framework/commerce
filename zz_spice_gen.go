@@ -293,7 +293,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 	_ = provider4
 	provider5, err := payments.NewService(provider4)
 	if err != nil {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|function|58:github.com/StevenBuglione/spice/examples/commerce/payments|0:|10:NewService (*github.com/StevenBuglione/spice/examples/commerce/payments.Service): %w", err))
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|type|58:github.com/StevenBuglione/spice/examples/commerce/payments|0:|7:Service (*github.com/StevenBuglione/spice/examples/commerce/payments.Service): %w", err))
 	}
 	_ = provider5
 	provider6 := platform.Settings{}

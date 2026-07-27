@@ -1,4 +1,4 @@
-// @import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
+// @import { Configuration, Implements, Service } from "github.com/StevenBuglione/spice/annotation/core"
 // @import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
 
 // Package payments owns payment authorization behavior.
@@ -35,16 +35,28 @@ type Authorization struct {
 	Amount    int
 }
 
+// Processor is the payment contract consumed by other commerce modules.
+type Processor interface {
+	Authorize(
+		context.Context,
+		string,
+		int,
+	) (Authorization, error)
+}
+
 // Service owns payment authorization state for the reference application.
+//
+// @Service
+// @Implements(Processor)
 type Service struct {
 	mu           sync.RWMutex
 	maximumCents int
 	approved     []Authorization
 }
 
+var _ Processor = (*Service)(nil)
+
 // NewService constructs the payment service from validated configuration.
-//
-// @Bean
 func NewService(settings Settings) (*Service, error) {
 	if settings.MaximumCents <= 0 {
 		return nil, fmt.Errorf(

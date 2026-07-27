@@ -12,7 +12,6 @@ import (
 )
 
 // @import { Cacheable } from "github.com/StevenBuglione/spice/annotation/cache"
-// @import { Bean } from "github.com/StevenBuglione/spice/annotation/core"
 // @import { Controller, Get, Post } from "github.com/StevenBuglione/spice/annotation/web"
 
 // Controller exposes typed order operations.
@@ -23,8 +22,6 @@ type Controller struct {
 }
 
 // NewController constructs the order HTTP boundary.
-//
-// @Bean
 func NewController(service *Service) *Controller {
 	return &Controller{service: service}
 }
