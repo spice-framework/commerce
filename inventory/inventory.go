@@ -1,3 +1,8 @@
+// @spice.import { Execute } from "github.com/StevenBuglione/spice/annotation/async"
+// @spice.import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
+// @spice.import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+// @spice.import { FixedDelay } from "github.com/StevenBuglione/spice/annotation/schedule"
+
 // Package inventory owns stock availability and reservation behavior.
 //
 // @Module
@@ -99,7 +104,7 @@ func (service *Service) Release(sku string, quantity int) error {
 
 // Audit verifies the module's stock invariants without mutating inventory.
 //
-// @schedule.FixedDelay(delay="5m", initialDelay="30s")
+// @FixedDelay(delay="5m", initialDelay="30s")
 func (service *Service) Audit(ctx context.Context) error {
 	if err := ctx.Err(); err != nil {
 		return fmt.Errorf("audit inventory: %w", err)
@@ -121,7 +126,7 @@ func (service *Service) Audit(ctx context.Context) error {
 // VerifySKU asynchronously checks one configured stock record without
 // mutating inventory.
 //
-// @async.Execute
+// @Execute
 func (service *Service) VerifySKU(
 	ctx context.Context,
 	sku string,

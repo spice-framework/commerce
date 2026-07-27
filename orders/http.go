@@ -11,6 +11,10 @@ import (
 	"github.com/StevenBuglione/spice/web"
 )
 
+// @spice.import { Cacheable } from "github.com/StevenBuglione/spice/annotation/cache"
+// @spice.import { Bean } from "github.com/StevenBuglione/spice/annotation/core"
+// @spice.import { Controller, Get, Post } from "github.com/StevenBuglione/spice/annotation/web"
+
 // Controller exposes typed order operations.
 //
 // @Controller
@@ -82,7 +86,7 @@ func (controller *Controller) Place(
 // Get returns one completed order.
 //
 // @Get("/orders/{id}")
-// @cache.Cacheable(name="commerce.orders.by-id")
+// @Cacheable(name="commerce.orders.by-id")
 func (controller *Controller) Get(
 	ctx context.Context,
 	request GetOrderRequest,

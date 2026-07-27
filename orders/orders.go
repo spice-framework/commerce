@@ -1,3 +1,6 @@
+// @spice.import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
+// @spice.import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+
 // Package orders owns order placement.
 //
 // @Module(allowedDependencies=["github.com/StevenBuglione/spice/examples/commerce/inventory", "github.com/StevenBuglione/spice/examples/commerce/payments"])

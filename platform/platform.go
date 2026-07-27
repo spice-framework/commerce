@@ -1,3 +1,7 @@
+// @spice.import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
+// @spice.import { OnStart, OnStop } from "github.com/StevenBuglione/spice/annotation/lifecycle"
+// @spice.import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+
 // Package platform owns the commerce application's HTTP transport lifecycle.
 //
 // @Module

@@ -9,6 +9,9 @@ import (
 	"github.com/StevenBuglione/spice/event"
 )
 
+// @spice.import { Bean } from "github.com/StevenBuglione/spice/annotation/core"
+// @spice.import { Listener, Topic } from "github.com/StevenBuglione/spice/annotation/event"
+
 // OrderViewed is emitted after a successful uncached order lookup.
 type OrderViewed struct {
 	ID string
@@ -30,7 +33,7 @@ func NewViewAudit() *ViewAudit {
 
 // Record consumes one typed order-view event.
 //
-// @event.Listener(order=10)
+// @Listener(order=10)
 func (audit *ViewAudit) Record(
 	ctx context.Context,
 	viewed OrderViewed,
@@ -66,7 +69,7 @@ func (audit *ViewAudit) Views(id string) uint64 {
 
 // OrderEvents declares the generated exact order-view publisher.
 //
-// @event.Topic
+// @Topic
 func OrderEvents(*ViewAudit) event.Publisher[OrderViewed] {
 	panic("Spice event marker bodies are never executed")
 }
