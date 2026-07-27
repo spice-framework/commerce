@@ -1,5 +1,5 @@
-// @spice.import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
-// @spice.import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+// @import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
+// @import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
 
 // Package payments owns payment authorization behavior.
 //

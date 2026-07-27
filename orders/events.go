@@ -9,8 +9,8 @@ import (
 	"github.com/StevenBuglione/spice/event"
 )
 
-// @spice.import { Bean } from "github.com/StevenBuglione/spice/annotation/core"
-// @spice.import { Listener, Topic } from "github.com/StevenBuglione/spice/annotation/event"
+// @import { Bean } from "github.com/StevenBuglione/spice/annotation/core"
+// @import { Listener, Topic } from "github.com/StevenBuglione/spice/annotation/event"
 
 // OrderViewed is emitted after a successful uncached order lookup.
 type OrderViewed struct {

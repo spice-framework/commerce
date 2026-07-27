@@ -11,9 +11,9 @@ import (
 	"github.com/StevenBuglione/spice/web"
 )
 
-// @spice.import { Cacheable } from "github.com/StevenBuglione/spice/annotation/cache"
-// @spice.import { Bean } from "github.com/StevenBuglione/spice/annotation/core"
-// @spice.import { Controller, Get, Post } from "github.com/StevenBuglione/spice/annotation/web"
+// @import { Cacheable } from "github.com/StevenBuglione/spice/annotation/cache"
+// @import { Bean } from "github.com/StevenBuglione/spice/annotation/core"
+// @import { Controller, Get, Post } from "github.com/StevenBuglione/spice/annotation/web"
 
 // Controller exposes typed order operations.
 //

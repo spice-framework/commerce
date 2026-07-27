@@ -1,7 +1,7 @@
-// @spice.import { Execute } from "github.com/StevenBuglione/spice/annotation/async"
-// @spice.import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
-// @spice.import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
-// @spice.import { FixedDelay } from "github.com/StevenBuglione/spice/annotation/schedule"
+// @import { Execute } from "github.com/StevenBuglione/spice/annotation/async"
+// @import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
+// @import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+// @import { FixedDelay } from "github.com/StevenBuglione/spice/annotation/schedule"
 
 // Package inventory owns stock availability and reservation behavior.
 //

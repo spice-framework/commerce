@@ -393,7 +393,7 @@ func TestCommerceMainIsOnlyTheProcessBoundary(t *testing.T) {
 	}
 	if !strings.Contains(source, "os.Exit(spiceMain(os.Args[1:]))") ||
 		!strings.Contains(source, "// @Application") ||
-		!strings.Contains(source, "// @spice.import { Application }") ||
+		!strings.Contains(source, "// @import { Application }") ||
 		len(strings.Split(strings.TrimSpace(source), "\n")) > 18 {
 		t.Fatalf("main.go is not a tiny process boundary:\n%s", source)
 	}
