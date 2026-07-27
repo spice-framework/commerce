@@ -60,3 +60,25 @@ func TestServiceHonorsCancellation(t *testing.T) {
 		t.Fatalf("len(Approved()) = %d, want 0", got)
 	}
 }
+
+func TestOfflineProcessorFailsClosedAndHonorsCancellation(t *testing.T) {
+	t.Parallel()
+	service := &OfflineProcessor{}
+	if _, err := service.Authorize(
+		context.Background(),
+		"order-1",
+		50,
+	); !errors.Is(err, ErrDeclined) {
+		t.Fatalf("Authorize() error = %v, want ErrDeclined", err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if _, err := service.Authorize(
+		ctx,
+		"order-1",
+		50,
+	); !errors.Is(err, context.Canceled) {
+		t.Fatalf("Authorize() error = %v, want context.Canceled", err)
+	}
+}

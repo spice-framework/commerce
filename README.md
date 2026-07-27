@@ -24,6 +24,13 @@ construction, command, lifecycle, scheduling, asynchronous, cache, and event
 code beside `main.go`; no runtime scan, reflection, service locator, dummy
 module import, or marker execution is used.
 
+The payment module exposes two explicit `payments.Processor` candidates.
+`Service` is named, qualified as `stripe`, and primary; `OfflineProcessor` is
+qualified separately and marked fallback. Both use `@Implements(Processor)`
+plus normal Go assertions. The orders constructor requests
+`@Qualifier("stripe")`, and the generated file passes the already constructed
+Stripe service directly as the interface—there is no runtime lookup.
+
 From the repository root:
 
 ```text

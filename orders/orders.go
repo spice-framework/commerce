@@ -1,4 +1,4 @@
-// @import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
+// @import { Bean, Configuration, Qualifier } from "github.com/StevenBuglione/spice/annotation/core"
 // @import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
 
 // Package orders owns order placement.
@@ -64,6 +64,7 @@ type Service struct {
 func NewService(
 	settings Settings,
 	inventoryService *inventory.Service,
+	// @Qualifier("stripe")
 	paymentService payments.Processor,
 	viewPublisher event.Publisher[OrderViewed],
 ) (*Service, error) {

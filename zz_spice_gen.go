@@ -278,7 +278,9 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		provider3.UnitPriceCents = convertedValue
 	}
 	_ = provider3
-	provider4 := payments.Settings{}
+	provider4 := new(payments.OfflineProcessor)
+	_ = provider4
+	provider5 := payments.Settings{}
 	if _, configured := configurationSnapshot.Lookup("commerce.payments.maximum-cents"); configured {
 		rawValue, valueErr := configurationSnapshot.Integer("commerce.payments.maximum-cents")
 		if valueErr != nil {
@@ -288,22 +290,22 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		if int64(convertedValue) != rawValue {
 			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.payments.maximum-cents for github.com/StevenBuglione/spice/examples/commerce/payments.Settings.MaximumCents: value is outside int"))
 		}
-		provider4.MaximumCents = convertedValue
+		provider5.MaximumCents = convertedValue
 	}
-	_ = provider4
-	provider5, err := payments.NewService(provider4)
+	_ = provider5
+	provider6, err := payments.NewService(provider5)
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|type|58:github.com/StevenBuglione/spice/examples/commerce/payments|0:|7:Service (*github.com/StevenBuglione/spice/examples/commerce/payments.Service): %w", err))
 	}
-	_ = provider5
-	provider6 := platform.Settings{}
+	_ = provider6
+	provider7 := platform.Settings{}
 	if _, configured := configurationSnapshot.Lookup("commerce.server.address"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.server.address")
 		if valueErr != nil {
 			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.server.address for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.Address: %w", valueErr))
 		}
 		convertedValue := string(rawValue)
-		provider6.Address = convertedValue
+		provider7.Address = convertedValue
 	}
 	if _, configured := configurationSnapshot.Lookup("commerce.server.read-header-timeout"); configured {
 		rawValue, valueErr := configurationSnapshot.Duration("commerce.server.read-header-timeout")
@@ -311,7 +313,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.server.read-header-timeout for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.ReadHeaderTimeout: %w", valueErr))
 		}
 		convertedValue := time.Duration(rawValue)
-		provider6.ReadHeaderTimeout = convertedValue
+		provider7.ReadHeaderTimeout = convertedValue
 	}
 	if _, configured := configurationSnapshot.Lookup("commerce.server.read-timeout"); configured {
 		rawValue, valueErr := configurationSnapshot.Duration("commerce.server.read-timeout")
@@ -319,7 +321,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.server.read-timeout for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.ReadTimeout: %w", valueErr))
 		}
 		convertedValue := time.Duration(rawValue)
-		provider6.ReadTimeout = convertedValue
+		provider7.ReadTimeout = convertedValue
 	}
 	if _, configured := configurationSnapshot.Lookup("commerce.server.write-timeout"); configured {
 		rawValue, valueErr := configurationSnapshot.Duration("commerce.server.write-timeout")
@@ -327,7 +329,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.server.write-timeout for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.WriteTimeout: %w", valueErr))
 		}
 		convertedValue := time.Duration(rawValue)
-		provider6.WriteTimeout = convertedValue
+		provider7.WriteTimeout = convertedValue
 	}
 	if _, configured := configurationSnapshot.Lookup("commerce.server.idle-timeout"); configured {
 		rawValue, valueErr := configurationSnapshot.Duration("commerce.server.idle-timeout")
@@ -335,22 +337,22 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.server.idle-timeout for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.IdleTimeout: %w", valueErr))
 		}
 		convertedValue := time.Duration(rawValue)
-		provider6.IdleTimeout = convertedValue
+		provider7.IdleTimeout = convertedValue
 	}
-	_ = provider6
-	provider7, err := platform.NewServer(provider6, provider2)
+	_ = provider7
+	provider8, err := platform.NewServer(provider7, provider2)
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|function|58:github.com/StevenBuglione/spice/examples/commerce/platform|0:|9:NewServer (*github.com/StevenBuglione/spice/examples/commerce/platform.Server): %w", err))
 	}
-	_ = provider7
-	provider8 := inventory.Settings{}
+	_ = provider8
+	provider9 := inventory.Settings{}
 	if _, configured := configurationSnapshot.Lookup("commerce.inventory.sku"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.inventory.sku")
 		if valueErr != nil {
 			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.inventory.sku for github.com/StevenBuglione/spice/examples/commerce/inventory.Settings.SKU: %w", valueErr))
 		}
 		convertedValue := string(rawValue)
-		provider8.SKU = convertedValue
+		provider9.SKU = convertedValue
 	}
 	if _, configured := configurationSnapshot.Lookup("commerce.inventory.initial-stock"); configured {
 		rawValue, valueErr := configurationSnapshot.Integer("commerce.inventory.initial-stock")
@@ -361,21 +363,21 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		if int64(convertedValue) != rawValue {
 			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.inventory.initial-stock for github.com/StevenBuglione/spice/examples/commerce/inventory.Settings.InitialStock: value is outside int"))
 		}
-		provider8.InitialStock = convertedValue
+		provider9.InitialStock = convertedValue
 	}
-	_ = provider8
-	provider9, err := inventory.NewService(provider8)
+	_ = provider9
+	provider10, err := inventory.NewService(provider9)
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|function|59:github.com/StevenBuglione/spice/examples/commerce/inventory|0:|10:NewService (*github.com/StevenBuglione/spice/examples/commerce/inventory.Service): %w", err))
 	}
-	_ = provider9
-	provider10, err := orders.NewService(provider3, provider9, provider5, provider1)
+	_ = provider10
+	provider11, err := orders.NewService(provider3, provider10, provider6, provider1)
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|function|56:github.com/StevenBuglione/spice/examples/commerce/orders|0:|10:NewService (*github.com/StevenBuglione/spice/examples/commerce/orders.Service): %w", err))
 	}
-	_ = provider10
-	provider11 := orders.NewController(provider10)
 	_ = provider11
+	provider12 := orders.NewController(provider11)
+	_ = provider12
 	asyncConcurrency, err := configurationSnapshot.Integer("spice.async.max-concurrency")
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode generated async concurrency: %w", err))
@@ -407,7 +409,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 				Module: "github.com/StevenBuglione/spice/examples/commerce/inventory",
 			},
 			func(taskContext context.Context) error {
-				return provider9.VerifySKU(taskContext, argument1)
+				return provider10.VerifySKU(taskContext, argument1)
 			},
 		)
 	}
@@ -451,7 +453,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 				},
 				InitialDelay: 30000000000,
 				Delay:        300000000000,
-				Run:          provider9.Audit,
+				Run:          provider10.Audit,
 			},
 		},
 		options.ScheduleWaiter,
@@ -493,7 +495,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		}
 		responseValue, cacheHit, routeErr := generatedCache0.Get(httpRequest.Context(), requestValue)
 		if routeErr == nil && !cacheHit {
-			responseValue, routeErr = provider11.Get(httpRequest.Context(), requestValue)
+			responseValue, routeErr = provider12.Get(httpRequest.Context(), requestValue)
 			if routeErr == nil {
 				routeErr = generatedCache0.Put(httpRequest.Context(), requestValue, responseValue, generatedCache0TTL)
 			}
@@ -540,7 +542,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 			}
 			return
 		}
-		responseValue, routeErr := provider11.Place(httpRequest.Context(), requestValue)
+		responseValue, routeErr := provider12.Place(httpRequest.Context(), requestValue)
 		if routeErr != nil {
 			if writeErr := spiceweb.WriteError(writer, httpRequest, routeErr, options.ErrorMapper); writeErr != nil {
 				return
@@ -557,8 +559,8 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		{
 			ID:     "spice:symbol:v1|function|58:github.com/StevenBuglione/spice/examples/commerce/platform|0:|9:NewServer",
 			Module: "github.com/StevenBuglione/spice/examples/commerce/platform",
-			Start:  provider7.Start,
-			Stop:   provider7.Stop,
+			Start:  provider8.Start,
+			Stop:   provider8.Stop,
 		},
 		{
 			ID:     "spice.schedule",
