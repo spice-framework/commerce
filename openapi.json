@@ -5,6 +5,39 @@
     "version": "0.1.0-dev"
   },
   "paths": {
+    "/catalog": {
+      "get": {
+        "operationId": "Controller_Catalog",
+        "summary": "Catalog",
+        "tags": [
+          "github.com/StevenBuglione/spice/examples/commerce/orders"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogResponse_dca6587de6"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "RFC 9457 problem response",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpiceProblem"
+                }
+              }
+            }
+          }
+        },
+        "x-spice-symbol": "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|7:Catalog",
+        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders"
+      }
+    },
     "/orders": {
       "post": {
         "operationId": "Controller_Place",
@@ -33,6 +66,26 @@
               }
             }
           },
+          "401": {
+            "description": "RFC 9457 problem response",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpiceProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RFC 9457 problem response",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpiceProblem"
+                }
+              }
+            }
+          },
           "default": {
             "description": "RFC 9457 problem response",
             "content": {
@@ -44,8 +97,19 @@
             }
           }
         },
+        "security": [
+          {
+            "SpicePrincipal": []
+          }
+        ],
         "x-spice-symbol": "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|5:Place",
-        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders"
+        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders",
+        "x-spice-authorization": {
+          "owner": "github.com/StevenBuglione/spice/examples/commerce/orders",
+          "allScopes": [
+            "orders:write"
+          ]
+        }
       }
     },
     "/orders/{id}": {
@@ -76,6 +140,26 @@
               }
             }
           },
+          "401": {
+            "description": "RFC 9457 problem response",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpiceProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RFC 9457 problem response",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpiceProblem"
+                }
+              }
+            }
+          },
           "default": {
             "description": "RFC 9457 problem response",
             "content": {
@@ -87,13 +171,114 @@
             }
           }
         },
+        "security": [
+          {
+            "SpicePrincipal": []
+          }
+        ],
         "x-spice-symbol": "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|3:Get",
-        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders"
+        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders",
+        "x-spice-authorization": {
+          "owner": "github.com/StevenBuglione/spice/examples/commerce/orders",
+          "allScopes": [
+            "orders:read"
+          ]
+        }
+      }
+    },
+    "/orders/{id}/receipt": {
+      "post": {
+        "operationId": "Controller_SendReceipt",
+        "summary": "SendReceipt",
+        "tags": [
+          "github.com/StevenBuglione/spice/examples/commerce/orders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptResponse_571249437c"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "RFC 9457 problem response",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpiceProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RFC 9457 problem response",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpiceProblem"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "RFC 9457 problem response",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpiceProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "SpicePrincipal": []
+          }
+        ],
+        "x-spice-symbol": "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|11:SendReceipt",
+        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders",
+        "x-spice-authorization": {
+          "owner": "github.com/StevenBuglione/spice/examples/commerce/orders",
+          "allScopes": [
+            "orders:notify"
+          ]
+        }
       }
     }
   },
   "components": {
     "schemas": {
+      "CatalogResponse_dca6587de6": {
+        "type": "object",
+        "properties": {
+          "sku": {
+            "type": "string"
+          },
+          "unit_price_cents": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "sku",
+          "unit_price_cents"
+        ]
+      },
       "OrderResponse_d0a448cf7a": {
         "type": "object",
         "properties": {
@@ -135,6 +320,29 @@
           "quantity"
         ]
       },
+      "ReceiptResponse_571249437c": {
+        "type": "object",
+        "properties": {
+          "accepted": {
+            "type": "boolean"
+          },
+          "attachment": {
+            "type": "string"
+          },
+          "message_id": {
+            "type": "string"
+          },
+          "transport": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accepted",
+          "attachment",
+          "message_id",
+          "transport"
+        ]
+      },
       "SpiceProblem": {
         "type": "object",
         "properties": {
@@ -162,6 +370,12 @@
           "title",
           "status"
         ]
+      }
+    },
+    "securitySchemes": {
+      "SpicePrincipal": {
+        "type": "http",
+        "scheme": "bearer"
       }
     }
   }

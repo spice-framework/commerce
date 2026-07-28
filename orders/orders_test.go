@@ -8,6 +8,7 @@ import (
 
 	"github.com/StevenBuglione/spice/event"
 	"github.com/StevenBuglione/spice/examples/commerce/inventory"
+	"github.com/StevenBuglione/spice/examples/commerce/notifications"
 	"github.com/StevenBuglione/spice/examples/commerce/payments"
 	"github.com/StevenBuglione/spice/examples/commerce/storage"
 	"github.com/StevenBuglione/spice/web"
@@ -75,7 +76,7 @@ func TestServiceRejectsCanceledOrderWithoutSideEffects(t *testing.T) {
 func TestControllerReturnsSafePaymentProblem(t *testing.T) {
 	t.Parallel()
 	service, _, _ := newTestService(t, 2, 1000)
-	controller := NewController(service)
+	controller := newTestController(t, service)
 
 	_, err := controller.Place(
 		context.Background(),
@@ -106,7 +107,7 @@ func TestPlaceOrderRequestValidation(t *testing.T) {
 func TestControllerGetsCompletedOrder(t *testing.T) {
 	t.Parallel()
 	service, _, _ := newTestService(t, 2, 5000)
-	controller := NewController(service)
+	controller := newTestController(t, service)
 	placed, err := controller.Place(
 		context.Background(),
 		service.reads,
@@ -124,6 +125,48 @@ func TestControllerGetsCompletedOrder(t *testing.T) {
 	}
 	if _, err := controller.Get(context.Background(), GetOrderRequest{ID: "missing"}); err == nil {
 		t.Fatal("Get(missing) error = nil")
+	}
+}
+
+func TestControllerSendsReceiptOnlyForPersistedOrder(t *testing.T) {
+	t.Parallel()
+	service, _, _ := newTestService(t, 2, 5000)
+	controller, delivery := newTestControllerWithDelivery(t, service)
+	placed, err := controller.Place(
+		context.Background(),
+		service.reads,
+		PlaceOrderRequest{Body: PlaceOrderBody{Quantity: 1}},
+	)
+	if err != nil {
+		t.Fatalf("Place() error = %v", err)
+	}
+	response, err := controller.SendReceipt(
+		context.Background(),
+		ReceiptRequest{ID: placed.ID},
+	)
+	if err != nil {
+		t.Fatalf("SendReceipt() error = %v", err)
+	}
+	if response.MessageID != "receipt-"+placed.ID+"@commerce.example" ||
+		len(delivery.Messages()) != 1 {
+		t.Fatalf(
+			"SendReceipt() response=%#v messages=%#v",
+			response,
+			delivery.Messages(),
+		)
+	}
+	if _, err := controller.SendReceipt(
+		context.Background(),
+		ReceiptRequest{ID: "missing"},
+	); err == nil {
+		t.Fatal("SendReceipt(missing) error = nil")
+	}
+}
+
+func TestControllerRejectsNilDependencies(t *testing.T) {
+	t.Parallel()
+	if _, err := NewController(nil, nil); err == nil {
+		t.Fatal("NewController(nil) error = nil")
 	}
 }
 
@@ -182,6 +225,43 @@ func TestServicePublishesOnlySuccessfulOrderViews(t *testing.T) {
 	if got := audit.Views(placed.ID); got != 1 {
 		t.Fatalf("cancelled Find changed Views() to %d", got)
 	}
+}
+
+func newTestController(t *testing.T, service *Service) *Controller {
+	t.Helper()
+	controller, _ := newTestControllerWithDelivery(t, service)
+	return controller
+}
+
+func newTestControllerWithDelivery(
+	t *testing.T,
+	service *Service,
+) (*Controller, *notifications.Delivery) {
+	t.Helper()
+	settings := notifications.Settings{
+		Transport:    "test",
+		From:         "Spice Commerce <no-reply@commerce.example>",
+		Recipient:    "Developer <developer@commerce.example>",
+		TestCapacity: 10,
+	}
+	delivery, err := notifications.NewDelivery(settings)
+	if err != nil {
+		t.Fatalf("notifications.NewDelivery() error = %v", err)
+	}
+	notifier, err := notifications.NewNotifier(
+		settings,
+		delivery,
+		delivery,
+		notifications.NewSystemClock(),
+	)
+	if err != nil {
+		t.Fatalf("notifications.NewNotifier() error = %v", err)
+	}
+	controller, err := NewController(service, notifier)
+	if err != nil {
+		t.Fatalf("NewController() error = %v", err)
+	}
+	return controller, delivery
 }
 
 func newTestService(

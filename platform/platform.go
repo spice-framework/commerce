@@ -9,6 +9,7 @@ package platform
 
 import (
 	"context"
+	"crypto/subtle"
 	"errors"
 	"fmt"
 	"net"
@@ -18,6 +19,7 @@ import (
 	"time"
 
 	"github.com/StevenBuglione/spice/examples/commerce/storage"
+	"github.com/StevenBuglione/spice/security"
 )
 
 // Settings contains safe HTTP server defaults.
@@ -29,6 +31,7 @@ type Settings struct {
 	ReadTimeout       time.Duration `spice:"read-timeout,default=15s"`
 	WriteTimeout      time.Duration `spice:"write-timeout,default=15s"`
 	IdleTimeout       time.Duration `spice:"idle-timeout,default=60s"`
+	DeveloperToken    string        `spice:"developer-token,env=SPICE_COMMERCE_DEVELOPER_TOKEN,secret"`
 }
 
 // Mux supplies the route table populated by generated controller adapters.
@@ -70,10 +73,18 @@ func NewServer(
 	if database == nil {
 		return nil, errors.New("construct commerce server: database is nil")
 	}
+	securedHandler, err := developerAuthentication(
+		settings.Address,
+		settings.DeveloperToken,
+		handler,
+	)
+	if err != nil {
+		return nil, err
+	}
 	return &Server{
 		httpServer: &http.Server{
 			Addr:              settings.Address,
-			Handler:           handler,
+			Handler:           securedHandler,
 			ReadHeaderTimeout: settings.ReadHeaderTimeout,
 			ReadTimeout:       settings.ReadTimeout,
 			WriteTimeout:      settings.WriteTimeout,
@@ -81,6 +92,80 @@ func NewServer(
 		},
 		serveErrors: make(chan error, 1),
 	}, nil
+}
+
+func developerAuthentication(
+	address string,
+	token string,
+	next http.Handler,
+) (http.Handler, error) {
+	if token == "" {
+		return next, nil
+	}
+	if len(token) < 16 ||
+		len(token) > 1024 ||
+		strings.TrimSpace(token) != token ||
+		strings.ContainsAny(token, "\x00\r\n\t ") {
+		return nil, errors.New(
+			"construct commerce developer authentication: token must contain 16 to 1024 non-space bytes",
+		)
+	}
+	host, _, err := net.SplitHostPort(address)
+	if err != nil || !loopbackHost(host) {
+		return nil, errors.New(
+			"construct commerce developer authentication: token requires a loopback server address",
+		)
+	}
+	principal, err := security.NewPrincipal(
+		"commerce-developer",
+		"spice://commerce/developer",
+		nil,
+		[]string{"orders:notify", "orders:read", "orders:write"},
+	)
+	if err != nil {
+		return nil, fmt.Errorf(
+			"construct commerce developer authentication: %w",
+			err,
+		)
+	}
+	return http.HandlerFunc(func(
+		writer http.ResponseWriter,
+		request *http.Request,
+	) {
+		presented, found := strings.CutPrefix(
+			request.Header.Get("Authorization"),
+			"Bearer ",
+		)
+		if found &&
+			len(presented) == len(token) &&
+			subtle.ConstantTimeCompare(
+				[]byte(presented),
+				[]byte(token),
+			) == 1 {
+			ctx, attachErr := security.WithPrincipal(
+				request.Context(),
+				principal,
+			)
+			if attachErr != nil {
+				http.Error(
+					writer,
+					"authentication unavailable",
+					http.StatusInternalServerError,
+				)
+				return
+			}
+			request = request.WithContext(ctx)
+		}
+		next.ServeHTTP(writer, request)
+	}), nil
+}
+
+func loopbackHost(host string) bool {
+	if strings.EqualFold(host, "localhost") {
+		return true
+	}
+	ip := net.ParseIP(host)
+	return ip != nil && ip.IsLoopback()
 }
 
 // Start binds the configured listener.

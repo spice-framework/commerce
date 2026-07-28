@@ -19,7 +19,9 @@ import (
 	"github.com/StevenBuglione/spice/examples/commerce/orders"
 	"github.com/StevenBuglione/spice/lifecycle"
 	"github.com/StevenBuglione/spice/management"
+	"github.com/StevenBuglione/spice/security"
 	"github.com/StevenBuglione/spice/spicetest"
+	"github.com/StevenBuglione/spice/web"
 )
 
 func TestGeneratedCommandCheckConstructsCommerceApplication(t *testing.T) {
@@ -60,6 +62,39 @@ func TestGeneratedCommandReportsInvalidConfigurationWithoutRawValue(t *testing.T
 		!strings.Contains(logs.String(), "commerce.server.read-header-timeout") ||
 		strings.Contains(logs.String(), "secret-invalid-duration") {
 		t.Fatalf("RunCommand() exit=%d logs=%q", exitCode, logs.String())
+	}
+}
+
+func TestGeneratedCommerceConfigurationOverrides(t *testing.T) {
+	t.Parallel()
+	source := mapSource(t, map[string]string{
+		"commerce.mail.transport":               "test",
+		"commerce.mail.from":                    "Commerce <sender@example.com>",
+		"commerce.mail.recipient":               "Recipient <recipient@example.com>",
+		"commerce.mail.test-capacity":           "7",
+		"commerce.mail.smtp-address":            "smtp.example:465",
+		"commerce.mail.smtp-server-name":        "smtp.example",
+		"commerce.mail.smtp-mode":               "implicit-tls",
+		"commerce.mail.smtp-username":           "commerce",
+		"commerce.mail.smtp-password":           "not-logged",
+		"commerce.mail.timeout":                 "3s",
+		"commerce.mail.max-attempts":            "2",
+		"commerce.server.developer-token":       "commerce-override-token",
+		"spice.cache.commerce.catalog.capacity": "17",
+		"spice.cache.commerce.catalog.ttl":      "45s",
+	})
+	application, err := NewApplicationWithOptions(
+		context.Background(),
+		ApplicationOptions{
+			Sources: []config.Source{source},
+			Logger:  discardLogger(),
+		},
+	)
+	if err != nil {
+		t.Fatalf("NewApplicationWithOptions() error = %v", err)
+	}
+	if err := application.Stop(context.Background()); err != nil {
+		t.Fatalf("Stop() error = %v", err)
 	}
 }
 
@@ -182,10 +217,11 @@ func TestGeneratedCommerceCommandCancellationUsesFreshShutdownContext(t *testing
 	}
 }
 
-func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
+func TestCommerceDeveloperProof(t *testing.T) {
 	t.Parallel()
 	var cacheObservations []spicecache.Observation
 	eventObserver := &commerceEventObserver{}
+	var authorizationDecisions []security.Decision
 	server, err := spicetest.NewHTTP(
 		context.Background(),
 		func(ctx context.Context) (spicetest.HTTPApplication, error) {
@@ -199,6 +235,17 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 						},
 					},
 					EventObservers: []spiceevent.Observer{eventObserver},
+					Middleware: []web.Middleware{
+						commerceTestAuthentication(t),
+					},
+					AuthorizationObservers: []security.Observer{
+						func(_ context.Context, decision security.Decision) {
+							authorizationDecisions = append(
+								authorizationDecisions,
+								decision,
+							)
+						},
+					},
 				},
 			)
 		},
@@ -213,40 +260,105 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 		}
 	})
 
-	order := placeOrder(t, server, 2)
+	order := placeOrder(t, server, 2, "full")
 	if order.ID != "order-000001" || order.Quantity != 2 || order.TotalCents != 5000 {
 		t.Fatalf("POST /orders response = %#v", order)
 	}
-	assertGETStatus(t, server, "/orders/"+order.ID, http.StatusOK)
-	assertGETStatus(t, server, "/orders/"+order.ID, http.StatusOK)
-	assertProblem(t, server, `{"quantity":0}`, http.StatusBadRequest, "quantity must be positive")
-	assertGETStatus(t, server, "/orders/missing", http.StatusNotFound)
+	assertGETStatus(t, server, "/orders/"+order.ID, http.StatusOK, "full")
+	assertGETStatus(t, server, "/orders/"+order.ID, http.StatusOK, "full")
+	assertProblem(
+		t,
+		server,
+		`{"quantity":0}`,
+		http.StatusBadRequest,
+		"quantity must be positive",
+		"full",
+	)
+	assertGETStatus(t, server, "/orders/missing", http.StatusNotFound, "full")
+	receiptResponse, err := server.Do(
+		context.Background(),
+		spicetest.HTTPRequest{
+			Method: http.MethodPost,
+			Path:   "/orders/" + order.ID + "/receipt",
+			Header: commerceAuthorizationHeader("full"),
+		},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if receiptResponse.StatusCode != http.StatusOK {
+		t.Fatalf(
+			"POST receipt status=%d body=%s",
+			receiptResponse.StatusCode,
+			receiptResponse.Body,
+		)
+	}
+	var receipt orders.ReceiptResponse
+	if err := receiptResponse.DecodeJSON(&receipt); err != nil {
+		t.Fatal(err)
+	}
+	if receipt.MessageID != "receipt-"+order.ID+"@commerce.example" ||
+		receipt.Transport != "test" ||
+		!receipt.Accepted ||
+		receipt.Attachment != order.ID+".txt" {
+		t.Fatalf("receipt response = %#v", receipt)
+	}
+	for range 2 {
+		var catalog orders.CatalogResponse
+		decodeGET(t, server, "/catalog", &catalog)
+		if catalog.SKU != "SKU-RED" ||
+			catalog.UnitPriceCents != 2500 {
+			t.Fatalf("catalog response = %#v", catalog)
+		}
+	}
+	assertProblemRequest(
+		t,
+		server,
+		spicetest.HTTPRequest{
+			Method: http.MethodPost,
+			Path:   "/orders",
+			JSON:   map[string]int{"quantity": 1},
+		},
+		http.StatusUnauthorized,
+		"Authentication required",
+	)
+	assertProblemRequest(
+		t,
+		server,
+		spicetest.HTTPRequest{
+			Method: http.MethodPost,
+			Path:   "/orders",
+			Header: commerceAuthorizationHeader("read"),
+			JSON:   map[string]int{"quantity": 1},
+		},
+		http.StatusForbidden,
+		"Forbidden",
+	)
 
 	var snapshot management.HTTPMetricsSnapshot
 	decodeGET(t, server, "/actuator/metrics", &snapshot)
 	requestsByMethod := make(map[string]uint64, len(snapshot.Routes))
 	for _, route := range snapshot.Routes {
-		requestsByMethod[route.Route.Method] = route.Requests
+		requestsByMethod[route.Route.Method] += route.Requests
 	}
-	if len(snapshot.Routes) != 2 ||
-		requestsByMethod[http.MethodGet] != 3 ||
-		requestsByMethod[http.MethodPost] != 2 {
+	if len(snapshot.Routes) != 4 ||
+		requestsByMethod[http.MethodGet] != 5 ||
+		requestsByMethod[http.MethodPost] != 5 {
 		t.Fatalf("metrics snapshot = %#v", snapshot)
 	}
 	wantCacheOperations := []spicecache.Operation{
 		spicecache.OperationGet,
 		spicecache.OperationPut,
 		spicecache.OperationGet,
-		spicecache.OperationGet,
 	}
 	if len(cacheObservations) != len(wantCacheOperations) {
 		t.Fatalf("cache observations = %#v", cacheObservations)
 	}
-	if len(eventObserver.interactions) != 1 {
+	if len(eventObserver.interactions) != 3 {
 		t.Fatalf("event observations = %#v", eventObserver)
 	}
 	eventInteraction := eventObserver.interactions[0]
-	if eventObserver.results != 1 ||
+	if eventObserver.results != 3 ||
 		eventObserver.lastErr != nil ||
 		eventInteraction.Event.Module !=
 			"github.com/StevenBuglione/spice/examples/commerce/orders" ||
@@ -269,13 +381,28 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 	) {
 		t.Fatalf("cache operations = %v, want %v", got, wantCacheOperations)
 	}
-	if cacheObservations[0].Definition.ID != "commerce.orders.by-id" ||
+	if cacheObservations[0].Definition.ID != "commerce.catalog" ||
 		cacheObservations[0].Definition.Module !=
 			"github.com/StevenBuglione/spice/examples/commerce/orders" ||
 		cacheObservations[0].Hit ||
-		!cacheObservations[2].Hit ||
-		cacheObservations[3].Hit {
+		!cacheObservations[2].Hit {
 		t.Fatalf("cache observations = %#v", cacheObservations)
+	}
+	if len(authorizationDecisions) != 8 {
+		t.Fatalf("authorization decisions = %#v", authorizationDecisions)
+	}
+	decisionReasons := make(map[security.Reason]int)
+	allowedDecisions := 0
+	for _, decision := range authorizationDecisions {
+		decisionReasons[decision.Reason]++
+		if decision.Allowed {
+			allowedDecisions++
+		}
+	}
+	if allowedDecisions != 6 ||
+		decisionReasons[security.ReasonUnauthenticated] != 1 ||
+		decisionReasons[security.ReasonScope] != 1 {
+		t.Fatalf("authorization decisions = %#v", authorizationDecisions)
 	}
 	var info map[string]string
 	decodeGET(t, server, "/actuator/info", &info)
@@ -303,17 +430,26 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 		!properties["commerce.orders.sku"].Default ||
 		properties["commerce.database.url"].Value != "<redacted>" ||
 		!properties["commerce.database.url"].Secret ||
+		properties["commerce.mail.transport"].Value != "test" ||
+		properties["commerce.mail.recipient"].Value != "<redacted>" ||
+		!properties["commerce.mail.recipient"].Secret ||
+		properties["commerce.mail.smtp-password"].Value != "" ||
+		properties["commerce.mail.smtp-password"].Resolved ||
+		!properties["commerce.mail.smtp-password"].Secret ||
+		properties["commerce.server.developer-token"].Value != "" ||
+		properties["commerce.server.developer-token"].Resolved ||
+		!properties["commerce.server.developer-token"].Secret ||
 		properties["spice.async.max-concurrency"].Value != "16" ||
-		properties["spice.cache.commerce.orders.by-id.capacity"].Value !=
+		properties["spice.cache.commerce.catalog.capacity"].Value !=
 			"256" ||
-		properties["spice.cache.commerce.orders.by-id.ttl"].Value != "5m" {
+		properties["spice.cache.commerce.catalog.ttl"].Value != "5m" {
 		t.Fatalf("configuration report = %#v", configuration)
 	}
 	var modules management.ModuleReport
 	decodeGET(t, server, "/actuator/modules", &modules)
 	if modules.Schema != "spice.modules/v1" ||
-		len(modules.Modules) != 5 ||
-		len(modules.Edges) != 4 ||
+		len(modules.Modules) != 6 ||
+		len(modules.Edges) != 5 ||
 		!slices.Equal(
 			modules.UnassignedPackages,
 			[]string{
@@ -407,6 +543,7 @@ func placeOrder(
 	t *testing.T,
 	server *spicetest.HTTP,
 	quantity int,
+	token string,
 ) orders.OrderResponse {
 	t.Helper()
 	response, err := server.Do(
@@ -414,6 +551,7 @@ func placeOrder(
 		spicetest.HTTPRequest{
 			Method: http.MethodPost,
 			Path:   "/orders",
+			Header: commerceAuthorizationHeader(token),
 			JSON:   map[string]int{"quantity": quantity},
 		},
 	)
@@ -436,6 +574,7 @@ func assertProblem(
 	body string,
 	status int,
 	detail string,
+	token string,
 ) {
 	t.Helper()
 	response, err := server.Do(
@@ -444,7 +583,8 @@ func assertProblem(
 			Method: http.MethodPost,
 			Path:   "/orders",
 			Header: http.Header{
-				"Content-Type": []string{"application/json"},
+				"Content-Type":  []string{"application/json"},
+				"Authorization": []string{"Bearer " + token},
 			},
 			Body: []byte(body),
 		},
@@ -466,11 +606,20 @@ func assertGETStatus(
 	server *spicetest.HTTP,
 	path string,
 	status int,
+	token ...string,
 ) {
 	t.Helper()
+	header := make(http.Header)
+	if len(token) != 0 {
+		header = commerceAuthorizationHeader(token[0])
+	}
 	response, err := server.Do(
 		context.Background(),
-		spicetest.HTTPRequest{Method: http.MethodGet, Path: path},
+		spicetest.HTTPRequest{
+			Method: http.MethodGet,
+			Path:   path,
+			Header: header,
+		},
 	)
 	if err != nil {
 		t.Fatal(err)
@@ -482,6 +631,31 @@ func assertGETStatus(
 			response.StatusCode,
 			status,
 			response.Body,
+		)
+	}
+}
+
+func assertProblemRequest(
+	t *testing.T,
+	server *spicetest.HTTP,
+	request spicetest.HTTPRequest,
+	status int,
+	title string,
+) {
+	t.Helper()
+	response, err := server.Do(context.Background(), request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	problem, err := response.Problem()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if response.StatusCode != status || problem.Title != title {
+		t.Fatalf(
+			"problem status=%d body=%#v",
+			response.StatusCode,
+			problem,
 		)
 	}
 }
@@ -515,6 +689,62 @@ func mapSource(t *testing.T, values map[string]string) config.Source {
 		t.Fatal(err)
 	}
 	return source
+}
+
+func commerceTestAuthentication(t *testing.T) web.Middleware {
+	t.Helper()
+	full, err := security.NewPrincipal(
+		"commerce-developer",
+		"https://issuer.example",
+		nil,
+		[]string{"orders:notify", "orders:read", "orders:write"},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	read, err := security.NewPrincipal(
+		"commerce-reader",
+		"https://issuer.example",
+		nil,
+		[]string{"orders:read"},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(
+			writer http.ResponseWriter,
+			request *http.Request,
+		) {
+			var principal security.Principal
+			switch request.Header.Get("Authorization") {
+			case "Bearer full":
+				principal = full
+			case "Bearer read":
+				principal = read
+			default:
+				next.ServeHTTP(writer, request)
+				return
+			}
+			ctx, attachErr := security.WithPrincipal(
+				request.Context(),
+				principal,
+			)
+			if attachErr != nil {
+				http.Error(
+					writer,
+					"test authentication failed",
+					http.StatusInternalServerError,
+				)
+				return
+			}
+			next.ServeHTTP(writer, request.WithContext(ctx))
+		})
+	}
+}
+
+func commerceAuthorizationHeader(token string) http.Header {
+	return http.Header{"Authorization": []string{"Bearer " + token}}
 }
 
 func discardLogger() *slog.Logger {

@@ -22,6 +22,7 @@ import (
 	spicedata "github.com/StevenBuglione/spice/data"
 	spiceevent "github.com/StevenBuglione/spice/event"
 	inventory "github.com/StevenBuglione/spice/examples/commerce/inventory"
+	notifications "github.com/StevenBuglione/spice/examples/commerce/notifications"
 	orders "github.com/StevenBuglione/spice/examples/commerce/orders"
 	payments "github.com/StevenBuglione/spice/examples/commerce/payments"
 	platform "github.com/StevenBuglione/spice/examples/commerce/platform"
@@ -30,6 +31,7 @@ import (
 	spicemanagement "github.com/StevenBuglione/spice/management"
 	spiceobservability "github.com/StevenBuglione/spice/observability"
 	spiceschedule "github.com/StevenBuglione/spice/schedule"
+	spicesecurity "github.com/StevenBuglione/spice/security"
 	spiceweb "github.com/StevenBuglione/spice/web"
 )
 
@@ -59,6 +61,8 @@ type ApplicationOptions struct {
 	MaxRequestBodyBytes       int64
 	HTTPObservers             []spiceweb.HTTPObserver
 	Middleware                []spiceweb.Middleware
+	AuthorizationObservers    []spicesecurity.Observer
+	AuthorizationWriteFailure spicesecurity.WriteFailure
 	Logger                    *slog.Logger
 	ScheduleContext           context.Context
 	ScheduleWaiter            spiceschedule.Waiter
@@ -148,6 +152,13 @@ func ConfigurationSchema() (spiceconfig.Schema, error) {
 			HasDefault: true,
 		},
 		spiceconfig.Property{
+			Key:         "commerce.server.developer-token",
+			Kind:        spiceconfig.KindString,
+			Module:      "github.com/StevenBuglione/spice/examples/commerce/platform",
+			Environment: "SPICE_COMMERCE_DEVELOPER_TOKEN",
+			Secret:      true,
+		},
+		spiceconfig.Property{
 			Key:        "commerce.inventory.sku",
 			Kind:       spiceconfig.KindString,
 			Module:     "github.com/StevenBuglione/spice/examples/commerce/inventory",
@@ -162,20 +173,100 @@ func ConfigurationSchema() (spiceconfig.Schema, error) {
 			HasDefault: true,
 		},
 		spiceconfig.Property{
-			Key:         "spice.cache.commerce.orders.by-id.capacity",
+			Key:         "commerce.mail.transport",
+			Kind:        spiceconfig.KindString,
+			Module:      "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Environment: "SPICE_COMMERCE_MAIL_TRANSPORT",
+			Default:     "test",
+			HasDefault:  true,
+		},
+		spiceconfig.Property{
+			Key:         "commerce.mail.from",
+			Kind:        spiceconfig.KindString,
+			Module:      "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Environment: "SPICE_COMMERCE_MAIL_FROM",
+			Default:     "Spice Commerce <no-reply@commerce.example>",
+			HasDefault:  true,
+		},
+		spiceconfig.Property{
+			Key:         "commerce.mail.recipient",
+			Kind:        spiceconfig.KindString,
+			Module:      "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Environment: "SPICE_COMMERCE_MAIL_RECIPIENT",
+			Default:     "Developer <developer@commerce.example>",
+			HasDefault:  true,
+			Secret:      true,
+		},
+		spiceconfig.Property{
+			Key:        "commerce.mail.test-capacity",
+			Kind:       spiceconfig.KindInteger,
+			Module:     "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Default:    "100",
+			HasDefault: true,
+		},
+		spiceconfig.Property{
+			Key:         "commerce.mail.smtp-address",
+			Kind:        spiceconfig.KindString,
+			Module:      "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Environment: "SPICE_COMMERCE_MAIL_SMTP_ADDRESS",
+		},
+		spiceconfig.Property{
+			Key:         "commerce.mail.smtp-server-name",
+			Kind:        spiceconfig.KindString,
+			Module:      "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Environment: "SPICE_COMMERCE_MAIL_SMTP_SERVER_NAME",
+		},
+		spiceconfig.Property{
+			Key:         "commerce.mail.smtp-mode",
+			Kind:        spiceconfig.KindString,
+			Module:      "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Environment: "SPICE_COMMERCE_MAIL_SMTP_MODE",
+			Default:     "starttls",
+			HasDefault:  true,
+		},
+		spiceconfig.Property{
+			Key:         "commerce.mail.smtp-username",
+			Kind:        spiceconfig.KindString,
+			Module:      "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Environment: "SPICE_COMMERCE_MAIL_SMTP_USERNAME",
+			Secret:      true,
+		},
+		spiceconfig.Property{
+			Key:         "commerce.mail.smtp-password",
+			Kind:        spiceconfig.KindString,
+			Module:      "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Environment: "SPICE_COMMERCE_MAIL_SMTP_PASSWORD",
+			Secret:      true,
+		},
+		spiceconfig.Property{
+			Key:        "commerce.mail.timeout",
+			Kind:       spiceconfig.KindDuration,
+			Module:     "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Default:    "5s",
+			HasDefault: true,
+		},
+		spiceconfig.Property{
+			Key:        "commerce.mail.max-attempts",
+			Kind:       spiceconfig.KindInteger,
+			Module:     "github.com/StevenBuglione/spice/examples/commerce/notifications",
+			Default:    "1",
+			HasDefault: true,
+		},
+		spiceconfig.Property{
+			Key:         "spice.cache.commerce.catalog.capacity",
 			Kind:        spiceconfig.KindInteger,
-			Description: "Maximum entries for cache commerce.orders.by-id",
+			Description: "Maximum entries for cache commerce.catalog",
 			Module:      "github.com/StevenBuglione/spice/examples/commerce/orders",
-			Environment: "SPICE_CACHE_COMMERCE_ORDERS_BY_ID_CAPACITY",
+			Environment: "SPICE_CACHE_COMMERCE_CATALOG_CAPACITY",
 			Default:     "256",
 			HasDefault:  true,
 		},
 		spiceconfig.Property{
-			Key:         "spice.cache.commerce.orders.by-id.ttl",
+			Key:         "spice.cache.commerce.catalog.ttl",
 			Kind:        spiceconfig.KindDuration,
-			Description: "Entry lifetime for cache commerce.orders.by-id",
+			Description: "Entry lifetime for cache commerce.catalog",
 			Module:      "github.com/StevenBuglione/spice/examples/commerce/orders",
-			Environment: "SPICE_CACHE_COMMERCE_ORDERS_BY_ID_TTL",
+			Environment: "SPICE_CACHE_COMMERCE_CATALOG_TTL",
 			Default:     "5m",
 			HasDefault:  true,
 		},
@@ -225,6 +316,10 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("configure HTTP logging: %w", err))
 	}
 	httpObservers = append(httpObservers[:1], append([]spiceweb.HTTPObserver{httpLogs}, httpObservers[1:]...)...)
+	authorizer, authorizationErr := spicesecurity.NewAuthorizer(options.AuthorizationObservers...)
+	if authorizationErr != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated authorizer: %w", authorizationErr))
+	}
 	for index, observer := range observers {
 		if err := application.coordinator.RegisterObserver(observer); err != nil {
 			return nil, fmt.Errorf("register lifecycle observer %d: %w", index, err)
@@ -402,6 +497,14 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		convertedValue := time.Duration(rawValue)
 		provider13.IdleTimeout = convertedValue
 	}
+	if _, configured := configurationSnapshot.Lookup("commerce.server.developer-token"); configured {
+		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.server.developer-token")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.server.developer-token for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.DeveloperToken: %w", valueErr))
+		}
+		convertedValue := string(rawValue)
+		provider13.DeveloperToken = convertedValue
+	}
 	_ = provider13
 	provider14, err := platform.NewServer(provider13, provider2, provider6)
 	if err != nil {
@@ -439,8 +542,119 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|function|56:github.com/StevenBuglione/spice/examples/commerce/orders|0:|10:NewService (*github.com/StevenBuglione/spice/examples/commerce/orders.Service): %w", err))
 	}
 	_ = provider17
-	provider18 := orders.NewController(provider17)
+	provider18 := notifications.NewSystemClock()
 	_ = provider18
+	provider19 := notifications.Settings{}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.transport"); configured {
+		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.transport")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.transport for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.Transport: %w", valueErr))
+		}
+		convertedValue := string(rawValue)
+		provider19.Transport = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.from"); configured {
+		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.from")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.from for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.From: %w", valueErr))
+		}
+		convertedValue := string(rawValue)
+		provider19.From = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.recipient"); configured {
+		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.recipient")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.recipient for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.Recipient: %w", valueErr))
+		}
+		convertedValue := string(rawValue)
+		provider19.Recipient = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.test-capacity"); configured {
+		rawValue, valueErr := configurationSnapshot.Integer("commerce.mail.test-capacity")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.test-capacity for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.TestCapacity: %w", valueErr))
+		}
+		convertedValue := int(rawValue)
+		if int64(convertedValue) != rawValue {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.test-capacity for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.TestCapacity: value is outside int"))
+		}
+		provider19.TestCapacity = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-address"); configured {
+		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-address")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.smtp-address for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPAddress: %w", valueErr))
+		}
+		convertedValue := string(rawValue)
+		provider19.SMTPAddress = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-server-name"); configured {
+		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-server-name")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.smtp-server-name for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPServerName: %w", valueErr))
+		}
+		convertedValue := string(rawValue)
+		provider19.SMTPServerName = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-mode"); configured {
+		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-mode")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.smtp-mode for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPMode: %w", valueErr))
+		}
+		convertedValue := string(rawValue)
+		provider19.SMTPMode = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-username"); configured {
+		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-username")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.smtp-username for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPUsername: %w", valueErr))
+		}
+		convertedValue := string(rawValue)
+		provider19.SMTPUsername = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-password"); configured {
+		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-password")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.smtp-password for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPPassword: %w", valueErr))
+		}
+		convertedValue := string(rawValue)
+		provider19.SMTPPassword = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.timeout"); configured {
+		rawValue, valueErr := configurationSnapshot.Duration("commerce.mail.timeout")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.timeout for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.Timeout: %w", valueErr))
+		}
+		convertedValue := time.Duration(rawValue)
+		provider19.Timeout = convertedValue
+	}
+	if _, configured := configurationSnapshot.Lookup("commerce.mail.max-attempts"); configured {
+		rawValue, valueErr := configurationSnapshot.Integer("commerce.mail.max-attempts")
+		if valueErr != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.max-attempts for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.MaxAttempts: %w", valueErr))
+		}
+		convertedValue := int(rawValue)
+		if int64(convertedValue) != rawValue {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode configuration property commerce.mail.max-attempts for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.MaxAttempts: value is outside int"))
+		}
+		provider19.MaxAttempts = convertedValue
+	}
+	_ = provider19
+	provider20, err := notifications.NewDelivery(provider19)
+	if err != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|8:Delivery (*github.com/StevenBuglione/spice/examples/commerce/notifications.Delivery): %w", err))
+	}
+	_ = provider20
+	provider21, err := notifications.NewNotifier(provider19, provider20, provider20, provider18)
+	if err != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|8:Notifier (*github.com/StevenBuglione/spice/examples/commerce/notifications.Notifier): %w", err))
+	}
+	_ = provider21
+	provider22, err := orders.NewController(provider17, provider21)
+	if err != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct provider spice:symbol:v1|type|56:github.com/StevenBuglione/spice/examples/commerce/orders|0:|10:Controller (*github.com/StevenBuglione/spice/examples/commerce/orders.Controller): %w", err))
+	}
+	_ = provider22
 	asyncConcurrency, err := configurationSnapshot.Integer("spice.async.max-concurrency")
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode generated async concurrency: %w", err))
@@ -476,23 +690,23 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 			},
 		)
 	}
-	generatedCache0Capacity, err := configurationSnapshot.Integer("spice.cache.commerce.orders.by-id.capacity")
+	generatedCache0Capacity, err := configurationSnapshot.Integer("spice.cache.commerce.catalog.capacity")
 	if err != nil {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode capacity for cache commerce.orders.by-id: %w", err))
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode capacity for cache commerce.catalog: %w", err))
 	}
 	if generatedCache0Capacity < 1 || uint64(generatedCache0Capacity) > uint64(^uint(0)>>1) {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode capacity for cache commerce.orders.by-id: value must fit a positive int"))
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode capacity for cache commerce.catalog: value must fit a positive int"))
 	}
-	generatedCache0TTL, err := configurationSnapshot.Duration("spice.cache.commerce.orders.by-id.ttl")
+	generatedCache0TTL, err := configurationSnapshot.Duration("spice.cache.commerce.catalog.ttl")
 	if err != nil {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode TTL for cache commerce.orders.by-id: %w", err))
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode TTL for cache commerce.catalog: %w", err))
 	}
 	if generatedCache0TTL < 0 {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode TTL for cache commerce.orders.by-id: duration must not be negative"))
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode TTL for cache commerce.catalog: duration must not be negative"))
 	}
-	generatedCache0, err := spicecache.NewMemory[orders.GetOrderRequest, orders.OrderResponse](
+	generatedCache0, err := spicecache.NewMemory[orders.CatalogRequest, orders.CatalogResponse](
 		spicecache.Definition{
-			ID:     "commerce.orders.by-id",
+			ID:     "commerce.catalog",
 			Module: "github.com/StevenBuglione/spice/examples/commerce/orders",
 		},
 		int(generatedCache0Capacity),
@@ -500,7 +714,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		options.CacheObservers...,
 	)
 	if err != nil {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated cache commerce.orders.by-id: %w", err))
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated cache commerce.catalog: %w", err))
 	}
 	scheduleContext := options.ScheduleContext
 	if scheduleContext == nil {
@@ -528,9 +742,91 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 	routeMux := provider2
 	application.mux = routeMux
 	application.handler = routeMux
-	routeObservation0, routeObservationErr0 := spiceweb.ObservationMiddleware(spiceweb.RouteMetadata{ID: "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|3:Get", Module: "github.com/StevenBuglione/spice/examples/commerce/orders", Method: "GET", Pattern: "/orders/{id}"}, httpObservers...)
+	authorizationPolicy1, authorizationPolicy1Err := spicesecurity.NewPolicy(spicesecurity.PolicySpec{
+		Definition: spicesecurity.Definition{
+			ID:     "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|3:Get",
+			Module: "github.com/StevenBuglione/spice/examples/commerce/orders",
+		},
+		AllScopes: []string{"orders:read"},
+	})
+	if authorizationPolicy1Err != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated authorization policy for route GET /orders/{id}: %w", authorizationPolicy1Err))
+	}
+	authorizationGuard1, authorizationGuard1Err := spicesecurity.Guard(authorizer, authorizationPolicy1, options.AuthorizationWriteFailure)
+	if authorizationGuard1Err != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated authorization guard for route GET /orders/{id}: %w", authorizationGuard1Err))
+	}
+	routeMiddleware1 := append(append([]spiceweb.Middleware(nil), options.Middleware...), authorizationGuard1)
+	authorizationPolicy2, authorizationPolicy2Err := spicesecurity.NewPolicy(spicesecurity.PolicySpec{
+		Definition: spicesecurity.Definition{
+			ID:     "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|5:Place",
+			Module: "github.com/StevenBuglione/spice/examples/commerce/orders",
+		},
+		AllScopes: []string{"orders:write"},
+	})
+	if authorizationPolicy2Err != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated authorization policy for route POST /orders: %w", authorizationPolicy2Err))
+	}
+	authorizationGuard2, authorizationGuard2Err := spicesecurity.Guard(authorizer, authorizationPolicy2, options.AuthorizationWriteFailure)
+	if authorizationGuard2Err != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated authorization guard for route POST /orders: %w", authorizationGuard2Err))
+	}
+	routeMiddleware2 := append(append([]spiceweb.Middleware(nil), options.Middleware...), authorizationGuard2)
+	authorizationPolicy3, authorizationPolicy3Err := spicesecurity.NewPolicy(spicesecurity.PolicySpec{
+		Definition: spicesecurity.Definition{
+			ID:     "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|11:SendReceipt",
+			Module: "github.com/StevenBuglione/spice/examples/commerce/orders",
+		},
+		AllScopes: []string{"orders:notify"},
+	})
+	if authorizationPolicy3Err != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated authorization policy for route POST /orders/{id}/receipt: %w", authorizationPolicy3Err))
+	}
+	authorizationGuard3, authorizationGuard3Err := spicesecurity.Guard(authorizer, authorizationPolicy3, options.AuthorizationWriteFailure)
+	if authorizationGuard3Err != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated authorization guard for route POST /orders/{id}/receipt: %w", authorizationGuard3Err))
+	}
+	routeMiddleware3 := append(append([]spiceweb.Middleware(nil), options.Middleware...), authorizationGuard3)
+	routeObservation0, routeObservationErr0 := spiceweb.ObservationMiddleware(spiceweb.RouteMetadata{ID: "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|7:Catalog", Module: "github.com/StevenBuglione/spice/examples/commerce/orders", Method: "GET", Pattern: "/catalog"}, httpObservers...)
 	if routeObservationErr0 != nil {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("configure generated route GET /orders/{id} observation: %w", routeObservationErr0))
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("configure generated route GET /catalog observation: %w", routeObservationErr0))
+	}
+	if routeErr := spiceweb.RegisterObserved(routeMux, "GET /catalog", http.HandlerFunc(func(writer http.ResponseWriter, httpRequest *http.Request) {
+		if !spiceweb.AcceptsJSON(httpRequest.Header.Get("Accept")) {
+			problem := spiceweb.Problem{
+				Type:   "about:blank",
+				Title:  "Not Acceptable",
+				Status: http.StatusNotAcceptable,
+				Detail: "the endpoint produces application/json",
+			}
+			if writeErr := spiceweb.WriteProblem(writer, problem); writeErr != nil {
+				return
+			}
+			return
+		}
+		requestValue := orders.CatalogRequest{}
+		responseValue, cacheHit, routeErr := generatedCache0.Get(httpRequest.Context(), requestValue)
+		if routeErr == nil && !cacheHit {
+			responseValue, routeErr = provider22.Catalog(httpRequest.Context(), requestValue)
+			if routeErr == nil {
+				routeErr = generatedCache0.Put(httpRequest.Context(), requestValue, responseValue, generatedCache0TTL)
+			}
+		}
+		if routeErr != nil {
+			if writeErr := spiceweb.WriteError(writer, httpRequest, routeErr, options.ErrorMapper); writeErr != nil {
+				return
+			}
+			return
+		}
+		if writeErr := spiceweb.WriteJSON(writer, http.StatusOK, responseValue); writeErr != nil {
+			return
+		}
+	}), routeObservation0, options.Middleware...); routeErr != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("register generated route GET /catalog: %w", routeErr))
+	}
+	routeObservation1, routeObservationErr1 := spiceweb.ObservationMiddleware(spiceweb.RouteMetadata{ID: "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|3:Get", Module: "github.com/StevenBuglione/spice/examples/commerce/orders", Method: "GET", Pattern: "/orders/{id}"}, httpObservers...)
+	if routeObservationErr1 != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("configure generated route GET /orders/{id} observation: %w", routeObservationErr1))
 	}
 	if routeErr := spiceweb.RegisterObserved(routeMux, "GET /orders/{id}", http.HandlerFunc(func(writer http.ResponseWriter, httpRequest *http.Request) {
 		if !spiceweb.AcceptsJSON(httpRequest.Header.Get("Accept")) {
@@ -556,13 +852,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		if present0 {
 			requestValue.ID = string(raw0)
 		}
-		responseValue, cacheHit, routeErr := generatedCache0.Get(httpRequest.Context(), requestValue)
-		if routeErr == nil && !cacheHit {
-			responseValue, routeErr = provider18.Get(httpRequest.Context(), requestValue)
-			if routeErr == nil {
-				routeErr = generatedCache0.Put(httpRequest.Context(), requestValue, responseValue, generatedCache0TTL)
-			}
-		}
+		responseValue, routeErr := provider22.Get(httpRequest.Context(), requestValue)
 		if routeErr != nil {
 			if writeErr := spiceweb.WriteError(writer, httpRequest, routeErr, options.ErrorMapper); writeErr != nil {
 				return
@@ -572,12 +862,12 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		if writeErr := spiceweb.WriteJSON(writer, http.StatusOK, responseValue); writeErr != nil {
 			return
 		}
-	}), routeObservation0, options.Middleware...); routeErr != nil {
+	}), routeObservation1, routeMiddleware1...); routeErr != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("register generated route GET /orders/{id}: %w", routeErr))
 	}
-	routeObservation1, routeObservationErr1 := spiceweb.ObservationMiddleware(spiceweb.RouteMetadata{ID: "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|5:Place", Module: "github.com/StevenBuglione/spice/examples/commerce/orders", Method: "POST", Pattern: "/orders"}, httpObservers...)
-	if routeObservationErr1 != nil {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("configure generated route POST /orders observation: %w", routeObservationErr1))
+	routeObservation2, routeObservationErr2 := spiceweb.ObservationMiddleware(spiceweb.RouteMetadata{ID: "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|5:Place", Module: "github.com/StevenBuglione/spice/examples/commerce/orders", Method: "POST", Pattern: "/orders"}, httpObservers...)
+	if routeObservationErr2 != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("configure generated route POST /orders observation: %w", routeObservationErr2))
 	}
 	if routeErr := spiceweb.RegisterObserved(routeMux, "POST /orders", http.HandlerFunc(func(writer http.ResponseWriter, httpRequest *http.Request) {
 		if !spiceweb.AcceptsJSON(httpRequest.Header.Get("Accept")) {
@@ -612,7 +902,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 			Isolation: sql.LevelSerializable,
 		}, func(transactionContext context.Context, executor spicedata.Executor) error {
 			var transactionErr error
-			responseValue, transactionErr = provider18.Place(transactionContext, executor, requestValue)
+			responseValue, transactionErr = provider22.Place(transactionContext, executor, requestValue)
 			return transactionErr
 		})
 		if routeErr != nil {
@@ -624,8 +914,49 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		if writeErr := spiceweb.WriteJSON(writer, http.StatusOK, responseValue); writeErr != nil {
 			return
 		}
-	}), routeObservation1, options.Middleware...); routeErr != nil {
+	}), routeObservation2, routeMiddleware2...); routeErr != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("register generated route POST /orders: %w", routeErr))
+	}
+	routeObservation3, routeObservationErr3 := spiceweb.ObservationMiddleware(spiceweb.RouteMetadata{ID: "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|11:SendReceipt", Module: "github.com/StevenBuglione/spice/examples/commerce/orders", Method: "POST", Pattern: "/orders/{id}/receipt"}, httpObservers...)
+	if routeObservationErr3 != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("configure generated route POST /orders/{id}/receipt observation: %w", routeObservationErr3))
+	}
+	if routeErr := spiceweb.RegisterObserved(routeMux, "POST /orders/{id}/receipt", http.HandlerFunc(func(writer http.ResponseWriter, httpRequest *http.Request) {
+		if !spiceweb.AcceptsJSON(httpRequest.Header.Get("Accept")) {
+			problem := spiceweb.Problem{
+				Type:   "about:blank",
+				Title:  "Not Acceptable",
+				Status: http.StatusNotAcceptable,
+				Detail: "the endpoint produces application/json",
+			}
+			if writeErr := spiceweb.WriteProblem(writer, problem); writeErr != nil {
+				return
+			}
+			return
+		}
+		requestValue := orders.ReceiptRequest{}
+		raw0, present0, bindErr0 := spiceweb.Parameter(spiceweb.LocationPath, "id", []string{httpRequest.PathValue("id")}, true)
+		if bindErr0 != nil {
+			if writeErr := spiceweb.WriteError(writer, httpRequest, bindErr0, options.ErrorMapper); writeErr != nil {
+				return
+			}
+			return
+		}
+		if present0 {
+			requestValue.ID = string(raw0)
+		}
+		responseValue, routeErr := provider22.SendReceipt(httpRequest.Context(), requestValue)
+		if routeErr != nil {
+			if writeErr := spiceweb.WriteError(writer, httpRequest, routeErr, options.ErrorMapper); writeErr != nil {
+				return
+			}
+			return
+		}
+		if writeErr := spiceweb.WriteJSON(writer, http.StatusOK, responseValue); writeErr != nil {
+			return
+		}
+	}), routeObservation3, routeMiddleware3...); routeErr != nil {
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("register generated route POST /orders/{id}/receipt: %w", routeErr))
 	}
 	application.hooks = []spicelifecycle.Hook{
 		{
@@ -668,6 +999,13 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 				},
 			},
 			{
+				ID:          "github.com/StevenBuglione/spice/examples/commerce/notifications",
+				RootPackage: "github.com/StevenBuglione/spice/examples/commerce/notifications",
+				Packages: []string{
+					"github.com/StevenBuglione/spice/examples/commerce/notifications",
+				},
+			},
+			{
 				ID:          "github.com/StevenBuglione/spice/examples/commerce/orders",
 				RootPackage: "github.com/StevenBuglione/spice/examples/commerce/orders",
 				Packages: []string{
@@ -675,6 +1013,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 				},
 				AllowedDependencies: []string{
 					"github.com/StevenBuglione/spice/examples/commerce/inventory",
+					"github.com/StevenBuglione/spice/examples/commerce/notifications",
 					"github.com/StevenBuglione/spice/examples/commerce/payments",
 					"github.com/StevenBuglione/spice/examples/commerce/storage",
 				},
@@ -706,6 +1045,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		},
 		[]spicemanagement.ModuleEdge{
 			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/orders", ToModule: "github.com/StevenBuglione/spice/examples/commerce/inventory", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/orders", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/inventory"},
+			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/orders", ToModule: "github.com/StevenBuglione/spice/examples/commerce/notifications", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/orders", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/notifications"},
 			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/orders", ToModule: "github.com/StevenBuglione/spice/examples/commerce/payments", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/orders", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/payments"},
 			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/orders", ToModule: "github.com/StevenBuglione/spice/examples/commerce/storage", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/orders", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/storage"},
 			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/platform", ToModule: "github.com/StevenBuglione/spice/examples/commerce/storage", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/platform", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/storage"},

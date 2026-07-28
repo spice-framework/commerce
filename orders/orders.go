@@ -3,7 +3,7 @@
 
 // Package orders owns order placement.
 //
-// @Module(allowedDependencies=["github.com/StevenBuglione/spice/examples/commerce/inventory", "github.com/StevenBuglione/spice/examples/commerce/payments", "github.com/StevenBuglione/spice/examples/commerce/storage"])
+// @Module(allowedDependencies=["github.com/StevenBuglione/spice/examples/commerce/inventory", "github.com/StevenBuglione/spice/examples/commerce/notifications", "github.com/StevenBuglione/spice/examples/commerce/payments", "github.com/StevenBuglione/spice/examples/commerce/storage"])
 package orders
 
 import (
@@ -178,6 +178,12 @@ func (service *Service) allocateID() string {
 	defer service.mu.Unlock()
 	service.nextID++
 	return fmt.Sprintf("order-%06d", service.nextID)
+}
+
+// Catalog returns the immutable configured product offered by the reference
+// application.
+func (service *Service) Catalog() (string, int) {
+	return service.settings.SKU, service.settings.UnitPriceCents
 }
 
 // Find returns one completed order and publishes a typed view event. Missing

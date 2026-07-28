@@ -8,24 +8,33 @@ import (
 
 	"github.com/StevenBuglione/spice/data"
 	"github.com/StevenBuglione/spice/examples/commerce/inventory"
+	"github.com/StevenBuglione/spice/examples/commerce/notifications"
 	"github.com/StevenBuglione/spice/examples/commerce/payments"
 	"github.com/StevenBuglione/spice/web"
 )
 
 // @import { Cacheable } from "github.com/StevenBuglione/spice/annotation/cache"
 // @import { Transactional } from "github.com/StevenBuglione/spice/annotation/data"
+// @import { Authorize } from "github.com/StevenBuglione/spice/annotation/security"
 // @import { Controller, Get, Post } from "github.com/StevenBuglione/spice/annotation/web"
 
 // Controller exposes typed order operations.
 //
 // @Controller
 type Controller struct {
-	service *Service
+	service  *Service
+	notifier *notifications.Notifier
 }
 
 // NewController constructs the order HTTP boundary.
-func NewController(service *Service) *Controller {
-	return &Controller{service: service}
+func NewController(
+	service *Service,
+	notifier *notifications.Notifier,
+) (*Controller, error) {
+	if service == nil || notifier == nil {
+		return nil, errors.New("construct order controller: dependencies are nil")
+	}
+	return &Controller{service: service, notifier: notifier}, nil
 }
 
 // PlaceOrderBody is the strict JSON payload for a new order.
@@ -59,6 +68,15 @@ type GetOrderRequest struct {
 	ID string `path:"id"`
 }
 
+// ReceiptRequest binds the persisted order that should receive a test or SMTP
+// receipt.
+type ReceiptRequest struct {
+	ID string `path:"id"`
+}
+
+// CatalogRequest is the explicit empty request DTO for the public catalog.
+type CatalogRequest struct{}
+
 // OrderResponse is the stable public order representation.
 type OrderResponse struct {
 	ID              string `json:"id"`
@@ -68,10 +86,27 @@ type OrderResponse struct {
 	AuthorizationID string `json:"authorization_id"`
 }
 
+// ReceiptResponse contains safe delivery metadata and no recipient or message
+// content.
+type ReceiptResponse struct {
+	MessageID  string `json:"message_id"`
+	Transport  string `json:"transport"`
+	Accepted   bool   `json:"accepted"`
+	Attachment string `json:"attachment"`
+}
+
+// CatalogResponse is the stable public product offered by the reference
+// service.
+type CatalogResponse struct {
+	SKU            string `json:"sku"`
+	UnitPriceCents int    `json:"unit_price_cents"`
+}
+
 // Place creates one order through generated strict JSON binding.
 //
 // @Post("/orders")
 // @Transactional(isolation="serializable")
+// @Authorize(allScopes=["orders:write"])
 func (controller *Controller) Place(
 	ctx context.Context,
 	executor data.Executor,
@@ -91,7 +126,7 @@ func (controller *Controller) Place(
 // Get returns one completed order.
 //
 // @Get("/orders/{id}")
-// @Cacheable(name="commerce.orders.by-id")
+// @Authorize(allScopes=["orders:read"])
 func (controller *Controller) Get(
 	ctx context.Context,
 	request GetOrderRequest,
@@ -104,13 +139,81 @@ func (controller *Controller) Get(
 		return OrderResponse{}, err
 	}
 	if !found {
-		return OrderResponse{}, web.NewError(web.Problem{
-			Type:   "https://spice.dev/problems/order-not-found",
-			Title:  "Order not found",
-			Status: http.StatusNotFound,
-		}, nil)
+		return OrderResponse{}, orderNotFound()
 	}
 	return orderResponse(order), nil
+}
+
+// Catalog returns public immutable product metadata. This route remains safe
+// to cache because it contains no principal- or order-specific data.
+//
+// @Get("/catalog")
+// @Cacheable(name="commerce.catalog")
+func (controller *Controller) Catalog(
+	ctx context.Context,
+	_ CatalogRequest,
+) (CatalogResponse, error) {
+	if err := ctx.Err(); err != nil {
+		return CatalogResponse{}, err
+	}
+	sku, unitPriceCents := controller.service.Catalog()
+	return CatalogResponse{
+		SKU:            sku,
+		UnitPriceCents: unitPriceCents,
+	}, nil
+}
+
+// SendReceipt delivers an inspectable receipt for one already committed order.
+// It is deliberately separate from Place so external I/O never runs inside the
+// database transaction.
+//
+// @Post("/orders/{id}/receipt")
+// @Authorize(allScopes=["orders:notify"])
+func (controller *Controller) SendReceipt(
+	ctx context.Context,
+	request ReceiptRequest,
+) (ReceiptResponse, error) {
+	order, found, err := controller.service.Find(
+		ctx,
+		strings.TrimSpace(request.ID),
+	)
+	if err != nil {
+		return ReceiptResponse{}, err
+	}
+	if !found {
+		return ReceiptResponse{}, orderNotFound()
+	}
+	result, err := controller.notifier.SendReceipt(
+		ctx,
+		notifications.Receipt{
+			OrderID:         order.ID,
+			SKU:             order.SKU,
+			Quantity:        order.Quantity,
+			TotalCents:      order.TotalCents,
+			AuthorizationID: order.AuthorizationID,
+		},
+	)
+	if err != nil {
+		return ReceiptResponse{}, web.NewError(web.Problem{
+			Type:   "https://spice.dev/problems/receipt-delivery-failed",
+			Title:  "Receipt delivery failed",
+			Status: http.StatusBadGateway,
+		}, err)
+	}
+	return ReceiptResponse{
+		MessageID:  result.MessageID,
+		Transport:  result.Transport,
+		Accepted:   result.Accepted,
+		Attachment: result.Attachment,
+	}, nil
+}
+
+func orderNotFound() error {
+	return web.NewError(web.Problem{
+		Type:   "https://spice.dev/problems/order-not-found",
+		Title:  "Order not found",
+		Status: http.StatusNotFound,
+	}, nil)
 }
 
 func publicOrderError(err error) error {
