@@ -1,12 +1,14 @@
 # Commerce reference application
 
 The commerce example is Spice's production-shaped reference application. It
-uses four explicit application modules:
+uses five explicit application modules:
 
 - `inventory` owns stock and compensated reservations;
 - `payments` owns authorization policy and records approvals;
-- `orders` declares and uses only the inventory and payment default APIs;
-- `platform` owns the safely configured HTTP server lifecycle.
+- `orders` declares and uses explicit inventory, payment, and storage APIs;
+- `storage` owns typed order persistence and module-owned migrations;
+- `platform` owns the safely configured HTTP server lifecycle and depends on
+  storage readiness.
 
 The ordinary `main.go` is the compile-time application marker. Its explicit
 `@management.Enable` allowlist exposes health, liveness, readiness, info, and
@@ -15,14 +17,16 @@ metrics plus redacted configuration and generated module reports;
 inventory module's `@schedule.FixedDelay` audit demonstrates direct generated,
 lifecycle-owned scheduled work. Its `@async.Execute` inventory verification
 demonstrates a readiness-gated typed generated submit method, bounded
-admission, and graceful drain before provider cleanup. The order lookup's
+admission, and graceful drain before provider cleanup. The placement route's
+`@data.Transactional` boundary passes the generated transaction-owned
+`data.Executor` directly into the repository. The order lookup's
 `@cache.Cacheable` boundary demonstrates configured, bounded, typed response
-caching. Its first successful lookup publishes a typed `OrderViewed` event to
+caching over persisted records. Its first successful lookup publishes a typed `OrderViewed` event to
 the provider-owned `ViewAudit` listener; a cache hit bypasses the controller
 and therefore does not publish again. Spice generates ordinary direct
-construction, command, lifecycle, scheduling, asynchronous, cache, and event
-code beside `main.go`; no runtime scan, reflection, service locator, dummy
-module import, or marker execution is used.
+construction, command, lifecycle, scheduling, asynchronous, cache, event,
+migration, repository, and transaction code beside `main.go`; no runtime scan,
+reflection, service locator, dummy module import, or marker execution is used.
 
 The payment module exposes two explicit `payments.Processor` candidates.
 `Service` is named, qualified as `stripe`, and primary; `OfflineProcessor` is
@@ -49,6 +53,22 @@ own. Order lookup caching defaults to 256 entries and a five-minute TTL;
 `SPICE_CACHE_COMMERCE_ORDERS_BY_ID_TTL` override those generated typed
 properties. Asynchronous execution defaults to 16 concurrent tasks;
 `SPICE_ASYNC_MAX_CONCURRENCY` overrides that positive bound.
+
+Database configuration is typed and secret-redacted. The default
+`memory://commerce` URL selects an instance-owned transaction-aware
+`database/sql` connector so `spice dev` needs no external service. Set
+`SPICE_COMMERCE_DATABASE_URL` to a complete PostgreSQL URL to use the reviewed
+pgx starter; local `sslmode=disable` additionally requires the explicit
+`SPICE_COMMERCE_DATABASE_ALLOW_INSECURE=true` opt-in. The database opens without
+network I/O during construction. Its module-owned migration runs as the first
+lifecycle hook, and the HTTP server has an explicit dependency on the database
+bean, so traffic cannot start against an unreconciled schema. The
+`integration`-tagged storage test proves a committed order survives closing and
+reopening the PostgreSQL pool:
+
+```text
+SPICE_TEST_POSTGRES_URL=postgres://... go test -tags=integration -run PostgreSQLPersistence ./examples/commerce/storage
+```
 
 The generated public API is:
 
@@ -78,5 +98,6 @@ shutdown policy. The ready application exposes
 typed asynchronous boundary.
 
 `main_test.go` demonstrates `spicetest.NewHTTP`, which constructs this
-generated application with explicit test options and exercises its controllers
-and management routes through a bounded loopback-only slice.
+generated application with explicit test options and exercises its
+transactional controller, persisted retrieval, cache, and management routes
+through a bounded loopback-only slice.

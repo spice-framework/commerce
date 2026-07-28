@@ -137,7 +137,9 @@ func TestGeneratedCommerceCommandCancellationUsesFreshShutdownContext(t *testing
 	observer := func(_ context.Context, observation lifecycle.Observation) {
 		if observation.Operation == lifecycle.OperationStart &&
 			observation.Phase == lifecycle.PhaseEnd &&
-			observation.Err == nil {
+			observation.Err == nil &&
+			observation.Module ==
+				"github.com/StevenBuglione/spice/examples/commerce/platform" {
 			startedOnce.Do(func() { close(started) })
 		}
 	}
@@ -299,6 +301,8 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 	}
 	if properties["commerce.orders.sku"].Value != "SKU-RED" ||
 		!properties["commerce.orders.sku"].Default ||
+		properties["commerce.database.url"].Value != "<redacted>" ||
+		!properties["commerce.database.url"].Secret ||
 		properties["spice.async.max-concurrency"].Value != "16" ||
 		properties["spice.cache.commerce.orders.by-id.capacity"].Value !=
 			"256" ||
@@ -308,8 +312,8 @@ func TestGeneratedCommerceHTTPAndManagement(t *testing.T) {
 	var modules management.ModuleReport
 	decodeGET(t, server, "/actuator/modules", &modules)
 	if modules.Schema != "spice.modules/v1" ||
-		len(modules.Modules) != 4 ||
-		len(modules.Edges) != 2 ||
+		len(modules.Modules) != 5 ||
+		len(modules.Edges) != 4 ||
 		!slices.Equal(
 			modules.UnassignedPackages,
 			[]string{
@@ -472,7 +476,13 @@ func assertGETStatus(
 		t.Fatal(err)
 	}
 	if response.StatusCode != status {
-		t.Fatalf("GET %s status = %d, want %d", path, response.StatusCode, status)
+		t.Fatalf(
+			"GET %s status = %d, want %d, body=%s",
+			path,
+			response.StatusCode,
+			status,
+			response.Body,
+		)
 	}
 }
 

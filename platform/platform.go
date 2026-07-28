@@ -4,7 +4,7 @@
 
 // Package platform owns the commerce application's HTTP transport lifecycle.
 //
-// @Module
+// @Module(allowedDependencies=["github.com/StevenBuglione/spice/examples/commerce/storage"])
 package platform
 
 import (
@@ -16,6 +16,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/StevenBuglione/spice/examples/commerce/storage"
 )
 
 // Settings contains safe HTTP server defaults.
@@ -48,7 +50,11 @@ type Server struct {
 // NewServer constructs a lifecycle-managed server with bounded timeouts.
 //
 // @Bean
-func NewServer(settings Settings, handler *http.ServeMux) (*Server, error) {
+func NewServer(
+	settings Settings,
+	handler *http.ServeMux,
+	database *storage.Database,
+) (*Server, error) {
 	if strings.TrimSpace(settings.Address) == "" {
 		return nil, errors.New("construct commerce server: address is empty")
 	}
@@ -60,6 +66,9 @@ func NewServer(settings Settings, handler *http.ServeMux) (*Server, error) {
 	}
 	if handler == nil {
 		return nil, errors.New("construct commerce server: handler is nil")
+	}
+	if database == nil {
+		return nil, errors.New("construct commerce server: database is nil")
 	}
 	return &Server{
 		httpServer: &http.Server{

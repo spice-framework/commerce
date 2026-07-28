@@ -9,6 +9,7 @@ import (
 	"github.com/StevenBuglione/spice/event"
 	"github.com/StevenBuglione/spice/examples/commerce/inventory"
 	"github.com/StevenBuglione/spice/examples/commerce/payments"
+	"github.com/StevenBuglione/spice/examples/commerce/storage"
 	"github.com/StevenBuglione/spice/web"
 )
 
@@ -45,8 +46,11 @@ func TestServiceRestoresStockWhenPaymentIsDeclined(t *testing.T) {
 	if got := len(payment.Approved()); got != 0 {
 		t.Fatalf("len(Approved()) = %d, want 0", got)
 	}
-	if got := len(service.Orders()); got != 0 {
-		t.Fatalf("len(Orders()) = %d, want 0", got)
+	if _, found, findErr := service.Find(
+		context.Background(),
+		"order-000001",
+	); findErr != nil || found {
+		t.Fatalf("Find(rejected) = found=%t err=%v", found, findErr)
 	}
 }
 
@@ -75,6 +79,7 @@ func TestControllerReturnsSafePaymentProblem(t *testing.T) {
 
 	_, err := controller.Place(
 		context.Background(),
+		service.reads,
 		PlaceOrderRequest{Body: PlaceOrderBody{Quantity: 1}},
 	)
 	var carrier web.ProblemCarrier
@@ -104,6 +109,7 @@ func TestControllerGetsCompletedOrder(t *testing.T) {
 	controller := NewController(service)
 	placed, err := controller.Place(
 		context.Background(),
+		service.reads,
 		PlaceOrderRequest{Body: PlaceOrderBody{Quantity: 1}},
 	)
 	if err != nil {
@@ -225,11 +231,35 @@ func newTestServiceWithPublisher(
 	if err != nil {
 		t.Fatalf("payments.NewService() error = %v", err)
 	}
+	database, cleanup, err := storage.OpenDatabase(storage.Settings{
+		URL: "memory://commerce",
+	})
+	if err != nil {
+		t.Fatalf("storage.OpenDatabase() error = %v", err)
+	}
+	t.Cleanup(func() {
+		if cleanupErr := cleanup(context.Background()); cleanupErr != nil {
+			t.Errorf("storage cleanup error = %v", cleanupErr)
+		}
+	})
+	if migrationErr := database.Migrate(context.Background()); migrationErr != nil {
+		t.Fatalf("Database.Migrate() error = %v", migrationErr)
+	}
+	native, err := storage.Native(database)
+	if err != nil {
+		t.Fatalf("storage.Native() error = %v", err)
+	}
+	orderRepository, err := storage.NewOrderRepository()
+	if err != nil {
+		t.Fatalf("storage.NewOrderRepository() error = %v", err)
+	}
 	service, err := NewService(
 		Settings{SKU: "widget", UnitPriceCents: 2500},
 		stock,
 		payment,
 		publisher,
+		orderRepository,
+		native,
 	)
 	if err != nil {
 		t.Fatalf("NewService() error = %v", err)

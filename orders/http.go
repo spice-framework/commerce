@@ -6,12 +6,14 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/StevenBuglione/spice/data"
 	"github.com/StevenBuglione/spice/examples/commerce/inventory"
 	"github.com/StevenBuglione/spice/examples/commerce/payments"
 	"github.com/StevenBuglione/spice/web"
 )
 
 // @import { Cacheable } from "github.com/StevenBuglione/spice/annotation/cache"
+// @import { Transactional } from "github.com/StevenBuglione/spice/annotation/data"
 // @import { Controller, Get, Post } from "github.com/StevenBuglione/spice/annotation/web"
 
 // Controller exposes typed order operations.
@@ -69,11 +71,17 @@ type OrderResponse struct {
 // Place creates one order through generated strict JSON binding.
 //
 // @Post("/orders")
+// @Transactional(isolation="serializable")
 func (controller *Controller) Place(
 	ctx context.Context,
+	executor data.Executor,
 	request PlaceOrderRequest,
 ) (OrderResponse, error) {
-	order, err := controller.service.Place(ctx, Request{Quantity: request.Body.Quantity})
+	order, err := controller.service.PlaceWithin(
+		ctx,
+		executor,
+		Request{Quantity: request.Body.Quantity},
+	)
 	if err != nil {
 		return OrderResponse{}, publicOrderError(err)
 	}

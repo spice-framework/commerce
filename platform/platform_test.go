@@ -6,11 +6,13 @@ import (
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/StevenBuglione/spice/examples/commerce/storage"
 )
 
 func TestServerStartsAndDrains(t *testing.T) {
 	t.Parallel()
-	server, err := NewServer(testSettings(), http.NewServeMux())
+	server, err := NewServer(testSettings(), http.NewServeMux(), testDatabase(t))
 	if err != nil {
 		t.Fatalf("NewServer() error = %v", err)
 	}
@@ -34,13 +36,37 @@ func TestServerRejectsUnsafeConfiguration(t *testing.T) {
 		name     string
 		settings Settings
 		handler  *http.ServeMux
+		database *storage.Database
 	}{
-		{name: "empty address", settings: Settings{}, handler: http.NewServeMux()},
-		{name: "missing timeout", settings: Settings{Address: "127.0.0.1:0"}, handler: http.NewServeMux()},
-		{name: "nil handler", settings: testSettings()},
+		{
+			name:     "empty address",
+			settings: Settings{},
+			handler:  http.NewServeMux(),
+			database: testDatabase(t),
+		},
+		{
+			name:     "missing timeout",
+			settings: Settings{Address: "127.0.0.1:0"},
+			handler:  http.NewServeMux(),
+			database: testDatabase(t),
+		},
+		{
+			name:     "nil handler",
+			settings: testSettings(),
+			database: testDatabase(t),
+		},
+		{
+			name:     "nil database",
+			settings: testSettings(),
+			handler:  http.NewServeMux(),
+		},
 	}
 	for _, test := range tests {
-		if _, err := NewServer(test.settings, test.handler); err == nil {
+		if _, err := NewServer(
+			test.settings,
+			test.handler,
+			test.database,
+		); err == nil {
 			t.Fatalf("NewServer(%s) error = nil", test.name)
 		}
 	}
@@ -48,7 +74,7 @@ func TestServerRejectsUnsafeConfiguration(t *testing.T) {
 
 func TestServerHonorsCanceledStart(t *testing.T) {
 	t.Parallel()
-	server, err := NewServer(testSettings(), http.NewServeMux())
+	server, err := NewServer(testSettings(), http.NewServeMux(), testDatabase(t))
 	if err != nil {
 		t.Fatalf("NewServer() error = %v", err)
 	}
@@ -71,4 +97,20 @@ func testSettings() Settings {
 		WriteTimeout:      time.Second,
 		IdleTimeout:       time.Second,
 	}
+}
+
+func testDatabase(t *testing.T) *storage.Database {
+	t.Helper()
+	database, cleanup, err := storage.OpenDatabase(storage.Settings{
+		URL: "memory://commerce",
+	})
+	if err != nil {
+		t.Fatalf("storage.OpenDatabase() error = %v", err)
+	}
+	t.Cleanup(func() {
+		if cleanupErr := cleanup(context.Background()); cleanupErr != nil {
+			t.Errorf("storage cleanup error = %v", cleanupErr)
+		}
+	})
+	return database
 }
