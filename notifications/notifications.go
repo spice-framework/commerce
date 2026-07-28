@@ -63,8 +63,6 @@ type Clock interface {
 // @Implements(Clock)
 type SystemClock struct{}
 
-var _ Clock = (*SystemClock)(nil)
-
 // NewSystemClock constructs the stateless system clock.
 func NewSystemClock() *SystemClock {
 	return &SystemClock{}
@@ -86,8 +84,6 @@ type Delivery struct {
 	test   *mailtest.Sender
 	mode   string
 }
-
-var _ mail.Sender = (*Delivery)(nil)
 
 // NewDelivery validates the public envelope and constructs the selected
 // instance-owned transport without opening a network connection.

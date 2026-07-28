@@ -37,11 +37,11 @@ or marker execution is used.
 The payment module exposes two explicit `payments.Processor` candidates.
 `Service` is named, qualified as `stripe`, and primary; `OfflineProcessor` is
 qualified separately and marked fallback. Both use `@Implements(Processor)`
-plus normal Go assertions. The orders constructor requests
+and Spice emits source-owned Go assertions. The orders constructor requests
 `@Qualifier("stripe")`, and the generated file passes the already constructed
 Stripe service directly as the interface—there is no runtime lookup.
 Notifications applies the same rule to an external framework interface:
-`Delivery` uses `@Implements(mail.Sender)` and a normal Go assertion, while
+`Delivery` uses `@Implements(mail.Sender)` and a generated Go assertion, while
 `Notifier` requests the exact interface. Generated code constructs and passes
 the concrete delivery directly. `SystemClock` is a second explicit interface
 binding, keeping message dates caller-owned and deterministic in tests.
@@ -120,16 +120,16 @@ The generated public API is:
   unassigned-package report.
 
 The generated OpenAPI 3.1 contract is
-`examples/commerce/openapi.json`. Route metrics use compiler-owned
+`internal/spicegen/commerce/openapi.json`. Route metrics use compiler-owned
 method, pattern, symbol, and module labels rather than raw request paths.
 
 The handwritten `main.go` only calls
 `os.Exit(spiceMain(os.Args[1:]))`. Generated `spiceMain` returns the exit code
 and owns signals; it never exits the process itself. Tests and embedded
 processes can instead use `RunCommand`, `NewApplication`,
-`NewApplicationWithOptions`, `Start`, `Stop`, or `Run` with caller-owned
-writers, loggers, sources, contexts, observers, middleware, error mapping, and
-shutdown policy. The ready application exposes
+`NewApplicationWithOptions`, `Start`, `Stop`, `Run`, or the typed `Components`
+snapshot with caller-owned writers, loggers, sources, contexts, observers,
+middleware, error mapping, and shutdown policy. The ready application exposes
 `SubmitServiceVerifySKU(admissionContext, sku)` and `AsyncSnapshot()` as its
 typed asynchronous boundary.
 

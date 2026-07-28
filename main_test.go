@@ -105,26 +105,43 @@ func TestGeneratedCommerceApplicationStartsAndStops(t *testing.T) {
 		"spice.shutdown-timeout":  "250ms",
 	})
 	asyncResults := make(chan spiceasync.Result, 1)
-	application, err := NewApplicationWithOptions(
+	testContext, err := spicetest.NewContext(
 		context.Background(),
-		ApplicationOptions{
-			Sources: []config.Source{overrides},
-			Logger:  discardLogger(),
-			AsyncObservers: []spiceasync.Observer{
-				func(_ context.Context, result spiceasync.Result) {
-					asyncResults <- result
+		func(ctx context.Context) (*Application, error) {
+			return NewApplicationWithOptions(
+				ctx,
+				ApplicationOptions{
+					Sources: []config.Source{overrides},
+					Logger:  discardLogger(),
+					AsyncObservers: []spiceasync.Observer{
+						func(_ context.Context, result spiceasync.Result) {
+							asyncResults <- result
+						},
+					},
 				},
-			},
+			)
 		},
+		spicetest.ContextOptions{ShutdownTimeout: 2 * time.Second},
 	)
 	if err != nil {
-		t.Fatalf("NewApplicationWithOptions() error = %v", err)
+		t.Fatalf("spicetest.NewContext() error = %v", err)
 	}
+	t.Cleanup(func() {
+		if closeErr := testContext.Close(); closeErr != nil {
+			t.Errorf("application test context Close() error = %v", closeErr)
+		}
+	})
+	application := testContext.Application()
 	if application.ShutdownTimeout() != 250*time.Millisecond {
 		t.Fatalf("ShutdownTimeout() = %s, want 250ms", application.ShutdownTimeout())
 	}
-	if err := application.Start(context.Background()); err != nil {
-		t.Fatalf("Start() error = %v", err)
+	components := application.Components()
+	if components.StripeProcessor == nil ||
+		components.OfflineProcessor == nil ||
+		components.OrdersService == nil ||
+		components.OrderRepository == nil ||
+		components.Delivery == nil {
+		t.Fatal("Components() has missing required singleton beans")
 	}
 	if got := application.State(); got != lifecycle.StateReady {
 		t.Fatalf("State() = %s, want %s", got, lifecycle.StateReady)
@@ -136,10 +153,8 @@ func TestGeneratedCommerceApplicationStartsAndStops(t *testing.T) {
 		t.Fatalf("SubmitServiceVerifySKU() error = %v", err)
 	}
 
-	shutdownContext, cancelShutdown := context.WithTimeout(context.Background(), 2*time.Second)
-	defer cancelShutdown()
-	if err := application.Stop(shutdownContext); err != nil {
-		t.Fatalf("Stop() error = %v", err)
+	if err := testContext.Close(); err != nil {
+		t.Fatalf("test context Close() error = %v", err)
 	}
 	if got := application.State(); got != lifecycle.StateStopped {
 		t.Fatalf("State() = %s, want %s", got, lifecycle.StateStopped)

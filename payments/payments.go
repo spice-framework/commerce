@@ -56,8 +56,6 @@ type Service struct {
 	approved     []Authorization
 }
 
-var _ Processor = (*Service)(nil)
-
 // OfflineProcessor is a deliberately safe fallback candidate. It demonstrates
 // that a regular qualified/primary bean wins while retaining an explicit
 // deterministic fallback for applications that omit the Stripe service.
@@ -67,8 +65,6 @@ var _ Processor = (*Service)(nil)
 // @Qualifier("offline")
 // @Fallback
 type OfflineProcessor struct{}
-
-var _ Processor = (*OfflineProcessor)(nil)
 
 // Authorize fails closed when the offline fallback is selected.
 func (*OfflineProcessor) Authorize(

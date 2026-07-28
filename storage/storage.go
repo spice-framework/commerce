@@ -215,8 +215,6 @@ type OrderRepository struct {
 	find *repository.Query[Record]
 }
 
-var _ Orders = (*OrderRepository)(nil)
-
 // NewOrderRepository constructs bounded typed query metadata.
 func NewOrderRepository() (*OrderRepository, error) {
 	find, err := repository.NewQuery(repository.QuerySpec[Record]{
