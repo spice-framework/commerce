@@ -17,6 +17,7 @@ import (
 	"github.com/StevenBuglione/spice/config"
 	spiceevent "github.com/StevenBuglione/spice/event"
 	"github.com/StevenBuglione/spice/examples/commerce/orders"
+	spiceapp "github.com/StevenBuglione/spice/internal/spicegen/commerce"
 	"github.com/StevenBuglione/spice/lifecycle"
 	"github.com/StevenBuglione/spice/management"
 	"github.com/StevenBuglione/spice/security"
@@ -28,14 +29,14 @@ func TestGeneratedCommandCheckConstructsCommerceApplication(t *testing.T) {
 	t.Parallel()
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	exitCode := RunCommand(CommandOptions{
+	exitCode := spiceapp.RunCommand(spiceapp.CommandOptions{
 		Context:   context.Background(),
 		Arguments: []string{"-check"},
 		Stdout:    &stdout,
 		Stderr:    &stderr,
 		Logger:    discardLogger(),
 	})
-	if exitCode != ExitSuccess {
+	if exitCode != spiceapp.ExitSuccess {
 		t.Fatalf("RunCommand() exit = %d, stderr=%q", exitCode, stderr.String())
 	}
 	if got := strings.TrimSpace(stdout.String()); got != "Spice commerce ready." {
@@ -49,16 +50,16 @@ func TestGeneratedCommandReportsInvalidConfigurationWithoutRawValue(t *testing.T
 		"commerce.server.read-header-timeout": "secret-invalid-duration",
 	})
 	var logs bytes.Buffer
-	exitCode := RunCommand(CommandOptions{
+	exitCode := spiceapp.RunCommand(spiceapp.CommandOptions{
 		Context:   context.Background(),
 		Arguments: []string{"-check"},
 		Stderr:    &logs,
 		Logger:    slog.New(slog.NewJSONHandler(&logs, nil)),
-		Application: ApplicationOptions{
+		Application: spiceapp.ApplicationOptions{
 			Sources: []config.Source{source},
 		},
 	})
-	if exitCode != ExitFailure ||
+	if exitCode != spiceapp.ExitFailure ||
 		!strings.Contains(logs.String(), "commerce.server.read-header-timeout") ||
 		strings.Contains(logs.String(), "secret-invalid-duration") {
 		t.Fatalf("RunCommand() exit=%d logs=%q", exitCode, logs.String())
@@ -83,9 +84,9 @@ func TestGeneratedCommerceConfigurationOverrides(t *testing.T) {
 		"spice.cache.commerce.catalog.capacity": "17",
 		"spice.cache.commerce.catalog.ttl":      "45s",
 	})
-	application, err := NewApplicationWithOptions(
+	application, err := spiceapp.NewApplicationWithOptions(
 		context.Background(),
-		ApplicationOptions{
+		spiceapp.ApplicationOptions{
 			Sources: []config.Source{source},
 			Logger:  discardLogger(),
 		},
@@ -107,10 +108,10 @@ func TestGeneratedCommerceApplicationStartsAndStops(t *testing.T) {
 	asyncResults := make(chan spiceasync.Result, 1)
 	testContext, err := spicetest.NewContext(
 		context.Background(),
-		func(ctx context.Context) (*Application, error) {
-			return NewApplicationWithOptions(
+		func(ctx context.Context) (*spiceapp.Application, error) {
+			return spiceapp.NewApplicationWithOptions(
 				ctx,
-				ApplicationOptions{
+				spiceapp.ApplicationOptions{
 					Sources: []config.Source{overrides},
 					Logger:  discardLogger(),
 					AsyncObservers: []spiceasync.Observer{
@@ -197,7 +198,7 @@ func TestGeneratedCommerceCommandCancellationUsesFreshShutdownContext(t *testing
 	freshShutdown := false
 	results := make(chan int, 1)
 	go func() {
-		results <- RunCommand(CommandOptions{
+		results <- spiceapp.RunCommand(spiceapp.CommandOptions{
 			Context:         runContext,
 			Logger:          discardLogger(),
 			ShutdownTimeout: 500 * time.Millisecond,
@@ -207,7 +208,7 @@ func TestGeneratedCommerceCommandCancellationUsesFreshShutdownContext(t *testing
 				freshShutdown = shutdownContext != runContext && shutdownContext.Err() == nil
 				return shutdownContext, cancel
 			},
-			Application: ApplicationOptions{
+			Application: spiceapp.ApplicationOptions{
 				Sources:   []config.Source{overrides},
 				Observers: []lifecycle.Observer{observer},
 			},
@@ -221,7 +222,7 @@ func TestGeneratedCommerceCommandCancellationUsesFreshShutdownContext(t *testing
 	}
 	select {
 	case exitCode := <-results:
-		if exitCode != ExitSuccess {
+		if exitCode != spiceapp.ExitSuccess {
 			t.Fatalf("RunCommand() exit = %d", exitCode)
 		}
 	case <-time.After(5 * time.Second):
@@ -240,9 +241,9 @@ func TestCommerceDeveloperProof(t *testing.T) {
 	server, err := spicetest.NewHTTP(
 		context.Background(),
 		func(ctx context.Context) (spicetest.HTTPApplication, error) {
-			return NewApplicationWithOptions(
+			return spiceapp.NewApplicationWithOptions(
 				ctx,
-				ApplicationOptions{
+				spiceapp.ApplicationOptions{
 					Logger: discardLogger(),
 					CacheObservers: []spicecache.Observer{
 						func(_ context.Context, observation spicecache.Observation) {
@@ -515,13 +516,13 @@ func cacheOperations(
 func TestGeneratedCommandRejectsUnknownFlag(t *testing.T) {
 	t.Parallel()
 	var stderr bytes.Buffer
-	exitCode := RunCommand(CommandOptions{
+	exitCode := spiceapp.RunCommand(spiceapp.CommandOptions{
 		Context:   context.Background(),
 		Arguments: []string{"-unknown"},
 		Stderr:    &stderr,
 		Logger:    discardLogger(),
 	})
-	if exitCode != ExitUsage || stderr.Len() == 0 {
+	if exitCode != spiceapp.ExitUsage || stderr.Len() == 0 {
 		t.Fatalf("RunCommand() exit=%d stderr=%q", exitCode, stderr.String())
 	}
 }
@@ -546,7 +547,7 @@ func TestCommerceMainIsOnlyTheProcessBoundary(t *testing.T) {
 			t.Fatalf("main.go contains framework assembly %q:\n%s", forbidden, source)
 		}
 	}
-	if !strings.Contains(source, "os.Exit(spiceMain(os.Args[1:]))") ||
+	if !strings.Contains(source, "os.Exit(spiceapp.Main(os.Args[1:]))") ||
 		!strings.Contains(source, "// @Application") ||
 		!strings.Contains(source, "// @import { Application }") ||
 		len(strings.Split(strings.TrimSpace(source), "\n")) > 18 {

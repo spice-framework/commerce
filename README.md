@@ -120,13 +120,13 @@ The generated public API is:
   unassigned-package report.
 
 The generated OpenAPI 3.1 contract is
-`internal/spicegen/commerce/openapi.json`. Route metrics use compiler-owned
+`internal/spicegen/commerce/artifacts/openapi.json`. Route metrics use compiler-owned
 method, pattern, symbol, and module labels rather than raw request paths.
 
-The handwritten `main.go` only calls
-`os.Exit(spiceMain(os.Args[1:]))`. Generated `spiceMain` returns the exit code
-and owns signals; it never exits the process itself. Tests and embedded
-processes can instead use `RunCommand`, `NewApplication`,
+The handwritten `main.go` explicitly imports the generated commerce target and
+only calls `os.Exit(spiceapp.Main(os.Args[1:]))`. Generated `Main` returns the
+exit code and owns signals; it never exits the process itself. Tests and
+embedded processes can instead use `RunCommand`, `NewApplication`,
 `NewApplicationWithOptions`, `Start`, `Stop`, `Run`, or the typed `Components`
 snapshot with caller-owned writers, loggers, sources, contexts, observers,
 middleware, error mapping, and shutdown policy. The ready application exposes

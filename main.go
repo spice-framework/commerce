@@ -2,6 +2,8 @@ package main
 
 import (
 	"os"
+
+	spiceapp "github.com/StevenBuglione/spice/internal/spicegen/commerce"
 )
 
 // @import { Application } from "github.com/StevenBuglione/spice/annotation/core"
@@ -12,5 +14,5 @@ import (
 // @Enable(expose=["health", "liveness", "readiness", "info", "metrics", "configprops", "modules"], access="loopback")
 // @Logging
 func main() {
-	os.Exit(spiceMain(os.Args[1:]))
+	os.Exit(spiceapp.Main(os.Args[1:]))
 }
