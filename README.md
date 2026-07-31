@@ -24,7 +24,9 @@ admission, and graceful drain before provider cleanup. The placement route's
 `@data.Transactional` boundary passes the generated transaction-owned
 `data.Executor` directly into the repository. Generated `@security.Authorize`
 guards require exact `orders:write`, `orders:read`, and `orders:notify` scopes
-on order routes and fail closed with safe 401/403 problems. The public catalog
+on order routes and fail closed with safe 401/403 problems. The read route also
+proves the compiler-validated restricted expression contract through explicit
+`authenticated` and `hasScope` symbols. The public catalog
 route's `@cache.Cacheable` boundary demonstrates configured, bounded, typed
 response caching without putting principal-specific data in a shared cache.
 Every successful persisted-order lookup publishes a typed `OrderViewed` event

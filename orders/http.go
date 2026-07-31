@@ -126,7 +126,7 @@ func (controller *Controller) Place(
 // Get returns one completed order.
 //
 // @Get("/orders/{id}")
-// @Authorize(allScopes=["orders:read"])
+// @Authorize(allScopes=["orders:read"], expression="authenticated && hasScope(\"orders:read\")")
 func (controller *Controller) Get(
 	ctx context.Context,
 	request GetOrderRequest,
