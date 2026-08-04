@@ -13,7 +13,10 @@ uses six explicit application modules:
 - `platform` owns the safely configured HTTP server lifecycle and depends on
   storage readiness.
 
-The ordinary `main.go` is the compile-time application marker. Its explicit
+The ordinary `main.go` is the compile-time application marker. Its direct blank
+imports name the same-module source packages that belong to the application;
+the imports are valid Go, visible to tools and reviewers, and replace repeated
+CLI package lists or compiler package scanning. Its explicit
 `@management.Enable` allowlist exposes health, liveness, readiness, info, and
 metrics plus redacted configuration and generated module reports;
 `@observability.Logging` installs structured lifecycle and HTTP observers. The
@@ -32,9 +35,11 @@ response caching without putting principal-specific data in a shared cache.
 Every successful persisted-order lookup publishes a typed `OrderViewed` event
 to the provider-owned `ViewAudit` listener. Spice generates ordinary direct
 construction, command, lifecycle, scheduling, asynchronous, cache, event,
-migration, repository, transaction, authorization, and HTTP code beside
-`main.go`; no runtime scan, reflection, service locator, dummy module import,
-or marker execution is used.
+migration, repository, transaction, authorization, and HTTP code under the
+owned generated target package. Source-mirror files retain a deterministic
+one-source-file-to-one-generated-file relationship; no runtime scan,
+reflection, service locator, repeated CLI source list, or marker execution is
+used.
 
 The payment module exposes two explicit `payments.Processor` candidates.
 `Service` is named, qualified as `stripe`, and primary; `OfflineProcessor` is
@@ -51,9 +56,9 @@ binding, keeping message dates caller-owned and deterministic in tests.
 From the repository root:
 
 ```text
-go run ./cmd/spice generate --check --target Commerce ./examples/commerce/...
-go run ./cmd/spice run --target Commerce ./examples/commerce/... -- -check
-go run ./cmd/spice run --target Commerce ./examples/commerce/...
+go run ./cmd/spice generate --check --target Commerce ./examples/commerce
+go run ./cmd/spice run --target Commerce ./examples/commerce -- -check
+go run ./cmd/spice run --target Commerce ./examples/commerce
 ```
 
 The server binds `127.0.0.1:8081` by default. Set

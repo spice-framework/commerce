@@ -550,8 +550,22 @@ func TestCommerceMainIsOnlyTheProcessBoundary(t *testing.T) {
 	if !strings.Contains(source, "os.Exit(spiceapp.Main(os.Args[1:]))") ||
 		!strings.Contains(source, "// @Application") ||
 		!strings.Contains(source, "// @import { Application }") ||
-		len(strings.Split(strings.TrimSpace(source), "\n")) > 18 {
+		len(strings.Split(strings.TrimSpace(source), "\n")) > 30 {
 		t.Fatalf("main.go is not a tiny process boundary:\n%s", source)
+	}
+	for _, packageName := range []string{
+		"inventory",
+		"notifications",
+		"orders",
+		"payments",
+		"platform",
+		"storage",
+	} {
+		compositionImport := `_ "github.com/StevenBuglione/spice/examples/commerce/` +
+			packageName + `"`
+		if !strings.Contains(source, compositionImport) {
+			t.Fatalf("main.go does not explicitly compose %s:\n%s", packageName, source)
+		}
 	}
 }
 

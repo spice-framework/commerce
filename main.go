@@ -3,6 +3,12 @@ package main
 import (
 	"os"
 
+	_ "github.com/StevenBuglione/spice/examples/commerce/inventory"
+	_ "github.com/StevenBuglione/spice/examples/commerce/notifications"
+	_ "github.com/StevenBuglione/spice/examples/commerce/orders"
+	_ "github.com/StevenBuglione/spice/examples/commerce/payments"
+	_ "github.com/StevenBuglione/spice/examples/commerce/platform"
+	_ "github.com/StevenBuglione/spice/examples/commerce/storage"
 	spiceapp "github.com/StevenBuglione/spice/internal/spicegen/commerce"
 )
 
