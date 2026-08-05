@@ -168,7 +168,7 @@ func (sender *Sender) Send(ctx context.Context, message spicemail.Message) error
 	config := sender.config
 	return retry.Run(ctx, retry.Policy{
 		ID:             "smtp.Send",
-		Module:         "github.com/spice-framework/spice/starter/smtp",
+		Module:         "github.com/spice-framework/starter-smtp",
 		MaxAttempts:    config.maxAttempts,
 		InitialBackoff: config.initialBackoff,
 		MaxBackoff:     config.maxBackoff,

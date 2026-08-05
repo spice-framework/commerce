@@ -17,7 +17,7 @@ import (
 
 	"github.com/spice-framework/spice/mail"
 	"github.com/spice-framework/spice/mail/mailtest"
-	"github.com/spice-framework/spice/starter/smtp"
+	startersmtp "github.com/spice-framework/starter-smtp"
 )
 
 const (
@@ -108,10 +108,10 @@ func NewDelivery(settings Settings) (*Delivery, error) {
 			mode:   transportTest,
 		}, nil
 	case transportSMTP:
-		sender, err := smtp.New(smtp.Config{
+		sender, err := startersmtp.New(startersmtp.Config{
 			Address:     settings.SMTPAddress,
 			ServerName:  settings.SMTPServerName,
-			Mode:        smtp.TLSMode(settings.SMTPMode),
+			Mode:        startersmtp.TLSMode(settings.SMTPMode),
 			Username:    settings.SMTPUsername,
 			Password:    settings.SMTPPassword,
 			Timeout:     settings.Timeout,

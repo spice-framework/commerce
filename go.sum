@@ -31,8 +31,10 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/redis/go-redis/v9 v9.21.0 h1:FPBE4hhbAke+TLmcY3WkpbDffJEomdqPn3HYiqAtL9E=
 github.com/redis/go-redis/v9 v9.21.0/go.mod h1:v/M13XI1PVCDcm01VtPFOADfZtHf8YW3baQf57KlIkA=
-github.com/spice-framework/spice v0.0.0-20260805142518-e5b8eef446d7 h1:CYpOr+Oxklfs8XOUv/jjQQ/e64L6vqoVfFEi6XZ5CxY=
-github.com/spice-framework/spice v0.0.0-20260805142518-e5b8eef446d7/go.mod h1:823ZmaopXc+f3ASWbIJL26fEXl1HP7lpyO0x5tE74tE=
+github.com/spice-framework/spice v0.0.0-20260805162230-a0bbb964bf6b h1:06Nb6d9OMxO2wYTFgJADozke9HvXnn80TU+e+tIXTi8=
+github.com/spice-framework/spice v0.0.0-20260805162230-a0bbb964bf6b/go.mod h1:823ZmaopXc+f3ASWbIJL26fEXl1HP7lpyO0x5tE74tE=
+github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a h1:dQg9Bte9MKabGxb6vPVy2OOlbLrDlnQ/aaxGJFBfHQU=
+github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a/go.mod h1:MU8E5X5qmjZAIcHfQ5NRBBFW7YqBhZLSS0mjeXkDZb4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=

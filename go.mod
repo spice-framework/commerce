@@ -9,7 +9,10 @@ tool (
 	github.com/spice-framework/spice/cmd/spice-annotation-core
 )
 
-require github.com/spice-framework/spice v0.0.0-20260805142518-e5b8eef446d7
+require (
+	github.com/spice-framework/spice v0.0.0-20260805162230-a0bbb964bf6b
+	github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a
+)
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
