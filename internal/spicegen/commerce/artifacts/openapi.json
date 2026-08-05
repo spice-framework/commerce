@@ -10,7 +10,7 @@
         "operationId": "Controller_Catalog",
         "summary": "Catalog",
         "tags": [
-          "github.com/StevenBuglione/spice/examples/commerce/orders"
+          "github.com/spice-framework/spice/examples/commerce/orders"
         ],
         "responses": {
           "200": {
@@ -18,7 +18,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CatalogResponse_dca6587de6"
+                  "$ref": "#/components/schemas/CatalogResponse_f6376be067"
                 }
               }
             }
@@ -34,8 +34,8 @@
             }
           }
         },
-        "x-spice-symbol": "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|7:Catalog",
-        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders"
+        "x-spice-symbol": "spice:symbol:v1|method|57:github.com/spice-framework/spice/examples/commerce/orders|10:Controller|7:Catalog",
+        "x-spice-module": "github.com/spice-framework/spice/examples/commerce/orders"
       }
     },
     "/orders": {
@@ -43,14 +43,14 @@
         "operationId": "Controller_Place",
         "summary": "Place",
         "tags": [
-          "github.com/StevenBuglione/spice/examples/commerce/orders"
+          "github.com/spice-framework/spice/examples/commerce/orders"
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PlaceOrderBody_477ff5bd72"
+                "$ref": "#/components/schemas/PlaceOrderBody_5085a8246a"
               }
             }
           }
@@ -61,7 +61,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderResponse_d0a448cf7a"
+                  "$ref": "#/components/schemas/OrderResponse_e60e5da6c6"
                 }
               }
             }
@@ -102,10 +102,10 @@
             "SpicePrincipal": []
           }
         ],
-        "x-spice-symbol": "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|5:Place",
-        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders",
+        "x-spice-symbol": "spice:symbol:v1|method|57:github.com/spice-framework/spice/examples/commerce/orders|10:Controller|5:Place",
+        "x-spice-module": "github.com/spice-framework/spice/examples/commerce/orders",
         "x-spice-authorization": {
-          "owner": "github.com/StevenBuglione/spice/examples/commerce/orders",
+          "owner": "github.com/spice-framework/spice/examples/commerce/orders",
           "allScopes": [
             "orders:write"
           ]
@@ -117,7 +117,7 @@
         "operationId": "Controller_Get",
         "summary": "Get",
         "tags": [
-          "github.com/StevenBuglione/spice/examples/commerce/orders"
+          "github.com/spice-framework/spice/examples/commerce/orders"
         ],
         "parameters": [
           {
@@ -135,7 +135,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderResponse_d0a448cf7a"
+                  "$ref": "#/components/schemas/OrderResponse_e60e5da6c6"
                 }
               }
             }
@@ -176,10 +176,10 @@
             "SpicePrincipal": []
           }
         ],
-        "x-spice-symbol": "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|3:Get",
-        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders",
+        "x-spice-symbol": "spice:symbol:v1|method|57:github.com/spice-framework/spice/examples/commerce/orders|10:Controller|3:Get",
+        "x-spice-module": "github.com/spice-framework/spice/examples/commerce/orders",
         "x-spice-authorization": {
-          "owner": "github.com/StevenBuglione/spice/examples/commerce/orders",
+          "owner": "github.com/spice-framework/spice/examples/commerce/orders",
           "allScopes": [
             "orders:read"
           ],
@@ -192,7 +192,7 @@
         "operationId": "Controller_SendReceipt",
         "summary": "SendReceipt",
         "tags": [
-          "github.com/StevenBuglione/spice/examples/commerce/orders"
+          "github.com/spice-framework/spice/examples/commerce/orders"
         ],
         "parameters": [
           {
@@ -210,7 +210,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReceiptResponse_571249437c"
+                  "$ref": "#/components/schemas/ReceiptResponse_703780a84f"
                 }
               }
             }
@@ -251,10 +251,10 @@
             "SpicePrincipal": []
           }
         ],
-        "x-spice-symbol": "spice:symbol:v1|method|56:github.com/StevenBuglione/spice/examples/commerce/orders|10:Controller|11:SendReceipt",
-        "x-spice-module": "github.com/StevenBuglione/spice/examples/commerce/orders",
+        "x-spice-symbol": "spice:symbol:v1|method|57:github.com/spice-framework/spice/examples/commerce/orders|10:Controller|11:SendReceipt",
+        "x-spice-module": "github.com/spice-framework/spice/examples/commerce/orders",
         "x-spice-authorization": {
-          "owner": "github.com/StevenBuglione/spice/examples/commerce/orders",
+          "owner": "github.com/spice-framework/spice/examples/commerce/orders",
           "allScopes": [
             "orders:notify"
           ]
@@ -264,7 +264,7 @@
   },
   "components": {
     "schemas": {
-      "CatalogResponse_dca6587de6": {
+      "CatalogResponse_f6376be067": {
         "type": "object",
         "properties": {
           "sku": {
@@ -280,7 +280,7 @@
           "unit_price_cents"
         ]
       },
-      "OrderResponse_d0a448cf7a": {
+      "OrderResponse_e60e5da6c6": {
         "type": "object",
         "properties": {
           "authorization_id": {
@@ -309,7 +309,7 @@
           "total_cents"
         ]
       },
-      "PlaceOrderBody_477ff5bd72": {
+      "PlaceOrderBody_5085a8246a": {
         "type": "object",
         "properties": {
           "quantity": {
@@ -321,7 +321,7 @@
           "quantity"
         ]
       },
-      "ReceiptResponse_571249437c": {
+      "ReceiptResponse_703780a84f": {
         "type": "object",
         "properties": {
           "accepted": {

@@ -1,10 +1,10 @@
-// @import { Bean, Configuration } from "github.com/StevenBuglione/spice/annotation/core"
-// @import { OnStart, OnStop } from "github.com/StevenBuglione/spice/annotation/lifecycle"
-// @import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+// @import { Bean, Configuration } from "github.com/spice-framework/spice/annotation/core"
+// @import { OnStart, OnStop } from "github.com/spice-framework/spice/annotation/lifecycle"
+// @import { Module } from "github.com/spice-framework/spice/annotation/modulith"
 
 // Package platform owns the commerce application's HTTP transport lifecycle.
 //
-// @Module(allowedDependencies=["github.com/StevenBuglione/spice/examples/commerce/storage"])
+// @Module(allowedDependencies=["github.com/spice-framework/spice/examples/commerce/storage"])
 package platform
 
 import (
@@ -18,8 +18,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/StevenBuglione/spice/examples/commerce/storage"
-	"github.com/StevenBuglione/spice/security"
+	"github.com/spice-framework/spice/examples/commerce/storage"
+	"github.com/spice-framework/spice/security"
 )
 
 // Settings contains safe HTTP server defaults.

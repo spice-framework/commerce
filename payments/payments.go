@@ -1,5 +1,5 @@
-// @import { Configuration, Fallback, Implements, Primary, Qualifier, Service } from "github.com/StevenBuglione/spice/annotation/core"
-// @import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+// @import { Configuration, Fallback, Implements, Primary, Qualifier, Service } from "github.com/spice-framework/spice/annotation/core"
+// @import { Module } from "github.com/spice-framework/spice/annotation/modulith"
 
 // Package payments owns payment authorization behavior.
 //

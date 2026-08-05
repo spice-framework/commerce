@@ -8,10 +8,10 @@ import (
 	context "context"
 	fmt "fmt"
 
-	spiceasync "github.com/StevenBuglione/spice/async"
-	spiceconfig "github.com/StevenBuglione/spice/config"
-	spicelifecycle "github.com/StevenBuglione/spice/lifecycle"
-	spiceschedule "github.com/StevenBuglione/spice/schedule"
+	spiceasync "github.com/spice-framework/spice/async"
+	spiceconfig "github.com/spice-framework/spice/config"
+	spicelifecycle "github.com/spice-framework/spice/lifecycle"
+	spiceschedule "github.com/spice-framework/spice/schedule"
 )
 
 func configureGeneratedAsync(
@@ -41,7 +41,7 @@ func configureGeneratedAsync(
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct generated async executor: %w", err))
 	}
-	if err := application.coordinator.RegisterModuleCleanup("github.com/StevenBuglione/spice/examples/commerce", "spice.async", generatedAsyncExecutor.Shutdown); err != nil {
+	if err := application.coordinator.RegisterModuleCleanup("github.com/spice-framework/spice/examples/commerce", "spice.async", generatedAsyncExecutor.Shutdown); err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("register generated async cleanup: %w", err))
 	}
 	application.asyncExecutor = generatedAsyncExecutor
@@ -49,8 +49,8 @@ func configureGeneratedAsync(
 		return generatedAsyncExecutor.Submit(
 			admission,
 			spiceasync.Definition{
-				ID:     "spice:symbol:v1|method|59:github.com/StevenBuglione/spice/examples/commerce/inventory|7:Service|9:VerifySKU",
-				Module: "github.com/StevenBuglione/spice/examples/commerce/inventory",
+				ID:     "spice:symbol:v1|method|60:github.com/spice-framework/spice/examples/commerce/inventory|7:Service|9:VerifySKU",
+				Module: "github.com/spice-framework/spice/examples/commerce/inventory",
 			},
 			func(taskContext context.Context) error {
 				return dependencies.inventoryService.VerifySKU(taskContext, argument1)
@@ -78,8 +78,8 @@ func configureGeneratedLifecycle(
 		[]spiceschedule.Job{
 			{
 				Definition: spiceschedule.Definition{
-					ID:     "spice:symbol:v1|method|59:github.com/StevenBuglione/spice/examples/commerce/inventory|7:Service|5:Audit",
-					Module: "github.com/StevenBuglione/spice/examples/commerce/inventory",
+					ID:     "spice:symbol:v1|method|60:github.com/spice-framework/spice/examples/commerce/inventory|7:Service|5:Audit",
+					Module: "github.com/spice-framework/spice/examples/commerce/inventory",
 				},
 				InitialDelay: 30000000000,
 				Delay:        300000000000,
@@ -94,19 +94,19 @@ func configureGeneratedLifecycle(
 	}
 	application.hooks = []spicelifecycle.Hook{
 		{
-			ID:     "spice:symbol:v1|function|57:github.com/StevenBuglione/spice/examples/commerce/storage|0:|12:OpenDatabase",
-			Module: "github.com/StevenBuglione/spice/examples/commerce/storage",
+			ID:     "spice:symbol:v1|function|58:github.com/spice-framework/spice/examples/commerce/storage|0:|12:OpenDatabase",
+			Module: "github.com/spice-framework/spice/examples/commerce/storage",
 			Start:  dependencies.openDatabase.Migrate,
 		},
 		{
-			ID:     "spice:symbol:v1|function|58:github.com/StevenBuglione/spice/examples/commerce/platform|0:|9:NewServer",
-			Module: "github.com/StevenBuglione/spice/examples/commerce/platform",
+			ID:     "spice:symbol:v1|function|59:github.com/spice-framework/spice/examples/commerce/platform|0:|9:NewServer",
+			Module: "github.com/spice-framework/spice/examples/commerce/platform",
 			Start:  dependencies.server.Start,
 			Stop:   dependencies.server.Stop,
 		},
 		{
 			ID:     "spice.schedule",
-			Module: "github.com/StevenBuglione/spice/examples/commerce",
+			Module: "github.com/spice-framework/spice/examples/commerce",
 			Start:  generatedScheduler.Start,
 			Stop:   generatedScheduler.Shutdown,
 		},

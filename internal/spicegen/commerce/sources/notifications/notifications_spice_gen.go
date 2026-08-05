@@ -12,54 +12,54 @@ import (
 	fmt "fmt"
 	time "time"
 
-	spiceconfig "github.com/StevenBuglione/spice/config"
-	notifications "github.com/StevenBuglione/spice/examples/commerce/notifications"
-	spicelifecycle "github.com/StevenBuglione/spice/lifecycle"
-	mail "github.com/StevenBuglione/spice/mail"
+	spiceconfig "github.com/spice-framework/spice/config"
+	notifications "github.com/spice-framework/spice/examples/commerce/notifications"
+	spicelifecycle "github.com/spice-framework/spice/lifecycle"
+	mail "github.com/spice-framework/spice/mail"
 )
 
-// ConstructSystemClock_6232152b performs the direct construction selected for bean "systemClock".
-// Spice source identity: spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|11:SystemClock.
-func ConstructSystemClock_6232152b() (*notifications.SystemClock, spicelifecycle.Cleanup, error) {
+// ConstructSystemClock_be055e0a performs the direct construction selected for bean "systemClock".
+// Spice source identity: spice:symbol:v1|type|64:github.com/spice-framework/spice/examples/commerce/notifications|0:|11:SystemClock.
+func ConstructSystemClock_be055e0a() (*notifications.SystemClock, spicelifecycle.Cleanup, error) {
 	value := notifications.NewSystemClock()
 	return value, nil, nil
 }
 
-// spiceImplementsSystemClockAsClock_4fd59814 identifies the explicit @Implements binding for spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|11:SystemClock.
+// spiceImplementsSystemClockAsClock_674447ac identifies the explicit @Implements binding for spice:symbol:v1|type|64:github.com/spice-framework/spice/examples/commerce/notifications|0:|11:SystemClock.
 var _ notifications.Clock = (*notifications.SystemClock)(nil)
 
-// ConstructDelivery_89970054 performs the direct construction selected for bean "delivery".
-// Spice source identity: spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|8:Delivery.
-func ConstructDelivery_89970054(dependency0 notifications.Settings) (*notifications.Delivery, spicelifecycle.Cleanup, error) {
+// ConstructDelivery_c9f5578a performs the direct construction selected for bean "delivery".
+// Spice source identity: spice:symbol:v1|type|64:github.com/spice-framework/spice/examples/commerce/notifications|0:|8:Delivery.
+func ConstructDelivery_c9f5578a(dependency0 notifications.Settings) (*notifications.Delivery, spicelifecycle.Cleanup, error) {
 	value, err := notifications.NewDelivery(dependency0)
 	if err != nil {
 		var zero *notifications.Delivery
-		return zero, nil, fmt.Errorf("construct bean delivery (*github.com/StevenBuglione/spice/examples/commerce/notifications.Delivery, source spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|8:Delivery): %w", err)
+		return zero, nil, fmt.Errorf("construct bean delivery (*github.com/spice-framework/spice/examples/commerce/notifications.Delivery, source spice:symbol:v1|type|64:github.com/spice-framework/spice/examples/commerce/notifications|0:|8:Delivery): %w", err)
 	}
 	return value, nil, nil
 }
 
-// spiceImplementsDeliveryAsSender_262d0dc4 identifies the explicit @Implements binding for spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|8:Delivery.
+// spiceImplementsDeliveryAsSender_ca3d7ed1 identifies the explicit @Implements binding for spice:symbol:v1|type|64:github.com/spice-framework/spice/examples/commerce/notifications|0:|8:Delivery.
 var _ mail.Sender = (*notifications.Delivery)(nil)
 
-// ConstructNotifier_f5f0b515 performs the direct construction selected for bean "notifier".
-// Spice source identity: spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|8:Notifier.
-func ConstructNotifier_f5f0b515(dependency0 notifications.Settings, dependency1 mail.Sender, dependency2 *notifications.Delivery, dependency3 notifications.Clock) (*notifications.Notifier, spicelifecycle.Cleanup, error) {
+// ConstructNotifier_e5db602e performs the direct construction selected for bean "notifier".
+// Spice source identity: spice:symbol:v1|type|64:github.com/spice-framework/spice/examples/commerce/notifications|0:|8:Notifier.
+func ConstructNotifier_e5db602e(dependency0 notifications.Settings, dependency1 mail.Sender, dependency2 *notifications.Delivery, dependency3 notifications.Clock) (*notifications.Notifier, spicelifecycle.Cleanup, error) {
 	value, err := notifications.NewNotifier(dependency0, dependency1, dependency2, dependency3)
 	if err != nil {
 		var zero *notifications.Notifier
-		return zero, nil, fmt.Errorf("construct bean notifier (*github.com/StevenBuglione/spice/examples/commerce/notifications.Notifier, source spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|8:Notifier): %w", err)
+		return zero, nil, fmt.Errorf("construct bean notifier (*github.com/spice-framework/spice/examples/commerce/notifications.Notifier, source spice:symbol:v1|type|64:github.com/spice-framework/spice/examples/commerce/notifications|0:|8:Notifier): %w", err)
 	}
 	return value, nil, nil
 }
 
-// BindSettings_d8b9beed binds the validated configuration declared by spice:symbol:v1|type|63:github.com/StevenBuglione/spice/examples/commerce/notifications|0:|8:Settings.
-func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifications.Settings, error) {
+// BindSettings_f88766fc binds the validated configuration declared by spice:symbol:v1|type|64:github.com/spice-framework/spice/examples/commerce/notifications|0:|8:Settings.
+func BindSettings_f88766fc(configurationSnapshot spiceconfig.Snapshot) (notifications.Settings, error) {
 	value := notifications.Settings{}
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.transport"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.transport")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.transport for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.Transport: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.transport for github.com/spice-framework/spice/examples/commerce/notifications.Settings.Transport: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.Transport = convertedValue
@@ -67,7 +67,7 @@ func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifica
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.from"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.from")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.from for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.From: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.from for github.com/spice-framework/spice/examples/commerce/notifications.Settings.From: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.From = convertedValue
@@ -75,7 +75,7 @@ func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifica
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.recipient"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.recipient")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.recipient for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.Recipient: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.recipient for github.com/spice-framework/spice/examples/commerce/notifications.Settings.Recipient: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.Recipient = convertedValue
@@ -83,18 +83,18 @@ func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifica
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.test-capacity"); configured {
 		rawValue, valueErr := configurationSnapshot.Integer("commerce.mail.test-capacity")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.test-capacity for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.TestCapacity: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.test-capacity for github.com/spice-framework/spice/examples/commerce/notifications.Settings.TestCapacity: %w", valueErr)
 		}
 		convertedValue := int(rawValue)
 		if int64(convertedValue) != rawValue {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.test-capacity for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.TestCapacity: value is outside int")
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.test-capacity for github.com/spice-framework/spice/examples/commerce/notifications.Settings.TestCapacity: value is outside int")
 		}
 		value.TestCapacity = convertedValue
 	}
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-address"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-address")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-address for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPAddress: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-address for github.com/spice-framework/spice/examples/commerce/notifications.Settings.SMTPAddress: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.SMTPAddress = convertedValue
@@ -102,7 +102,7 @@ func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifica
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-server-name"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-server-name")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-server-name for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPServerName: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-server-name for github.com/spice-framework/spice/examples/commerce/notifications.Settings.SMTPServerName: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.SMTPServerName = convertedValue
@@ -110,7 +110,7 @@ func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifica
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-mode"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-mode")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-mode for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPMode: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-mode for github.com/spice-framework/spice/examples/commerce/notifications.Settings.SMTPMode: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.SMTPMode = convertedValue
@@ -118,7 +118,7 @@ func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifica
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-username"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-username")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-username for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPUsername: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-username for github.com/spice-framework/spice/examples/commerce/notifications.Settings.SMTPUsername: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.SMTPUsername = convertedValue
@@ -126,7 +126,7 @@ func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifica
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.smtp-password"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.mail.smtp-password")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-password for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.SMTPPassword: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.smtp-password for github.com/spice-framework/spice/examples/commerce/notifications.Settings.SMTPPassword: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.SMTPPassword = convertedValue
@@ -134,7 +134,7 @@ func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifica
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.timeout"); configured {
 		rawValue, valueErr := configurationSnapshot.Duration("commerce.mail.timeout")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.timeout for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.Timeout: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.timeout for github.com/spice-framework/spice/examples/commerce/notifications.Settings.Timeout: %w", valueErr)
 		}
 		convertedValue := time.Duration(rawValue)
 		value.Timeout = convertedValue
@@ -142,11 +142,11 @@ func BindSettings_d8b9beed(configurationSnapshot spiceconfig.Snapshot) (notifica
 	if _, configured := configurationSnapshot.Lookup("commerce.mail.max-attempts"); configured {
 		rawValue, valueErr := configurationSnapshot.Integer("commerce.mail.max-attempts")
 		if valueErr != nil {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.max-attempts for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.MaxAttempts: %w", valueErr)
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.max-attempts for github.com/spice-framework/spice/examples/commerce/notifications.Settings.MaxAttempts: %w", valueErr)
 		}
 		convertedValue := int(rawValue)
 		if int64(convertedValue) != rawValue {
-			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.max-attempts for github.com/StevenBuglione/spice/examples/commerce/notifications.Settings.MaxAttempts: value is outside int")
+			return notifications.Settings{}, fmt.Errorf("decode configuration property commerce.mail.max-attempts for github.com/spice-framework/spice/examples/commerce/notifications.Settings.MaxAttempts: value is outside int")
 		}
 		value.MaxAttempts = convertedValue
 	}

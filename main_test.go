@@ -12,17 +12,17 @@ import (
 	"testing"
 	"time"
 
-	spiceasync "github.com/StevenBuglione/spice/async"
-	spicecache "github.com/StevenBuglione/spice/cache"
-	"github.com/StevenBuglione/spice/config"
-	spiceevent "github.com/StevenBuglione/spice/event"
-	spiceapp "github.com/StevenBuglione/spice/examples/commerce/internal/spicegen/commerce"
-	"github.com/StevenBuglione/spice/examples/commerce/orders"
-	"github.com/StevenBuglione/spice/lifecycle"
-	"github.com/StevenBuglione/spice/management"
-	"github.com/StevenBuglione/spice/security"
-	"github.com/StevenBuglione/spice/spicetest"
-	"github.com/StevenBuglione/spice/web"
+	spiceasync "github.com/spice-framework/spice/async"
+	spicecache "github.com/spice-framework/spice/cache"
+	"github.com/spice-framework/spice/config"
+	spiceevent "github.com/spice-framework/spice/event"
+	spiceapp "github.com/spice-framework/spice/examples/commerce/internal/spicegen/commerce"
+	"github.com/spice-framework/spice/examples/commerce/orders"
+	"github.com/spice-framework/spice/lifecycle"
+	"github.com/spice-framework/spice/management"
+	"github.com/spice-framework/spice/security"
+	"github.com/spice-framework/spice/spicetest"
+	"github.com/spice-framework/spice/web"
 )
 
 func TestGeneratedCommandCheckConstructsCommerceApplication(t *testing.T) {
@@ -164,7 +164,7 @@ func TestGeneratedCommerceApplicationStartsAndStops(t *testing.T) {
 	if result.Err != nil ||
 		result.Panicked ||
 		result.Definition.Module !=
-			"github.com/StevenBuglione/spice/examples/commerce/inventory" ||
+			"github.com/spice-framework/spice/examples/commerce/inventory" ||
 		!strings.Contains(result.Definition.ID, "VerifySKU") {
 		t.Fatalf("async result = %#v", result)
 	}
@@ -190,7 +190,7 @@ func TestGeneratedCommerceCommandCancellationUsesFreshShutdownContext(t *testing
 			observation.Phase == lifecycle.PhaseEnd &&
 			observation.Err == nil &&
 			observation.Module ==
-				"github.com/StevenBuglione/spice/examples/commerce/platform" {
+				"github.com/spice-framework/spice/examples/commerce/platform" {
 			startedOnce.Do(func() { close(started) })
 		}
 	}
@@ -377,9 +377,9 @@ func TestCommerceDeveloperProof(t *testing.T) {
 	if eventObserver.results != 3 ||
 		eventObserver.lastErr != nil ||
 		eventInteraction.Event.Module !=
-			"github.com/StevenBuglione/spice/examples/commerce/orders" ||
+			"github.com/spice-framework/spice/examples/commerce/orders" ||
 		eventInteraction.Subscriber.Module !=
-			"github.com/StevenBuglione/spice/examples/commerce/orders" ||
+			"github.com/spice-framework/spice/examples/commerce/orders" ||
 		eventInteraction.Subscriber.Order != 10 ||
 		!strings.Contains(
 			eventInteraction.Event.ID,
@@ -399,7 +399,7 @@ func TestCommerceDeveloperProof(t *testing.T) {
 	}
 	if cacheObservations[0].Definition.ID != "commerce.catalog" ||
 		cacheObservations[0].Definition.Module !=
-			"github.com/StevenBuglione/spice/examples/commerce/orders" ||
+			"github.com/spice-framework/spice/examples/commerce/orders" ||
 		cacheObservations[0].Hit ||
 		!cacheObservations[2].Hit {
 		t.Fatalf("cache observations = %#v", cacheObservations)
@@ -424,7 +424,7 @@ func TestCommerceDeveloperProof(t *testing.T) {
 	decodeGET(t, server, "/actuator/info", &info)
 	if info["application"] != "commerce" ||
 		info["framework"] != "Spice" ||
-		info["module"] != "github.com/StevenBuglione/spice/examples/commerce" ||
+		info["module"] != "github.com/spice-framework/spice/examples/commerce" ||
 		len(info) != 3 {
 		t.Fatalf("management info = %#v", info)
 	}
@@ -469,7 +469,7 @@ func TestCommerceDeveloperProof(t *testing.T) {
 		!slices.Equal(
 			modules.UnassignedPackages,
 			[]string{
-				"github.com/StevenBuglione/spice/examples/commerce",
+				"github.com/spice-framework/spice/examples/commerce",
 			},
 		) {
 		t.Fatalf("module report = %#v", modules)
@@ -561,7 +561,7 @@ func TestCommerceMainIsOnlyTheProcessBoundary(t *testing.T) {
 		"platform",
 		"storage",
 	} {
-		compositionImport := `_ "github.com/StevenBuglione/spice/examples/commerce/` +
+		compositionImport := `_ "github.com/spice-framework/spice/examples/commerce/` +
 			packageName + `"`
 		if !strings.Contains(source, compositionImport) {
 			t.Fatalf("main.go does not explicitly compose %s:\n%s", packageName, source)

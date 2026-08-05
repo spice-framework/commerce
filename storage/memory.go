@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/StevenBuglione/spice/migration"
+	"github.com/spice-framework/spice/migration"
 )
 
 var (

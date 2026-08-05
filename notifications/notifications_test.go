@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/StevenBuglione/spice/mail"
+	"github.com/spice-framework/spice/mail"
 )
 
 var (

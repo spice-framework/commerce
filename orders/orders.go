@@ -1,9 +1,9 @@
-// @import { Bean, Configuration, Qualifier } from "github.com/StevenBuglione/spice/annotation/core"
-// @import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+// @import { Bean, Configuration, Qualifier } from "github.com/spice-framework/spice/annotation/core"
+// @import { Module } from "github.com/spice-framework/spice/annotation/modulith"
 
 // Package orders owns order placement.
 //
-// @Module(allowedDependencies=["github.com/StevenBuglione/spice/examples/commerce/inventory", "github.com/StevenBuglione/spice/examples/commerce/notifications", "github.com/StevenBuglione/spice/examples/commerce/payments", "github.com/StevenBuglione/spice/examples/commerce/storage"])
+// @Module(allowedDependencies=["github.com/spice-framework/spice/examples/commerce/inventory", "github.com/spice-framework/spice/examples/commerce/notifications", "github.com/spice-framework/spice/examples/commerce/payments", "github.com/spice-framework/spice/examples/commerce/storage"])
 package orders
 
 import (
@@ -13,11 +13,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/StevenBuglione/spice/data"
-	"github.com/StevenBuglione/spice/event"
-	"github.com/StevenBuglione/spice/examples/commerce/inventory"
-	"github.com/StevenBuglione/spice/examples/commerce/payments"
-	"github.com/StevenBuglione/spice/examples/commerce/storage"
+	"github.com/spice-framework/spice/data"
+	"github.com/spice-framework/spice/event"
+	"github.com/spice-framework/spice/examples/commerce/inventory"
+	"github.com/spice-framework/spice/examples/commerce/payments"
+	"github.com/spice-framework/spice/examples/commerce/storage"
 )
 
 var (

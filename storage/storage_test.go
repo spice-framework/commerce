@@ -10,8 +10,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/StevenBuglione/spice/data"
-	"github.com/StevenBuglione/spice/migration"
+	"github.com/spice-framework/spice/data"
+	"github.com/spice-framework/spice/migration"
 )
 
 var errRollbackProbe = errors.New("rollback probe")

@@ -10,8 +10,8 @@ import (
 	http "net/http"
 	time "time"
 
-	spiceasync "github.com/StevenBuglione/spice/async"
-	spicelifecycle "github.com/StevenBuglione/spice/lifecycle"
+	spiceasync "github.com/spice-framework/spice/async"
+	spicelifecycle "github.com/spice-framework/spice/lifecycle"
 )
 
 func (application *Application) State() spicelifecycle.State {
@@ -66,10 +66,10 @@ func (application *Application) Components() Components {
 
 func (application *Application) SubmitServiceVerifySKU(admission context.Context, argument1 string) error {
 	if application == nil || application.submitServiceVerifySKU == nil {
-		return fmt.Errorf("submit asynchronous task spice:symbol:v1|method|59:github.com/StevenBuglione/spice/examples/commerce/inventory|7:Service|9:VerifySKU: application is nil")
+		return fmt.Errorf("submit asynchronous task spice:symbol:v1|method|60:github.com/spice-framework/spice/examples/commerce/inventory|7:Service|9:VerifySKU: application is nil")
 	}
 	if state := application.State(); state != spicelifecycle.StateReady {
-		return fmt.Errorf("submit asynchronous task spice:symbol:v1|method|59:github.com/StevenBuglione/spice/examples/commerce/inventory|7:Service|9:VerifySKU: application state %s is not ready", state)
+		return fmt.Errorf("submit asynchronous task spice:symbol:v1|method|60:github.com/spice-framework/spice/examples/commerce/inventory|7:Service|9:VerifySKU: application state %s is not ready", state)
 	}
 	return application.submitServiceVerifySKU(admission, argument1)
 }

@@ -1,5 +1,5 @@
-// @import { Configuration, Implements, Service } from "github.com/StevenBuglione/spice/annotation/core"
-// @import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+// @import { Configuration, Implements, Service } from "github.com/spice-framework/spice/annotation/core"
+// @import { Module } from "github.com/spice-framework/spice/annotation/modulith"
 
 // Package notifications owns explicit commerce receipt composition and mail
 // transport selection.
@@ -15,9 +15,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/StevenBuglione/spice/mail"
-	"github.com/StevenBuglione/spice/mail/mailtest"
-	"github.com/StevenBuglione/spice/starter/smtp"
+	"github.com/spice-framework/spice/mail"
+	"github.com/spice-framework/spice/mail/mailtest"
+	"github.com/spice-framework/spice/starter/smtp"
 )
 
 const (

@@ -1,6 +1,6 @@
-// @import { Bean, Configuration, Implements, Repository } from "github.com/StevenBuglione/spice/annotation/core"
-// @import { OnStart } from "github.com/StevenBuglione/spice/annotation/lifecycle"
-// @import { Module } from "github.com/StevenBuglione/spice/annotation/modulith"
+// @import { Bean, Configuration, Implements, Repository } from "github.com/spice-framework/spice/annotation/core"
+// @import { OnStart } from "github.com/spice-framework/spice/annotation/lifecycle"
+// @import { Module } from "github.com/spice-framework/spice/annotation/modulith"
 
 // Package storage owns commerce order persistence and its schema.
 //
@@ -15,15 +15,15 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/StevenBuglione/spice/data"
-	"github.com/StevenBuglione/spice/data/repository"
-	"github.com/StevenBuglione/spice/lifecycle"
-	"github.com/StevenBuglione/spice/migration"
-	"github.com/StevenBuglione/spice/starter/postgres"
+	"github.com/spice-framework/spice/data"
+	"github.com/spice-framework/spice/data/repository"
+	"github.com/spice-framework/spice/lifecycle"
+	"github.com/spice-framework/spice/migration"
+	"github.com/spice-framework/spice/starter/postgres"
 )
 
 const (
-	moduleID        = "github.com/StevenBuglione/spice/examples/commerce/storage"
+	moduleID        = "github.com/spice-framework/spice/examples/commerce/storage"
 	memoryURL       = "memory://commerce"
 	migrationNumber = 202607280001
 )

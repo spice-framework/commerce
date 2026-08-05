@@ -9,34 +9,34 @@ package spicegen
 import (
 	fmt "fmt"
 
-	spiceconfig "github.com/StevenBuglione/spice/config"
-	data "github.com/StevenBuglione/spice/data"
-	event "github.com/StevenBuglione/spice/event"
-	inventory "github.com/StevenBuglione/spice/examples/commerce/inventory"
-	orders "github.com/StevenBuglione/spice/examples/commerce/orders"
-	payments "github.com/StevenBuglione/spice/examples/commerce/payments"
-	storage "github.com/StevenBuglione/spice/examples/commerce/storage"
-	spicelifecycle "github.com/StevenBuglione/spice/lifecycle"
+	spiceconfig "github.com/spice-framework/spice/config"
+	data "github.com/spice-framework/spice/data"
+	event "github.com/spice-framework/spice/event"
+	inventory "github.com/spice-framework/spice/examples/commerce/inventory"
+	orders "github.com/spice-framework/spice/examples/commerce/orders"
+	payments "github.com/spice-framework/spice/examples/commerce/payments"
+	storage "github.com/spice-framework/spice/examples/commerce/storage"
+	spicelifecycle "github.com/spice-framework/spice/lifecycle"
 )
 
-// ConstructService_ce92b74a performs the direct construction selected for bean "newService".
-// Spice source identity: spice:symbol:v1|function|56:github.com/StevenBuglione/spice/examples/commerce/orders|0:|10:NewService.
-func ConstructService_ce92b74a(dependency0 orders.Settings, dependency1 *inventory.Service, dependency2 payments.Processor, dependency3 event.Publisher[orders.OrderViewed], dependency4 storage.Orders, dependency5 data.Executor) (*orders.Service, spicelifecycle.Cleanup, error) {
+// ConstructService_635293ed performs the direct construction selected for bean "newService".
+// Spice source identity: spice:symbol:v1|function|57:github.com/spice-framework/spice/examples/commerce/orders|0:|10:NewService.
+func ConstructService_635293ed(dependency0 orders.Settings, dependency1 *inventory.Service, dependency2 payments.Processor, dependency3 event.Publisher[orders.OrderViewed], dependency4 storage.Orders, dependency5 data.Executor) (*orders.Service, spicelifecycle.Cleanup, error) {
 	value, err := orders.NewService(dependency0, dependency1, dependency2, dependency3, dependency4, dependency5)
 	if err != nil {
 		var zero *orders.Service
-		return zero, nil, fmt.Errorf("construct bean newService (*github.com/StevenBuglione/spice/examples/commerce/orders.Service, source spice:symbol:v1|function|56:github.com/StevenBuglione/spice/examples/commerce/orders|0:|10:NewService): %w", err)
+		return zero, nil, fmt.Errorf("construct bean newService (*github.com/spice-framework/spice/examples/commerce/orders.Service, source spice:symbol:v1|function|57:github.com/spice-framework/spice/examples/commerce/orders|0:|10:NewService): %w", err)
 	}
 	return value, nil, nil
 }
 
-// BindSettings_59ba7b6b binds the validated configuration declared by spice:symbol:v1|type|56:github.com/StevenBuglione/spice/examples/commerce/orders|0:|8:Settings.
-func BindSettings_59ba7b6b(configurationSnapshot spiceconfig.Snapshot) (orders.Settings, error) {
+// BindSettings_f28e33eb binds the validated configuration declared by spice:symbol:v1|type|57:github.com/spice-framework/spice/examples/commerce/orders|0:|8:Settings.
+func BindSettings_f28e33eb(configurationSnapshot spiceconfig.Snapshot) (orders.Settings, error) {
 	value := orders.Settings{}
 	if _, configured := configurationSnapshot.Lookup("commerce.orders.sku"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.orders.sku")
 		if valueErr != nil {
-			return orders.Settings{}, fmt.Errorf("decode configuration property commerce.orders.sku for github.com/StevenBuglione/spice/examples/commerce/orders.Settings.SKU: %w", valueErr)
+			return orders.Settings{}, fmt.Errorf("decode configuration property commerce.orders.sku for github.com/spice-framework/spice/examples/commerce/orders.Settings.SKU: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.SKU = convertedValue
@@ -44,11 +44,11 @@ func BindSettings_59ba7b6b(configurationSnapshot spiceconfig.Snapshot) (orders.S
 	if _, configured := configurationSnapshot.Lookup("commerce.orders.unit-price-cents"); configured {
 		rawValue, valueErr := configurationSnapshot.Integer("commerce.orders.unit-price-cents")
 		if valueErr != nil {
-			return orders.Settings{}, fmt.Errorf("decode configuration property commerce.orders.unit-price-cents for github.com/StevenBuglione/spice/examples/commerce/orders.Settings.UnitPriceCents: %w", valueErr)
+			return orders.Settings{}, fmt.Errorf("decode configuration property commerce.orders.unit-price-cents for github.com/spice-framework/spice/examples/commerce/orders.Settings.UnitPriceCents: %w", valueErr)
 		}
 		convertedValue := int(rawValue)
 		if int64(convertedValue) != rawValue {
-			return orders.Settings{}, fmt.Errorf("decode configuration property commerce.orders.unit-price-cents for github.com/StevenBuglione/spice/examples/commerce/orders.Settings.UnitPriceCents: value is outside int")
+			return orders.Settings{}, fmt.Errorf("decode configuration property commerce.orders.unit-price-cents for github.com/spice-framework/spice/examples/commerce/orders.Settings.UnitPriceCents: value is outside int")
 		}
 		value.UnitPriceCents = convertedValue
 	}

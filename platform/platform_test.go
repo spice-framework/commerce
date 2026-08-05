@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/StevenBuglione/spice/examples/commerce/storage"
-	"github.com/StevenBuglione/spice/security"
+	"github.com/spice-framework/spice/examples/commerce/storage"
+	"github.com/spice-framework/spice/security"
 )
 
 func TestServerStartsAndDrains(t *testing.T) {

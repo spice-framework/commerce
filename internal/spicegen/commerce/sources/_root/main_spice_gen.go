@@ -5,5 +5,5 @@
 
 package spicegen
 
-// ApplicationTargetCommerce_9d5bf597 identifies the generated target selected by spice:symbol:v1|function|49:github.com/StevenBuglione/spice/examples/commerce|0:|4:main.
-const ApplicationTargetCommerce_9d5bf597 = "commerce"
+// ApplicationTargetCommerce_16450fb1 identifies the generated target selected by spice:symbol:v1|function|50:github.com/spice-framework/spice/examples/commerce|0:|4:main.
+const ApplicationTargetCommerce_16450fb1 = "commerce"

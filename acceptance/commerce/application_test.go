@@ -10,15 +10,15 @@ import (
 	"testing"
 	"time"
 
-	spiceasync "github.com/StevenBuglione/spice/async"
-	"github.com/StevenBuglione/spice/bean"
-	"github.com/StevenBuglione/spice/config"
-	commercegen "github.com/StevenBuglione/spice/examples/commerce/internal/spicegen/commerce"
-	"github.com/StevenBuglione/spice/examples/commerce/orders"
-	"github.com/StevenBuglione/spice/lifecycle"
-	"github.com/StevenBuglione/spice/security"
-	"github.com/StevenBuglione/spice/spicetest"
-	"github.com/StevenBuglione/spice/web"
+	spiceasync "github.com/spice-framework/spice/async"
+	"github.com/spice-framework/spice/bean"
+	"github.com/spice-framework/spice/config"
+	commercegen "github.com/spice-framework/spice/examples/commerce/internal/spicegen/commerce"
+	"github.com/spice-framework/spice/examples/commerce/orders"
+	"github.com/spice-framework/spice/lifecycle"
+	"github.com/spice-framework/spice/security"
+	"github.com/spice-framework/spice/spicetest"
+	"github.com/spice-framework/spice/web"
 )
 
 type (

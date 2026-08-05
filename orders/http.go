@@ -6,17 +6,17 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/StevenBuglione/spice/data"
-	"github.com/StevenBuglione/spice/examples/commerce/inventory"
-	"github.com/StevenBuglione/spice/examples/commerce/notifications"
-	"github.com/StevenBuglione/spice/examples/commerce/payments"
-	"github.com/StevenBuglione/spice/web"
+	"github.com/spice-framework/spice/data"
+	"github.com/spice-framework/spice/examples/commerce/inventory"
+	"github.com/spice-framework/spice/examples/commerce/notifications"
+	"github.com/spice-framework/spice/examples/commerce/payments"
+	"github.com/spice-framework/spice/web"
 )
 
-// @import { Cacheable } from "github.com/StevenBuglione/spice/annotation/cache"
-// @import { Transactional } from "github.com/StevenBuglione/spice/annotation/data"
-// @import { Authorize } from "github.com/StevenBuglione/spice/annotation/security"
-// @import { Controller, Get, Post } from "github.com/StevenBuglione/spice/annotation/web"
+// @import { Cacheable } from "github.com/spice-framework/spice/annotation/cache"
+// @import { Transactional } from "github.com/spice-framework/spice/annotation/data"
+// @import { Authorize } from "github.com/spice-framework/spice/annotation/security"
+// @import { Controller, Get, Post } from "github.com/spice-framework/spice/annotation/web"
 
 // Controller exposes typed order operations.
 //

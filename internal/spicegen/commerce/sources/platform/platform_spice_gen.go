@@ -12,37 +12,37 @@ import (
 	http "net/http"
 	time "time"
 
-	spiceconfig "github.com/StevenBuglione/spice/config"
-	platform "github.com/StevenBuglione/spice/examples/commerce/platform"
-	storage "github.com/StevenBuglione/spice/examples/commerce/storage"
-	spicelifecycle "github.com/StevenBuglione/spice/lifecycle"
+	spiceconfig "github.com/spice-framework/spice/config"
+	platform "github.com/spice-framework/spice/examples/commerce/platform"
+	storage "github.com/spice-framework/spice/examples/commerce/storage"
+	spicelifecycle "github.com/spice-framework/spice/lifecycle"
 )
 
-// ConstructMux_4f4cdf49 performs the direct construction selected for bean "mux".
-// Spice source identity: spice:symbol:v1|function|58:github.com/StevenBuglione/spice/examples/commerce/platform|0:|3:Mux.
-func ConstructMux_4f4cdf49() (*http.ServeMux, spicelifecycle.Cleanup, error) {
+// ConstructMux_c86b3ddf performs the direct construction selected for bean "mux".
+// Spice source identity: spice:symbol:v1|function|59:github.com/spice-framework/spice/examples/commerce/platform|0:|3:Mux.
+func ConstructMux_c86b3ddf() (*http.ServeMux, spicelifecycle.Cleanup, error) {
 	value := platform.Mux()
 	return value, nil, nil
 }
 
-// ConstructServer_593d6230 performs the direct construction selected for bean "newServer".
-// Spice source identity: spice:symbol:v1|function|58:github.com/StevenBuglione/spice/examples/commerce/platform|0:|9:NewServer.
-func ConstructServer_593d6230(dependency0 platform.Settings, dependency1 *http.ServeMux, dependency2 *storage.Database) (*platform.Server, spicelifecycle.Cleanup, error) {
+// ConstructServer_6edbe7ab performs the direct construction selected for bean "newServer".
+// Spice source identity: spice:symbol:v1|function|59:github.com/spice-framework/spice/examples/commerce/platform|0:|9:NewServer.
+func ConstructServer_6edbe7ab(dependency0 platform.Settings, dependency1 *http.ServeMux, dependency2 *storage.Database) (*platform.Server, spicelifecycle.Cleanup, error) {
 	value, err := platform.NewServer(dependency0, dependency1, dependency2)
 	if err != nil {
 		var zero *platform.Server
-		return zero, nil, fmt.Errorf("construct bean newServer (*github.com/StevenBuglione/spice/examples/commerce/platform.Server, source spice:symbol:v1|function|58:github.com/StevenBuglione/spice/examples/commerce/platform|0:|9:NewServer): %w", err)
+		return zero, nil, fmt.Errorf("construct bean newServer (*github.com/spice-framework/spice/examples/commerce/platform.Server, source spice:symbol:v1|function|59:github.com/spice-framework/spice/examples/commerce/platform|0:|9:NewServer): %w", err)
 	}
 	return value, nil, nil
 }
 
-// BindSettings_bd78ddfa binds the validated configuration declared by spice:symbol:v1|type|58:github.com/StevenBuglione/spice/examples/commerce/platform|0:|8:Settings.
-func BindSettings_bd78ddfa(configurationSnapshot spiceconfig.Snapshot) (platform.Settings, error) {
+// BindSettings_da5ffdb4 binds the validated configuration declared by spice:symbol:v1|type|59:github.com/spice-framework/spice/examples/commerce/platform|0:|8:Settings.
+func BindSettings_da5ffdb4(configurationSnapshot spiceconfig.Snapshot) (platform.Settings, error) {
 	value := platform.Settings{}
 	if _, configured := configurationSnapshot.Lookup("commerce.server.address"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.server.address")
 		if valueErr != nil {
-			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.address for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.Address: %w", valueErr)
+			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.address for github.com/spice-framework/spice/examples/commerce/platform.Settings.Address: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.Address = convertedValue
@@ -50,7 +50,7 @@ func BindSettings_bd78ddfa(configurationSnapshot spiceconfig.Snapshot) (platform
 	if _, configured := configurationSnapshot.Lookup("commerce.server.read-header-timeout"); configured {
 		rawValue, valueErr := configurationSnapshot.Duration("commerce.server.read-header-timeout")
 		if valueErr != nil {
-			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.read-header-timeout for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.ReadHeaderTimeout: %w", valueErr)
+			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.read-header-timeout for github.com/spice-framework/spice/examples/commerce/platform.Settings.ReadHeaderTimeout: %w", valueErr)
 		}
 		convertedValue := time.Duration(rawValue)
 		value.ReadHeaderTimeout = convertedValue
@@ -58,7 +58,7 @@ func BindSettings_bd78ddfa(configurationSnapshot spiceconfig.Snapshot) (platform
 	if _, configured := configurationSnapshot.Lookup("commerce.server.read-timeout"); configured {
 		rawValue, valueErr := configurationSnapshot.Duration("commerce.server.read-timeout")
 		if valueErr != nil {
-			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.read-timeout for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.ReadTimeout: %w", valueErr)
+			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.read-timeout for github.com/spice-framework/spice/examples/commerce/platform.Settings.ReadTimeout: %w", valueErr)
 		}
 		convertedValue := time.Duration(rawValue)
 		value.ReadTimeout = convertedValue
@@ -66,7 +66,7 @@ func BindSettings_bd78ddfa(configurationSnapshot spiceconfig.Snapshot) (platform
 	if _, configured := configurationSnapshot.Lookup("commerce.server.write-timeout"); configured {
 		rawValue, valueErr := configurationSnapshot.Duration("commerce.server.write-timeout")
 		if valueErr != nil {
-			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.write-timeout for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.WriteTimeout: %w", valueErr)
+			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.write-timeout for github.com/spice-framework/spice/examples/commerce/platform.Settings.WriteTimeout: %w", valueErr)
 		}
 		convertedValue := time.Duration(rawValue)
 		value.WriteTimeout = convertedValue
@@ -74,7 +74,7 @@ func BindSettings_bd78ddfa(configurationSnapshot spiceconfig.Snapshot) (platform
 	if _, configured := configurationSnapshot.Lookup("commerce.server.idle-timeout"); configured {
 		rawValue, valueErr := configurationSnapshot.Duration("commerce.server.idle-timeout")
 		if valueErr != nil {
-			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.idle-timeout for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.IdleTimeout: %w", valueErr)
+			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.idle-timeout for github.com/spice-framework/spice/examples/commerce/platform.Settings.IdleTimeout: %w", valueErr)
 		}
 		convertedValue := time.Duration(rawValue)
 		value.IdleTimeout = convertedValue
@@ -82,7 +82,7 @@ func BindSettings_bd78ddfa(configurationSnapshot spiceconfig.Snapshot) (platform
 	if _, configured := configurationSnapshot.Lookup("commerce.server.developer-token"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.server.developer-token")
 		if valueErr != nil {
-			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.developer-token for github.com/StevenBuglione/spice/examples/commerce/platform.Settings.DeveloperToken: %w", valueErr)
+			return platform.Settings{}, fmt.Errorf("decode configuration property commerce.server.developer-token for github.com/spice-framework/spice/examples/commerce/platform.Settings.DeveloperToken: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.DeveloperToken = convertedValue

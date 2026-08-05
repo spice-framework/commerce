@@ -13,27 +13,27 @@ import (
 	strings "strings"
 	time "time"
 
-	spiceasync "github.com/StevenBuglione/spice/async"
-	spicebean "github.com/StevenBuglione/spice/bean"
-	spicecache "github.com/StevenBuglione/spice/cache"
-	spiceconfig "github.com/StevenBuglione/spice/config"
-	spicedata "github.com/StevenBuglione/spice/data"
-	spiceevent "github.com/StevenBuglione/spice/event"
-	spiceentrypoint "github.com/StevenBuglione/spice/examples/commerce/internal/spicegen/commerce/sources/_root"
-	inventory "github.com/StevenBuglione/spice/examples/commerce/inventory"
-	notifications "github.com/StevenBuglione/spice/examples/commerce/notifications"
-	orders "github.com/StevenBuglione/spice/examples/commerce/orders"
-	payments "github.com/StevenBuglione/spice/examples/commerce/payments"
-	platform "github.com/StevenBuglione/spice/examples/commerce/platform"
-	storage "github.com/StevenBuglione/spice/examples/commerce/storage"
-	spiceintercept "github.com/StevenBuglione/spice/intercept"
-	spicelifecycle "github.com/StevenBuglione/spice/lifecycle"
-	spiceschedule "github.com/StevenBuglione/spice/schedule"
-	spicesecurity "github.com/StevenBuglione/spice/security"
-	spiceweb "github.com/StevenBuglione/spice/web"
+	spiceasync "github.com/spice-framework/spice/async"
+	spicebean "github.com/spice-framework/spice/bean"
+	spicecache "github.com/spice-framework/spice/cache"
+	spiceconfig "github.com/spice-framework/spice/config"
+	spicedata "github.com/spice-framework/spice/data"
+	spiceevent "github.com/spice-framework/spice/event"
+	spiceentrypoint "github.com/spice-framework/spice/examples/commerce/internal/spicegen/commerce/sources/_root"
+	inventory "github.com/spice-framework/spice/examples/commerce/inventory"
+	notifications "github.com/spice-framework/spice/examples/commerce/notifications"
+	orders "github.com/spice-framework/spice/examples/commerce/orders"
+	payments "github.com/spice-framework/spice/examples/commerce/payments"
+	platform "github.com/spice-framework/spice/examples/commerce/platform"
+	storage "github.com/spice-framework/spice/examples/commerce/storage"
+	spiceintercept "github.com/spice-framework/spice/intercept"
+	spicelifecycle "github.com/spice-framework/spice/lifecycle"
+	spiceschedule "github.com/spice-framework/spice/schedule"
+	spicesecurity "github.com/spice-framework/spice/security"
+	spiceweb "github.com/spice-framework/spice/web"
 )
 
-const TargetID = spiceentrypoint.ApplicationTargetCommerce_9d5bf597
+const TargetID = spiceentrypoint.ApplicationTargetCommerce_16450fb1
 
 const (
 	ExitSuccess = 0

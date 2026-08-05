@@ -1,51 +1,3 @@
-# github.com/StevenBuglione/spice v0.0.0 => ../..
-## explicit; go 1.26.0
-github.com/StevenBuglione/spice/annotation
-github.com/StevenBuglione/spice/annotation/async
-github.com/StevenBuglione/spice/annotation/cache
-github.com/StevenBuglione/spice/annotation/core
-github.com/StevenBuglione/spice/annotation/coretool
-github.com/StevenBuglione/spice/annotation/data
-github.com/StevenBuglione/spice/annotation/event
-github.com/StevenBuglione/spice/annotation/lifecycle
-github.com/StevenBuglione/spice/annotation/management
-github.com/StevenBuglione/spice/annotation/modulith
-github.com/StevenBuglione/spice/annotation/observability
-github.com/StevenBuglione/spice/annotation/schedule
-github.com/StevenBuglione/spice/annotation/sdk
-github.com/StevenBuglione/spice/annotation/sdk/protocol
-github.com/StevenBuglione/spice/annotation/sdk/starter
-github.com/StevenBuglione/spice/annotation/security
-github.com/StevenBuglione/spice/annotation/web
-github.com/StevenBuglione/spice/async
-github.com/StevenBuglione/spice/batch
-github.com/StevenBuglione/spice/bean
-github.com/StevenBuglione/spice/cache
-github.com/StevenBuglione/spice/cmd/spice-annotation-core
-github.com/StevenBuglione/spice/config
-github.com/StevenBuglione/spice/conversion
-github.com/StevenBuglione/spice/data
-github.com/StevenBuglione/spice/data/repository
-github.com/StevenBuglione/spice/event
-github.com/StevenBuglione/spice/event/outbox
-github.com/StevenBuglione/spice/expression
-github.com/StevenBuglione/spice/intercept
-github.com/StevenBuglione/spice/internal/annotationcore
-github.com/StevenBuglione/spice/lifecycle
-github.com/StevenBuglione/spice/mail
-github.com/StevenBuglione/spice/mail/mailtest
-github.com/StevenBuglione/spice/management
-github.com/StevenBuglione/spice/migration
-github.com/StevenBuglione/spice/observability
-github.com/StevenBuglione/spice/retry
-github.com/StevenBuglione/spice/schedule
-github.com/StevenBuglione/spice/security
-github.com/StevenBuglione/spice/spicetest
-github.com/StevenBuglione/spice/starter
-github.com/StevenBuglione/spice/starter/postgres
-github.com/StevenBuglione/spice/starter/smtp
-github.com/StevenBuglione/spice/validation
-github.com/StevenBuglione/spice/web
 # github.com/jackc/pgpassfile v1.0.0
 ## explicit; go 1.12
 github.com/jackc/pgpassfile
@@ -70,6 +22,54 @@ github.com/jackc/pgx/v5/stdlib
 ## explicit; go 1.19
 github.com/jackc/puddle/v2
 github.com/jackc/puddle/v2/internal/genstack
+# github.com/spice-framework/spice v0.0.0 => ../..
+## explicit; go 1.26.0
+github.com/spice-framework/spice/annotation
+github.com/spice-framework/spice/annotation/async
+github.com/spice-framework/spice/annotation/cache
+github.com/spice-framework/spice/annotation/core
+github.com/spice-framework/spice/annotation/coretool
+github.com/spice-framework/spice/annotation/data
+github.com/spice-framework/spice/annotation/event
+github.com/spice-framework/spice/annotation/lifecycle
+github.com/spice-framework/spice/annotation/management
+github.com/spice-framework/spice/annotation/modulith
+github.com/spice-framework/spice/annotation/observability
+github.com/spice-framework/spice/annotation/schedule
+github.com/spice-framework/spice/annotation/sdk
+github.com/spice-framework/spice/annotation/sdk/protocol
+github.com/spice-framework/spice/annotation/sdk/starter
+github.com/spice-framework/spice/annotation/security
+github.com/spice-framework/spice/annotation/web
+github.com/spice-framework/spice/async
+github.com/spice-framework/spice/batch
+github.com/spice-framework/spice/bean
+github.com/spice-framework/spice/cache
+github.com/spice-framework/spice/cmd/spice-annotation-core
+github.com/spice-framework/spice/config
+github.com/spice-framework/spice/conversion
+github.com/spice-framework/spice/data
+github.com/spice-framework/spice/data/repository
+github.com/spice-framework/spice/event
+github.com/spice-framework/spice/event/outbox
+github.com/spice-framework/spice/expression
+github.com/spice-framework/spice/intercept
+github.com/spice-framework/spice/internal/annotationcore
+github.com/spice-framework/spice/lifecycle
+github.com/spice-framework/spice/mail
+github.com/spice-framework/spice/mail/mailtest
+github.com/spice-framework/spice/management
+github.com/spice-framework/spice/migration
+github.com/spice-framework/spice/observability
+github.com/spice-framework/spice/retry
+github.com/spice-framework/spice/schedule
+github.com/spice-framework/spice/security
+github.com/spice-framework/spice/spicetest
+github.com/spice-framework/spice/starter
+github.com/spice-framework/spice/starter/postgres
+github.com/spice-framework/spice/starter/smtp
+github.com/spice-framework/spice/validation
+github.com/spice-framework/spice/web
 # golang.org/x/sync v0.22.0
 ## explicit; go 1.25.0
 golang.org/x/sync/semaphore
@@ -88,4 +88,4 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
-# github.com/StevenBuglione/spice => ../..
+# github.com/spice-framework/spice => ../..

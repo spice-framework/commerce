@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/StevenBuglione/spice/event"
-	"github.com/StevenBuglione/spice/examples/commerce/inventory"
-	"github.com/StevenBuglione/spice/examples/commerce/notifications"
-	"github.com/StevenBuglione/spice/examples/commerce/payments"
-	"github.com/StevenBuglione/spice/examples/commerce/storage"
-	"github.com/StevenBuglione/spice/web"
+	"github.com/spice-framework/spice/event"
+	"github.com/spice-framework/spice/examples/commerce/inventory"
+	"github.com/spice-framework/spice/examples/commerce/notifications"
+	"github.com/spice-framework/spice/examples/commerce/payments"
+	"github.com/spice-framework/spice/examples/commerce/storage"
+	"github.com/spice-framework/spice/web"
 )
 
 func TestServicePlacesOrderAcrossModules(t *testing.T) {

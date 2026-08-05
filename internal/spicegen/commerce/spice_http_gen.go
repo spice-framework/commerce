@@ -8,10 +8,10 @@ import (
 	context "context"
 	fmt "fmt"
 
-	spiceconfig "github.com/StevenBuglione/spice/config"
-	spicemanagement "github.com/StevenBuglione/spice/management"
-	spicesecurity "github.com/StevenBuglione/spice/security"
-	spiceweb "github.com/StevenBuglione/spice/web"
+	spiceconfig "github.com/spice-framework/spice/config"
+	spicemanagement "github.com/spice-framework/spice/management"
+	spicesecurity "github.com/spice-framework/spice/security"
+	spiceweb "github.com/spice-framework/spice/web"
 )
 
 func configureGeneratedHTTP(
@@ -32,7 +32,7 @@ func configureGeneratedHTTP(
 	routeMux := dependencies.mux
 	application.mux = routeMux
 	application.handler = routeMux
-	if _, err := registerGeneratedRouteOrdersControllerCatalog_125c6a7a(
+	if _, err := registerGeneratedRouteOrdersControllerCatalog_207df48b(
 		ctx,
 		application,
 		options,
@@ -44,7 +44,7 @@ func configureGeneratedHTTP(
 	); err != nil {
 		return nil, err
 	}
-	if _, err := registerGeneratedRouteOrdersControllerGet_8c548c3f(
+	if _, err := registerGeneratedRouteOrdersControllerGet_50b32bfa(
 		ctx,
 		application,
 		options,
@@ -56,7 +56,7 @@ func configureGeneratedHTTP(
 	); err != nil {
 		return nil, err
 	}
-	if _, err := registerGeneratedRouteOrdersControllerPlace_fbc15ec5(
+	if _, err := registerGeneratedRouteOrdersControllerPlace_0f315a27(
 		ctx,
 		application,
 		options,
@@ -68,7 +68,7 @@ func configureGeneratedHTTP(
 	); err != nil {
 		return nil, err
 	}
-	if _, err := registerGeneratedRouteOrdersControllerSendReceipt_04b28d78(
+	if _, err := registerGeneratedRouteOrdersControllerSendReceipt_749cb64d(
 		ctx,
 		application,
 		options,
@@ -80,7 +80,7 @@ func configureGeneratedHTTP(
 	); err != nil {
 		return nil, err
 	}
-	managementChecks, err := spicemanagement.LifecycleChecks(TargetID, "github.com/StevenBuglione/spice/examples/commerce", application.State)
+	managementChecks, err := spicemanagement.LifecycleChecks(TargetID, "github.com/spice-framework/spice/examples/commerce", application.State)
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("configure management lifecycle checks: %w", err))
 	}
@@ -95,66 +95,66 @@ func configureGeneratedHTTP(
 	managementModules, err := spicemanagement.NewModuleReport(
 		[]spicemanagement.ModuleDefinition{
 			{
-				ID:          "github.com/StevenBuglione/spice/examples/commerce/inventory",
-				RootPackage: "github.com/StevenBuglione/spice/examples/commerce/inventory",
+				ID:          "github.com/spice-framework/spice/examples/commerce/inventory",
+				RootPackage: "github.com/spice-framework/spice/examples/commerce/inventory",
 				Packages: []string{
-					"github.com/StevenBuglione/spice/examples/commerce/inventory",
+					"github.com/spice-framework/spice/examples/commerce/inventory",
 				},
 			},
 			{
-				ID:          "github.com/StevenBuglione/spice/examples/commerce/notifications",
-				RootPackage: "github.com/StevenBuglione/spice/examples/commerce/notifications",
+				ID:          "github.com/spice-framework/spice/examples/commerce/notifications",
+				RootPackage: "github.com/spice-framework/spice/examples/commerce/notifications",
 				Packages: []string{
-					"github.com/StevenBuglione/spice/examples/commerce/notifications",
+					"github.com/spice-framework/spice/examples/commerce/notifications",
 				},
 			},
 			{
-				ID:          "github.com/StevenBuglione/spice/examples/commerce/orders",
-				RootPackage: "github.com/StevenBuglione/spice/examples/commerce/orders",
+				ID:          "github.com/spice-framework/spice/examples/commerce/orders",
+				RootPackage: "github.com/spice-framework/spice/examples/commerce/orders",
 				Packages: []string{
-					"github.com/StevenBuglione/spice/examples/commerce/orders",
+					"github.com/spice-framework/spice/examples/commerce/orders",
 				},
 				AllowedDependencies: []string{
-					"github.com/StevenBuglione/spice/examples/commerce/inventory",
-					"github.com/StevenBuglione/spice/examples/commerce/notifications",
-					"github.com/StevenBuglione/spice/examples/commerce/payments",
-					"github.com/StevenBuglione/spice/examples/commerce/storage",
+					"github.com/spice-framework/spice/examples/commerce/inventory",
+					"github.com/spice-framework/spice/examples/commerce/notifications",
+					"github.com/spice-framework/spice/examples/commerce/payments",
+					"github.com/spice-framework/spice/examples/commerce/storage",
 				},
 			},
 			{
-				ID:          "github.com/StevenBuglione/spice/examples/commerce/payments",
-				RootPackage: "github.com/StevenBuglione/spice/examples/commerce/payments",
+				ID:          "github.com/spice-framework/spice/examples/commerce/payments",
+				RootPackage: "github.com/spice-framework/spice/examples/commerce/payments",
 				Packages: []string{
-					"github.com/StevenBuglione/spice/examples/commerce/payments",
+					"github.com/spice-framework/spice/examples/commerce/payments",
 				},
 			},
 			{
-				ID:          "github.com/StevenBuglione/spice/examples/commerce/platform",
-				RootPackage: "github.com/StevenBuglione/spice/examples/commerce/platform",
+				ID:          "github.com/spice-framework/spice/examples/commerce/platform",
+				RootPackage: "github.com/spice-framework/spice/examples/commerce/platform",
 				Packages: []string{
-					"github.com/StevenBuglione/spice/examples/commerce/platform",
+					"github.com/spice-framework/spice/examples/commerce/platform",
 				},
 				AllowedDependencies: []string{
-					"github.com/StevenBuglione/spice/examples/commerce/storage",
+					"github.com/spice-framework/spice/examples/commerce/storage",
 				},
 			},
 			{
-				ID:          "github.com/StevenBuglione/spice/examples/commerce/storage",
-				RootPackage: "github.com/StevenBuglione/spice/examples/commerce/storage",
+				ID:          "github.com/spice-framework/spice/examples/commerce/storage",
+				RootPackage: "github.com/spice-framework/spice/examples/commerce/storage",
 				Packages: []string{
-					"github.com/StevenBuglione/spice/examples/commerce/storage",
+					"github.com/spice-framework/spice/examples/commerce/storage",
 				},
 			},
 		},
 		[]spicemanagement.ModuleEdge{
-			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/orders", ToModule: "github.com/StevenBuglione/spice/examples/commerce/inventory", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/orders", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/inventory"},
-			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/orders", ToModule: "github.com/StevenBuglione/spice/examples/commerce/notifications", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/orders", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/notifications"},
-			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/orders", ToModule: "github.com/StevenBuglione/spice/examples/commerce/payments", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/orders", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/payments"},
-			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/orders", ToModule: "github.com/StevenBuglione/spice/examples/commerce/storage", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/orders", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/storage"},
-			{FromModule: "github.com/StevenBuglione/spice/examples/commerce/platform", ToModule: "github.com/StevenBuglione/spice/examples/commerce/storage", API: "default", FromPackage: "github.com/StevenBuglione/spice/examples/commerce/platform", ToPackage: "github.com/StevenBuglione/spice/examples/commerce/storage"},
+			{FromModule: "github.com/spice-framework/spice/examples/commerce/orders", ToModule: "github.com/spice-framework/spice/examples/commerce/inventory", API: "default", FromPackage: "github.com/spice-framework/spice/examples/commerce/orders", ToPackage: "github.com/spice-framework/spice/examples/commerce/inventory"},
+			{FromModule: "github.com/spice-framework/spice/examples/commerce/orders", ToModule: "github.com/spice-framework/spice/examples/commerce/notifications", API: "default", FromPackage: "github.com/spice-framework/spice/examples/commerce/orders", ToPackage: "github.com/spice-framework/spice/examples/commerce/notifications"},
+			{FromModule: "github.com/spice-framework/spice/examples/commerce/orders", ToModule: "github.com/spice-framework/spice/examples/commerce/payments", API: "default", FromPackage: "github.com/spice-framework/spice/examples/commerce/orders", ToPackage: "github.com/spice-framework/spice/examples/commerce/payments"},
+			{FromModule: "github.com/spice-framework/spice/examples/commerce/orders", ToModule: "github.com/spice-framework/spice/examples/commerce/storage", API: "default", FromPackage: "github.com/spice-framework/spice/examples/commerce/orders", ToPackage: "github.com/spice-framework/spice/examples/commerce/storage"},
+			{FromModule: "github.com/spice-framework/spice/examples/commerce/platform", ToModule: "github.com/spice-framework/spice/examples/commerce/storage", API: "default", FromPackage: "github.com/spice-framework/spice/examples/commerce/platform", ToPackage: "github.com/spice-framework/spice/examples/commerce/storage"},
 		},
 		[]string{
-			"github.com/StevenBuglione/spice/examples/commerce",
+			"github.com/spice-framework/spice/examples/commerce",
 		},
 	)
 	if err != nil {
@@ -164,7 +164,7 @@ func configureGeneratedHTTP(
 		Manager: managementManager,
 		Info: map[string]string{
 			"application": TargetID,
-			"module":      "github.com/StevenBuglione/spice/examples/commerce",
+			"module":      "github.com/spice-framework/spice/examples/commerce",
 			"framework":   "Spice",
 		},
 		Metrics:       managementMetrics,
