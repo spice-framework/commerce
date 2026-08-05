@@ -1,4 +1,4 @@
-.PHONY: bootstrap check fmt lint security smoke test verify
+.PHONY: bootstrap check compatibility fmt lint security smoke test verify
 
 bootstrap:
 	go mod tidy -diff
@@ -9,6 +9,9 @@ bootstrap:
 
 check:
 	go run ./internal/qualitygate -mode=check
+
+compatibility:
+	go run -mod=readonly ./internal/corecompat -line=all
 
 fmt:
 	go run ./internal/qualitygate -mode=fmt

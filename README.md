@@ -65,10 +65,22 @@ go tool spice run --target Commerce . -- -check
 go tool spice run --target Commerce .
 ```
 
+The committed direct Spice requirement is Commerce's provisional minimum core
+and tool line. [`spice-compatibility.json`](spice-compatibility.json) also pins
+the current forward-compatibility endpoint. `make compatibility` resolves both
+through normal Go module integrity, asserts the exact MVS-selected core and
+both authorized tool packages, then runs vet, shuffled race tests, `spice
+verify`, generation freshness, and a Spice build against each boundary. It
+uses isolated alternate modfiles and fails if any handwritten, generated,
+module, manifest, artifact, or vendor byte changes. See
+[`docs/compatibility.md`](docs/compatibility.md) for the complete contract.
+
 Go 1.26.5 is exact. `make verify` (or
 `go run ./internal/qualitygate` on every platform) runs the complete local
 quality gate, including deterministic generation, offline vendor execution,
 security analysis, race tests, and the executable zero-network workflow.
+The definitive local gate always includes both core/tool compatibility
+boundaries; CI publishes the same minimum/current evidence as parallel jobs.
 
 The server binds `127.0.0.1:8081` by default. Set
 `SPICE_COMMERCE_ADDRESS=127.0.0.1:0` for an ephemeral test listener. The command

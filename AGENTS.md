@@ -23,6 +23,9 @@ The gate checks identity, formatting, module and vendor reproducibility, vet,
 the allowlisted linter policy, NilAway, gosec, govulncheck, shuffled and race
 tests, an 85% business-source coverage floor, vendor-offline tests, current
 Spice generation, ordinary builds, and an executable zero-network smoke path.
+It also verifies the immutable minimum and pinned current Spice core/tool
+boundaries without changing handwritten source, generated output, module
+files, or vendor.
 
 PostgreSQL integration tests additionally run against PostgreSQL 18 in hosted
 Linux jobs. Local verification may use them when the explicit test URL is
