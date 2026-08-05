@@ -9,14 +9,25 @@ auditable.
 - Module: `github.com/spice-framework/spice`
 - Selection: the immutable pseudo-version recorded in `go.mod`
 - License: Apache-2.0
-- Purpose: public runtime contracts, isolated PostgreSQL and SMTP starters,
-  annotation descriptors, generated-code testing support, CLI, and annotation
-  tool.
+- Purpose: public runtime contracts, annotation descriptors, and generated-code
+  testing support.
 - Runtime: generated ordinary Go directly calls selected providers. The
-  compiler and CLI are tool dependencies and do not participate in the running
-  application.
+  compiler does not participate in the running application.
 - Security: no module download occurs during normal generation or verification;
   the committed vendor tree is checked against a fresh deterministic render.
+
+## Spice toolchain
+
+- Module: `github.com/spice-framework/toolchain`
+- Selection: the independently pinned immutable pseudo-version in `go.mod`
+- License: Apache-2.0
+- Purpose: the Spice CLI, compiler, generator, verifier, development loop, and
+  official annotation tool.
+- Runtime: toolchain packages are selected only through Go `tool` directives
+  and do not participate in the generated application's runtime graph.
+- Security: tools run from the exact Go module graph with offline generation
+  and verification; compatibility checks validate the tool module independently
+  from the core module.
 
 ## pgx
 

@@ -1,4 +1,4 @@
-// Command corecompat verifies Commerce against an explicit Spice core and tool line.
+// Command corecompat verifies Commerce against explicit Spice core/toolchain pairs.
 package main
 
 import (

@@ -22,7 +22,7 @@ github.com/jackc/pgx/v5/stdlib
 ## explicit; go 1.19
 github.com/jackc/puddle/v2
 github.com/jackc/puddle/v2/internal/genstack
-# github.com/spice-framework/spice v0.0.0-20260805175412-383c17744300
+# github.com/spice-framework/spice v0.0.0-20260805222830-a2ecd56df246
 ## explicit; go 1.26.0
 github.com/spice-framework/spice/annotation
 github.com/spice-framework/spice/annotation/async
@@ -45,40 +45,6 @@ github.com/spice-framework/spice/async
 github.com/spice-framework/spice/batch
 github.com/spice-framework/spice/bean
 github.com/spice-framework/spice/cache
-github.com/spice-framework/spice/cmd/spice
-github.com/spice-framework/spice/cmd/spice-annotation-core
-github.com/spice-framework/spice/compiler/annotationcatalog
-github.com/spice-framework/spice/compiler/annotationhost
-github.com/spice-framework/spice/compiler/annotationimport
-github.com/spice-framework/spice/compiler/annotationinstall
-github.com/spice-framework/spice/compiler/application
-github.com/spice-framework/spice/compiler/async
-github.com/spice-framework/spice/compiler/autoconfigure
-github.com/spice-framework/spice/compiler/bootstrap
-github.com/spice-framework/spice/compiler/cache
-github.com/spice-framework/spice/compiler/configuration
-github.com/spice-framework/spice/compiler/controller
-github.com/spice-framework/spice/compiler/descriptor
-github.com/spice-framework/spice/compiler/diagnostic
-github.com/spice-framework/spice/compiler/diagnostic/adapt
-github.com/spice-framework/spice/compiler/event
-github.com/spice-framework/spice/compiler/generate
-github.com/spice-framework/spice/compiler/graph
-github.com/spice-framework/spice/compiler/internal/moduleenv
-github.com/spice-framework/spice/compiler/lifecycle
-github.com/spice-framework/spice/compiler/load
-github.com/spice-framework/spice/compiler/modulith
-github.com/spice-framework/spice/compiler/parser
-github.com/spice-framework/spice/compiler/provider
-github.com/spice-framework/spice/compiler/resolve
-github.com/spice-framework/spice/compiler/scan
-github.com/spice-framework/spice/compiler/schedule
-github.com/spice-framework/spice/compiler/service
-github.com/spice-framework/spice/compiler/signature
-github.com/spice-framework/spice/compiler/starter
-github.com/spice-framework/spice/compiler/targetid
-github.com/spice-framework/spice/compiler/transaction
-github.com/spice-framework/spice/compiler/validate
 github.com/spice-framework/spice/config
 github.com/spice-framework/spice/conversion
 github.com/spice-framework/spice/data
@@ -87,16 +53,6 @@ github.com/spice-framework/spice/event
 github.com/spice-framework/spice/event/outbox
 github.com/spice-framework/spice/expression
 github.com/spice-framework/spice/intercept
-github.com/spice-framework/spice/internal/annotationcore
-github.com/spice-framework/spice/internal/autoconfigure
-github.com/spice-framework/spice/internal/cli
-github.com/spice-framework/spice/internal/devloop
-github.com/spice-framework/spice/internal/genfs
-github.com/spice-framework/spice/internal/lsp
-github.com/spice-framework/spice/internal/scaffold
-github.com/spice-framework/spice/internal/spicegen/spice
-github.com/spice-framework/spice/internal/spicegen/spice/sources/internal_/autoconfigure
-github.com/spice-framework/spice/internal/spicegen/spice/sources/internal_/spiceapp
 github.com/spice-framework/spice/lifecycle
 github.com/spice-framework/spice/mail
 github.com/spice-framework/spice/mail/mailtest
@@ -107,7 +63,6 @@ github.com/spice-framework/spice/retry
 github.com/spice-framework/spice/schedule
 github.com/spice-framework/spice/security
 github.com/spice-framework/spice/spicetest
-github.com/spice-framework/spice/starter
 github.com/spice-framework/spice/validation
 github.com/spice-framework/spice/web
 # github.com/spice-framework/starter-postgres v0.0.0-20260805182646-6310c4b4b95e
@@ -116,6 +71,49 @@ github.com/spice-framework/starter-postgres
 # github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a
 ## explicit; go 1.26.0
 github.com/spice-framework/starter-smtp
+# github.com/spice-framework/toolchain v0.0.0-20260805222344-fd87027fc195
+## explicit; go 1.26.0
+github.com/spice-framework/toolchain/cmd/spice
+github.com/spice-framework/toolchain/cmd/spice-annotation-core
+github.com/spice-framework/toolchain/compiler/annotationcatalog
+github.com/spice-framework/toolchain/compiler/annotationhost
+github.com/spice-framework/toolchain/compiler/annotationimport
+github.com/spice-framework/toolchain/compiler/annotationinstall
+github.com/spice-framework/toolchain/compiler/application
+github.com/spice-framework/toolchain/compiler/async
+github.com/spice-framework/toolchain/compiler/autoconfigure
+github.com/spice-framework/toolchain/compiler/bootstrap
+github.com/spice-framework/toolchain/compiler/cache
+github.com/spice-framework/toolchain/compiler/configuration
+github.com/spice-framework/toolchain/compiler/controller
+github.com/spice-framework/toolchain/compiler/descriptor
+github.com/spice-framework/toolchain/compiler/diagnostic
+github.com/spice-framework/toolchain/compiler/diagnostic/adapt
+github.com/spice-framework/toolchain/compiler/event
+github.com/spice-framework/toolchain/compiler/generate
+github.com/spice-framework/toolchain/compiler/graph
+github.com/spice-framework/toolchain/compiler/internal/moduleenv
+github.com/spice-framework/toolchain/compiler/lifecycle
+github.com/spice-framework/toolchain/compiler/load
+github.com/spice-framework/toolchain/compiler/modulith
+github.com/spice-framework/toolchain/compiler/parser
+github.com/spice-framework/toolchain/compiler/provider
+github.com/spice-framework/toolchain/compiler/resolve
+github.com/spice-framework/toolchain/compiler/scan
+github.com/spice-framework/toolchain/compiler/schedule
+github.com/spice-framework/toolchain/compiler/service
+github.com/spice-framework/toolchain/compiler/signature
+github.com/spice-framework/toolchain/compiler/starter
+github.com/spice-framework/toolchain/compiler/targetid
+github.com/spice-framework/toolchain/compiler/transaction
+github.com/spice-framework/toolchain/compiler/validate
+github.com/spice-framework/toolchain/internal/annotationcore
+github.com/spice-framework/toolchain/internal/cli
+github.com/spice-framework/toolchain/internal/devloop
+github.com/spice-framework/toolchain/internal/genfs
+github.com/spice-framework/toolchain/internal/identity
+github.com/spice-framework/toolchain/internal/lsp
+github.com/spice-framework/toolchain/internal/scaffold
 # golang.org/x/mod v0.38.0
 ## explicit; go 1.25.0
 golang.org/x/mod/internal/lazyregexp

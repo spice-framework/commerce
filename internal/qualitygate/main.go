@@ -26,7 +26,7 @@ const (
 	modulePath        = "github.com/spice-framework/commerce"
 	legacyModulePath  = "github.com/spice-framework/spice/examples/" + "commerce"
 	minimumCoverage   = 85.0
-	spiceTool         = "github.com/spice-framework/spice/cmd/spice"
+	spiceTool         = "github.com/spice-framework/toolchain/cmd/spice"
 )
 
 var output = log.New(os.Stdout, "", 0)
@@ -85,7 +85,7 @@ func stepsForMode(ctx context.Context, root, mode string) ([]verificationStep, e
 	coverageStep := verificationStep{"business coverage", func() error { return coverage(ctx, root) }}
 	offlineStep := verificationStep{"offline vendor", func() error { return offline(ctx, root) }}
 	spiceStep := verificationStep{"Spice application", func() error { return spiceApplication(ctx, root) }}
-	compatibilityStep := verificationStep{"Spice core and tool compatibility", func() error {
+	compatibilityStep := verificationStep{"Spice core and toolchain compatibility", func() error {
 		return networkGoCommand(
 			ctx,
 			root,

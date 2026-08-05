@@ -17,25 +17,36 @@ import (
 )
 
 const (
-	compatibilityFile  = "spice-compatibility.json"
-	compatibilityV1    = 1
-	repositoryModule   = "github.com/spice-framework/commerce"
-	spiceModulePath    = "github.com/spice-framework/spice"
-	spiceToolPath      = "github.com/spice-framework/spice/cmd/spice"
-	annotationToolPath = "github.com/spice-framework/spice/cmd/spice-annotation-core"
+	compatibilityFile   = "spice-compatibility.json"
+	compatibilityV2     = 2
+	repositoryModule    = "github.com/spice-framework/commerce"
+	coreModulePath      = "github.com/spice-framework/spice"
+	toolchainModulePath = "github.com/spice-framework/toolchain"
+	spiceToolPath       = toolchainModulePath + "/cmd/spice"
+	annotationToolPath  = toolchainModulePath + "/cmd/spice-annotation-core"
 )
 
 type compatibilityContract struct {
-	Schema  int      `json:"schema"`
-	Module  string   `json:"module"`
-	Minimum string   `json:"minimum"`
-	Current string   `json:"current"`
-	Tools   []string `json:"tools"`
+	Schema    int                 `json:"schema"`
+	Core      moduleCompatibility `json:"core"`
+	Toolchain toolCompatibility   `json:"toolchain"`
+}
+
+type moduleCompatibility struct {
+	Module  string `json:"module"`
+	Minimum string `json:"minimum"`
+	Current string `json:"current"`
+}
+
+type toolCompatibility struct {
+	moduleCompatibility
+	Tools []string `json:"tools"`
 }
 
 type compatibilityBoundary struct {
-	Name    string
-	Version string
+	Name             string
+	CoreVersion      string
+	ToolchainVersion string
 }
 
 func readContract(root string) (compatibilityContract, error) {
@@ -63,25 +74,36 @@ func readContract(root string) (compatibilityContract, error) {
 }
 
 func validateContract(result compatibilityContract) error {
-	if result.Schema != compatibilityV1 {
+	if result.Schema != compatibilityV2 {
 		return fmt.Errorf("%s schema %d is unsupported", compatibilityFile, result.Schema)
 	}
-	if result.Module == "" || result.Minimum == "" || result.Current == "" {
-		return fmt.Errorf("%s requires explicit module, minimum, and current values", compatibilityFile)
+	if err := validateModuleLine("core", result.Core); err != nil {
+		return err
 	}
-	for _, value := range append([]string{result.Module, result.Minimum, result.Current}, result.Tools...) {
+	if err := validateModuleLine("toolchain", result.Toolchain.moduleCompatibility); err != nil {
+		return err
+	}
+	if result.Core.Module != coreModulePath {
+		return fmt.Errorf("%s core module is %q; require %s", compatibilityFile, result.Core.Module, coreModulePath)
+	}
+	if result.Toolchain.Module != toolchainModulePath {
+		return fmt.Errorf(
+			"%s toolchain module is %q; require %s",
+			compatibilityFile,
+			result.Toolchain.Module,
+			toolchainModulePath,
+		)
+	}
+	for _, value := range result.Toolchain.Tools {
 		if strings.TrimSpace(value) != value {
 			return fmt.Errorf("%s values must not contain surrounding whitespace", compatibilityFile)
 		}
 	}
-	if result.Minimum == result.Current {
-		return fmt.Errorf("%s minimum and current versions must differ", compatibilityFile)
-	}
-	if len(result.Tools) == 0 {
+	if len(result.Toolchain.Tools) == 0 {
 		return fmt.Errorf("%s requires at least one tool", compatibilityFile)
 	}
-	seen := make(map[string]struct{}, len(result.Tools))
-	for _, tool := range result.Tools {
+	seen := make(map[string]struct{}, len(result.Toolchain.Tools))
+	for _, tool := range result.Toolchain.Tools {
 		if tool == "" {
 			return fmt.Errorf("%s tool paths must not be empty", compatibilityFile)
 		}
@@ -90,16 +112,34 @@ func validateContract(result compatibilityContract) error {
 		}
 		seen[tool] = struct{}{}
 	}
-	if !slices.IsSorted(result.Tools) {
+	if !slices.IsSorted(result.Toolchain.Tools) {
 		return fmt.Errorf("%s tool paths must be sorted", compatibilityFile)
-	}
-	if result.Module != spiceModulePath {
-		return fmt.Errorf("%s module is %q; require %s", compatibilityFile, result.Module, spiceModulePath)
 	}
 	requiredTools := []string{spiceToolPath, annotationToolPath}
 	slices.Sort(requiredTools)
-	if !slices.Equal(result.Tools, requiredTools) {
-		return fmt.Errorf("%s tools are %v; require %v", compatibilityFile, result.Tools, requiredTools)
+	if !slices.Equal(result.Toolchain.Tools, requiredTools) {
+		return fmt.Errorf(
+			"%s tools are %v; require %v",
+			compatibilityFile,
+			result.Toolchain.Tools,
+			requiredTools,
+		)
+	}
+	return nil
+}
+
+func validateModuleLine(name string, line moduleCompatibility) error {
+	if line.Module == "" || line.Minimum == "" || line.Current == "" {
+		return fmt.Errorf(
+			"%s requires explicit %s module, minimum, and current values",
+			compatibilityFile,
+			name,
+		)
+	}
+	for _, value := range []string{line.Module, line.Minimum, line.Current} {
+		if strings.TrimSpace(value) != value {
+			return fmt.Errorf("%s values must not contain surrounding whitespace", compatibilityFile)
+		}
 	}
 	return nil
 }
@@ -107,14 +147,34 @@ func validateContract(result compatibilityContract) error {
 func (contract compatibilityContract) boundaries(line string) ([]compatibilityBoundary, error) {
 	switch line {
 	case "minimum":
-		return []compatibilityBoundary{{Name: line, Version: contract.Minimum}}, nil
+		return []compatibilityBoundary{{
+			Name:             line,
+			CoreVersion:      contract.Core.Minimum,
+			ToolchainVersion: contract.Toolchain.Minimum,
+		}}, nil
 	case "current":
-		return []compatibilityBoundary{{Name: line, Version: contract.Current}}, nil
+		return []compatibilityBoundary{{
+			Name:             line,
+			CoreVersion:      contract.Core.Current,
+			ToolchainVersion: contract.Toolchain.Current,
+		}}, nil
 	case "all":
-		return []compatibilityBoundary{
-			{Name: "minimum", Version: contract.Minimum},
-			{Name: "current", Version: contract.Current},
-		}, nil
+		minimum := compatibilityBoundary{
+			Name:             "minimum",
+			CoreVersion:      contract.Core.Minimum,
+			ToolchainVersion: contract.Toolchain.Minimum,
+		}
+		current := compatibilityBoundary{
+			Name:             "current",
+			CoreVersion:      contract.Core.Current,
+			ToolchainVersion: contract.Toolchain.Current,
+		}
+		if minimum.CoreVersion == current.CoreVersion &&
+			minimum.ToolchainVersion == current.ToolchainVersion {
+			minimum.Name = "minimum/current"
+			return []compatibilityBoundary{minimum}, nil
+		}
+		return []compatibilityBoundary{minimum, current}, nil
 	default:
 		return nil, invalidLine(line)
 	}
@@ -194,33 +254,53 @@ func readModuleMetadata(ctx context.Context, root string) (moduleMetadata, error
 }
 
 func validateModuleContract(contract compatibilityContract, metadata moduleMetadata) error {
-	minimum := ""
-	for _, requirement := range metadata.Require {
-		if requirement.Path == contract.Module && !requirement.Indirect {
-			minimum = requirement.Version
-			break
+	for _, line := range []struct {
+		name          string
+		data          moduleCompatibility
+		requireDirect bool
+	}{
+		{name: "core", data: contract.Core, requireDirect: true},
+		{name: "toolchain", data: contract.Toolchain.moduleCompatibility},
+	} {
+		minimum := requirementVersion(metadata, line.data.Module, line.requireDirect)
+		if minimum == "" {
+			if line.requireDirect {
+				return fmt.Errorf("go.mod must directly require %s at an exact version", line.data.Module)
+			}
+			return fmt.Errorf("go.mod must require %s at an exact version", line.data.Module)
 		}
-	}
-	if minimum == "" {
-		return fmt.Errorf("go.mod must directly require %s at an exact version", contract.Module)
-	}
-	if minimum != contract.Minimum {
-		return fmt.Errorf(
-			"go.mod directly requires %s at %s; compatibility minimum is %s",
-			contract.Module,
-			minimum,
-			contract.Minimum,
-		)
+		if minimum != line.data.Minimum {
+			return fmt.Errorf(
+				"go.mod directly requires %s at %s; compatibility %s minimum is %s",
+				line.data.Module,
+				minimum,
+				line.name,
+				line.data.Minimum,
+			)
+		}
 	}
 	declaredTools := make([]string, 0, len(metadata.Tool))
 	for _, tool := range metadata.Tool {
 		declaredTools = append(declaredTools, tool.Path)
 	}
 	slices.Sort(declaredTools)
-	if !slices.Equal(declaredTools, contract.Tools) {
-		return fmt.Errorf("go.mod tools are %v; compatibility tools are %v", declaredTools, contract.Tools)
+	if !slices.Equal(declaredTools, contract.Toolchain.Tools) {
+		return fmt.Errorf(
+			"go.mod tools are %v; compatibility tools are %v",
+			declaredTools,
+			contract.Toolchain.Tools,
+		)
 	}
 	return nil
+}
+
+func requirementVersion(metadata moduleMetadata, module string, requireDirect bool) string {
+	for _, requirement := range metadata.Require {
+		if requirement.Path == module && (!requireDirect || !requirement.Indirect) {
+			return requirement.Version
+		}
+	}
+	return ""
 }
 
 func prepareBoundary(
@@ -229,37 +309,23 @@ func prepareBoundary(
 	contract compatibilityContract,
 	boundary compatibilityBoundary,
 ) error {
-	content, err := captureGo(
-		ctx,
-		root,
-		onlineEnvironment(),
-		"list",
-		"-mod=mod",
-		"-m",
-		"-json",
-		contract.Module+"@"+boundary.Version,
-	)
-	if err != nil {
-		return fmt.Errorf("resolve %s Spice version: %w", boundary.Name, err)
+	for _, selected := range []struct {
+		name    string
+		module  string
+		version string
+	}{
+		{name: "core", module: contract.Core.Module, version: boundary.CoreVersion},
+		{
+			name:    "toolchain",
+			module:  contract.Toolchain.Module,
+			version: boundary.ToolchainVersion,
+		},
+	} {
+		if err := resolveExactModule(ctx, root, boundary.Name, selected.name, selected.module, selected.version); err != nil {
+			return err
+		}
 	}
-	var resolved struct {
-		Path    string
-		Version string
-	}
-	if decodeErr := json.Unmarshal([]byte(content), &resolved); decodeErr != nil {
-		return fmt.Errorf("decode resolved %s Spice version: %w", boundary.Name, decodeErr)
-	}
-	if resolved.Path != contract.Module || resolved.Version != boundary.Version {
-		return fmt.Errorf(
-			"%s Spice version resolved as %s@%s; require exactly %s@%s",
-			boundary.Name,
-			resolved.Path,
-			resolved.Version,
-			contract.Module,
-			boundary.Version,
-		)
-	}
-	modfile, cleanup, err := alternateModfile(ctx, root, contract.Module, boundary.Version)
+	modfile, cleanup, err := alternateModfile(ctx, root, contract, boundary)
 	if err != nil {
 		return err
 	}
@@ -270,39 +336,68 @@ func prepareBoundary(
 	return nil
 }
 
+func resolveExactModule(ctx context.Context, root, boundaryName, role, module, version string) error {
+	content, err := captureGo(
+		ctx,
+		root,
+		onlineEnvironment(),
+		"list",
+		"-mod=mod",
+		"-m",
+		"-json",
+		module+"@"+version,
+	)
+	if err != nil {
+		return fmt.Errorf("resolve %s %s version: %w", boundaryName, role, err)
+	}
+	var resolved struct {
+		Path    string
+		Version string
+	}
+	if decodeErr := json.Unmarshal([]byte(content), &resolved); decodeErr != nil {
+		return fmt.Errorf("decode resolved %s %s version: %w", boundaryName, role, decodeErr)
+	}
+	if resolved.Path != module || resolved.Version != version {
+		return fmt.Errorf(
+			"%s %s version resolved as %s@%s; require exactly %s@%s",
+			boundaryName,
+			role,
+			resolved.Path,
+			resolved.Version,
+			module,
+			version,
+		)
+	}
+	return nil
+}
+
 func verifyBoundary(
 	ctx context.Context,
 	root string,
 	contract compatibilityContract,
 	boundary compatibilityBoundary,
 ) error {
-	modfile, cleanup, err := alternateModfile(ctx, root, contract.Module, boundary.Version)
+	modfile, cleanup, err := alternateModfile(ctx, root, contract, boundary)
 	if err != nil {
 		return err
 	}
 	defer cleanup()
 	environment := offlineModfileEnvironment(modfile)
-	selected, err := captureGo(
-		ctx,
-		root,
-		environment,
-		"list",
-		"-mod=mod",
-		"-modfile="+modfile,
-		"-m",
-		"-f={{.Version}}",
-		contract.Module,
-	)
-	if err != nil {
-		return fmt.Errorf("resolve %s MVS graph: %w", boundary.Name, err)
-	}
-	if strings.TrimSpace(selected) != boundary.Version {
-		return fmt.Errorf(
-			"%s MVS graph selected Spice %q; require exactly %q",
-			boundary.Name,
-			strings.TrimSpace(selected),
-			boundary.Version,
-		)
+	for _, selected := range []struct {
+		name    string
+		module  string
+		version string
+	}{
+		{name: "core", module: contract.Core.Module, version: boundary.CoreVersion},
+		{
+			name:    "toolchain",
+			module:  contract.Toolchain.Module,
+			version: boundary.ToolchainVersion,
+		},
+	} {
+		if selectedErr := verifySelectedModule(ctx, root, environment, modfile, boundary.Name, selected.name, selected.module, selected.version); selectedErr != nil {
+			return selectedErr
+		}
 	}
 	if toolErr := verifyToolModules(ctx, root, environment, modfile, contract, boundary); toolErr != nil {
 		return toolErr
@@ -312,9 +407,10 @@ func verifyBoundary(
 		return err
 	}
 	output.Printf(
-		"==> Commerce with %s Spice %s across %d product packages",
+		"==> Commerce with %s Spice core %s and toolchain %s across %d product packages",
 		boundary.Name,
-		boundary.Version,
+		boundary.CoreVersion,
+		boundary.ToolchainVersion,
 		len(packages),
 	)
 	vetArguments := []string{"vet", "-mod=mod", "-modfile=" + modfile}
@@ -351,7 +447,48 @@ func verifyBoundary(
 			return err
 		}
 	}
-	output.Printf("<== Commerce %s Spice compatibility passed at %s", boundary.Name, boundary.Version)
+	output.Printf(
+		"<== Commerce %s Spice compatibility passed at core %s and toolchain %s",
+		boundary.Name,
+		boundary.CoreVersion,
+		boundary.ToolchainVersion,
+	)
+	return nil
+}
+
+func verifySelectedModule(
+	ctx context.Context,
+	root string,
+	environment []string,
+	modfile string,
+	boundaryName string,
+	role string,
+	module string,
+	version string,
+) error {
+	selected, err := captureGo(
+		ctx,
+		root,
+		environment,
+		"list",
+		"-mod=mod",
+		"-modfile="+modfile,
+		"-m",
+		"-f={{.Version}}",
+		module,
+	)
+	if err != nil {
+		return fmt.Errorf("resolve %s %s MVS graph: %w", boundaryName, role, err)
+	}
+	if strings.TrimSpace(selected) != version {
+		return fmt.Errorf(
+			"%s MVS graph selected %s %q; require exactly %q",
+			boundaryName,
+			role,
+			strings.TrimSpace(selected),
+			version,
+		)
+	}
 	return nil
 }
 
@@ -363,7 +500,7 @@ func verifyToolModules(
 	contract compatibilityContract,
 	boundary compatibilityBoundary,
 ) error {
-	for _, tool := range contract.Tools {
+	for _, tool := range contract.Toolchain.Tools {
 		content, err := captureGo(
 			ctx,
 			root,
@@ -378,13 +515,16 @@ func verifyToolModules(
 			return fmt.Errorf("resolve tool %s: %w", tool, err)
 		}
 		fields := strings.Fields(content)
-		if len(fields) != 3 || fields[0] != "main" || fields[1] != contract.Module || fields[2] != boundary.Version {
+		if len(fields) != 3 ||
+			fields[0] != "main" ||
+			fields[1] != contract.Toolchain.Module ||
+			fields[2] != boundary.ToolchainVersion {
 			return fmt.Errorf(
 				"tool %s resolved as %q; require main package from %s@%s",
 				tool,
 				strings.TrimSpace(content),
-				contract.Module,
-				boundary.Version,
+				contract.Toolchain.Module,
+				boundary.ToolchainVersion,
 			)
 		}
 	}
@@ -572,8 +712,8 @@ func copyApplication(source, destination string) error {
 func alternateModfile(
 	ctx context.Context,
 	root string,
-	module string,
-	version string,
+	contract compatibilityContract,
+	boundary compatibilityBoundary,
 ) (string, func(), error) {
 	productMod, err := os.ReadFile(filepath.Join(root, "go.mod")) // #nosec G304 -- root is repository-owned.
 	if err != nil {
@@ -610,15 +750,14 @@ func alternateModfile(
 		cleanup()
 		return "", nil, fmt.Errorf("write compatibility sumfile: %w", err)
 	}
-	if err := goCommand(
-		ctx,
-		root,
-		offlineEnvironment(),
+	arguments := []string{
 		"mod",
 		"edit",
-		"-modfile="+modfile,
-		"-require="+module+"@"+version,
-	); err != nil {
+		"-modfile=" + modfile,
+		"-require=" + contract.Core.Module + "@" + boundary.CoreVersion,
+		"-require=" + contract.Toolchain.Module + "@" + boundary.ToolchainVersion,
+	}
+	if err := goCommand(ctx, root, offlineEnvironment(), arguments...); err != nil {
 		cleanup()
 		return "", nil, err
 	}

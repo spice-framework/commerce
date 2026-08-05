@@ -10,7 +10,8 @@ immutable Spice module without a local replacement or monorepo-only behavior.
 - Fetch and inspect `origin/main` before work and immediately before pushing.
 - Use bounded, reviewable commits and never overwrite unexpected remote work.
 - Preserve generated source and `.spice/*.manifest.json`; never hand-edit them.
-- Keep the Spice dependency pinned to one immutable released or pseudo-version.
+- Pin Spice core and toolchain independently to immutable released or
+  pseudo-versions.
 - Do not add a local `replace` to the committed module graph.
 
 ## Required verification
@@ -23,9 +24,9 @@ The gate checks identity, formatting, module and vendor reproducibility, vet,
 the allowlisted linter policy, NilAway, gosec, govulncheck, shuffled and race
 tests, an 85% business-source coverage floor, vendor-offline tests, current
 Spice generation, ordinary builds, and an executable zero-network smoke path.
-It also verifies the immutable minimum and pinned current Spice core/tool
-boundaries without changing handwritten source, generated output, module
-files, or vendor.
+It also verifies immutable minimum and pinned current paired Spice
+core/toolchain boundaries without changing handwritten source, generated
+output, module files, or vendor.
 
 PostgreSQL integration tests additionally run against PostgreSQL 18 in hosted
 Linux jobs. Local verification may use them when the explicit test URL is

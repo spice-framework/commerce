@@ -9,14 +9,21 @@ import (
 )
 
 const validContract = `{
-  "schema": 1,
-  "module": "github.com/spice-framework/spice",
-  "minimum": "v0.0.0-20260101000000-111111111111",
-  "current": "v0.0.0-20260201000000-222222222222",
-  "tools": [
-    "github.com/spice-framework/spice/cmd/spice",
-    "github.com/spice-framework/spice/cmd/spice-annotation-core"
-  ]
+  "schema": 2,
+  "core": {
+    "module": "github.com/spice-framework/spice",
+    "minimum": "v0.0.0-20260101000000-111111111111",
+    "current": "v0.0.0-20260201000000-222222222222"
+  },
+  "toolchain": {
+    "module": "github.com/spice-framework/toolchain",
+    "minimum": "v0.0.0-20260301000000-333333333333",
+    "current": "v0.0.0-20260401000000-444444444444",
+    "tools": [
+      "github.com/spice-framework/toolchain/cmd/spice",
+      "github.com/spice-framework/toolchain/cmd/spice-annotation-core"
+    ]
+  }
 }`
 
 func TestReadContract(t *testing.T) {
@@ -29,14 +36,14 @@ func TestReadContract(t *testing.T) {
 		{name: "valid", content: validContract},
 		{
 			name:    "unknown field",
-			content: strings.Replace(validContract, `"schema": 1,`, `"schema": 1, "future": true,`, 1),
+			content: strings.Replace(validContract, `"schema": 2,`, `"schema": 2, "future": true,`, 1),
 			wantErr: "unknown field",
 		},
 		{name: "trailing value", content: validContract + `{}`, wantErr: "trailing JSON values"},
 		{
 			name:    "unsupported schema",
-			content: strings.Replace(validContract, `"schema": 1`, `"schema": 2`, 1),
-			wantErr: "schema 2 is unsupported",
+			content: strings.Replace(validContract, `"schema": 2`, `"schema": 1`, 1),
+			wantErr: "schema 1 is unsupported",
 		},
 		{
 			name:    "whitespace",
@@ -44,14 +51,24 @@ func TestReadContract(t *testing.T) {
 			wantErr: "must not contain surrounding whitespace",
 		},
 		{
-			name:    "equal versions",
-			content: strings.Replace(validContract, "v0.0.0-20260201000000-222222222222", "v0.0.0-20260101000000-111111111111", 1),
-			wantErr: "minimum and current versions must differ",
+			name: "core-only current boundary",
+			content: strings.Replace(
+				validContract,
+				`"current": "v0.0.0-20260401000000-444444444444"`,
+				`"current": ""`,
+				1,
+			),
+			wantErr: "explicit toolchain module, minimum, and current",
 		},
 		{
-			name:    "wrong module",
-			content: strings.Replace(validContract, spiceModulePath, "example.com/not-spice", 1),
-			wantErr: "require " + spiceModulePath,
+			name:    "wrong core module",
+			content: strings.Replace(validContract, coreModulePath, "example.com/not-spice", 1),
+			wantErr: "require " + coreModulePath,
+		},
+		{
+			name:    "wrong toolchain module",
+			content: strings.Replace(validContract, toolchainModulePath, "example.com/not-toolchain", 1),
+			wantErr: "require " + toolchainModulePath,
 		},
 		{
 			name: "duplicate tool",
@@ -68,7 +85,7 @@ func TestReadContract(t *testing.T) {
 			content: strings.Replace(
 				validContract,
 				annotationToolPath,
-				spiceModulePath+"/cmd/unknown",
+				toolchainModulePath+"/cmd/unknown",
 				1,
 			),
 			wantErr: "require",
@@ -90,7 +107,9 @@ func TestReadContract(t *testing.T) {
 				if err != nil {
 					t.Fatalf("readContract() error = %v", err)
 				}
-				if got.Module != spiceModulePath || len(got.Tools) != 2 {
+				if got.Core.Module != coreModulePath ||
+					got.Toolchain.Module != toolchainModulePath ||
+					len(got.Toolchain.Tools) != 2 {
 					t.Fatalf("readContract() = %#v", got)
 				}
 				return
@@ -102,21 +121,58 @@ func TestReadContract(t *testing.T) {
 	}
 }
 
+func TestCompatibilityBoundariesCollapseTheInitialPublishedPair(t *testing.T) {
+	t.Parallel()
+	contract := compatibilityContract{
+		Core: moduleCompatibility{Minimum: "core", Current: "core"},
+		Toolchain: toolCompatibility{moduleCompatibility: moduleCompatibility{
+			Minimum: "toolchain",
+			Current: "toolchain",
+		}},
+	}
+	got, err := contract.boundaries("all")
+	if err != nil {
+		t.Fatalf("boundaries(all) error = %v", err)
+	}
+	want := []compatibilityBoundary{{
+		Name: "minimum/current", CoreVersion: "core", ToolchainVersion: "toolchain",
+	}}
+	if !slices.Equal(got, want) {
+		t.Fatalf("boundaries(all) = %#v, want %#v", got, want)
+	}
+}
+
 func TestCompatibilityBoundaries(t *testing.T) {
 	t.Parallel()
-	contract := compatibilityContract{Minimum: "minimum", Current: "current"}
+	contract := compatibilityContract{
+		Core: moduleCompatibility{Minimum: "core-minimum", Current: "core-current"},
+		Toolchain: toolCompatibility{moduleCompatibility: moduleCompatibility{
+			Minimum: "toolchain-minimum",
+			Current: "toolchain-current",
+		}},
+	}
 	tests := []struct {
 		line    string
 		want    []compatibilityBoundary
 		wantErr string
 	}{
-		{line: "minimum", want: []compatibilityBoundary{{Name: "minimum", Version: "minimum"}}},
-		{line: "current", want: []compatibilityBoundary{{Name: "current", Version: "current"}}},
+		{
+			line: "minimum",
+			want: []compatibilityBoundary{{
+				Name: "minimum", CoreVersion: "core-minimum", ToolchainVersion: "toolchain-minimum",
+			}},
+		},
+		{
+			line: "current",
+			want: []compatibilityBoundary{{
+				Name: "current", CoreVersion: "core-current", ToolchainVersion: "toolchain-current",
+			}},
+		},
 		{
 			line: "all",
 			want: []compatibilityBoundary{
-				{Name: "minimum", Version: "minimum"},
-				{Name: "current", Version: "current"},
+				{Name: "minimum", CoreVersion: "core-minimum", ToolchainVersion: "toolchain-minimum"},
+				{Name: "current", CoreVersion: "core-current", ToolchainVersion: "toolchain-current"},
 			},
 		},
 		{line: "latest", wantErr: "minimum, current, or all"},
@@ -141,21 +197,61 @@ func TestCompatibilityBoundaries(t *testing.T) {
 	}
 }
 
+func TestCompatibilityPairMayAdvanceOneModuleIndependently(t *testing.T) {
+	t.Parallel()
+	base := compatibilityContract{
+		Schema: compatibilityV2,
+		Core: moduleCompatibility{
+			Module:  "github.com/spice-framework/spice",
+			Minimum: "v0.1.0",
+			Current: "v0.2.0",
+		},
+		Toolchain: toolCompatibility{
+			moduleCompatibility: moduleCompatibility{
+				Module:  "github.com/spice-framework/toolchain",
+				Minimum: "v0.3.0",
+				Current: "v0.3.0",
+			},
+			Tools: []string{spiceToolPath, annotationToolPath},
+		},
+	}
+	slices.Sort(base.Toolchain.Tools)
+	if err := validateContract(base); err != nil {
+		t.Fatalf("validateContract(core advance) error = %v", err)
+	}
+	base.Core.Current = base.Core.Minimum
+	base.Toolchain.Current = "v0.4.0"
+	if err := validateContract(base); err != nil {
+		t.Fatalf("validateContract(toolchain advance) error = %v", err)
+	}
+}
+
 func TestValidateModuleContract(t *testing.T) {
 	t.Parallel()
 	contract := compatibilityContract{
-		Module:  spiceModulePath,
-		Minimum: "v0.1.0",
-		Tools:   []string{spiceToolPath, annotationToolPath},
+		Core: moduleCompatibility{
+			Module:  coreModulePath,
+			Minimum: "v0.1.0",
+		},
+		Toolchain: toolCompatibility{
+			moduleCompatibility: moduleCompatibility{
+				Module:  toolchainModulePath,
+				Minimum: "v0.2.0",
+			},
+			Tools: []string{spiceToolPath, annotationToolPath},
+		},
 	}
-	slices.Sort(contract.Tools)
+	slices.Sort(contract.Toolchain.Tools)
 	metadata := moduleMetadata{}
-	metadata.Require = append(metadata.Require, struct {
+	metadata.Require = append(metadata.Require, []struct {
 		Path     string
 		Version  string
 		Indirect bool
-	}{Path: spiceModulePath, Version: contract.Minimum})
-	for _, path := range contract.Tools {
+	}{
+		{Path: coreModulePath, Version: contract.Core.Minimum},
+		{Path: toolchainModulePath, Version: contract.Toolchain.Minimum, Indirect: true},
+	}...)
+	for _, path := range contract.Toolchain.Tools {
 		metadata.Tool = append(metadata.Tool, struct{ Path string }{Path: path})
 	}
 	if err := validateModuleContract(contract, metadata); err != nil {
@@ -171,9 +267,15 @@ func TestValidateModuleContract(t *testing.T) {
 
 	wrongVersion := metadata
 	wrongVersion.Require = slices.Clone(metadata.Require)
-	wrongVersion.Require[0].Version = "v0.2.0"
-	if err := validateModuleContract(contract, wrongVersion); err == nil || !strings.Contains(err.Error(), "compatibility minimum") {
+	wrongVersion.Require[1].Version = "v0.3.0"
+	if err := validateModuleContract(contract, wrongVersion); err == nil || !strings.Contains(err.Error(), "toolchain minimum") {
 		t.Fatalf("validateModuleContract(wrong version) error = %v", err)
+	}
+
+	missingToolchain := metadata
+	missingToolchain.Require = slices.Clone(metadata.Require[:1])
+	if err := validateModuleContract(contract, missingToolchain); err == nil || !strings.Contains(err.Error(), "must require "+toolchainModulePath) {
+		t.Fatalf("validateModuleContract(missing toolchain) error = %v", err)
 	}
 
 	missingTool := metadata
