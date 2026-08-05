@@ -53,12 +53,15 @@ Notifications applies the same rule to an external framework interface:
 the concrete delivery directly. `SystemClock` is a second explicit interface
 binding, keeping message dates caller-owned and deterministic in tests.
 
-From the repository root:
+Commerce is a real consuming Go module. Its `go.mod` authorizes the annotation
+tool, uses a local `replace` only while co-located with the framework source,
+and owns its generated target, manifest, acceptance tests, and vendor tree.
+From this directory with the `spice` CLI on `PATH`:
 
 ```text
-go run ./cmd/spice generate --check --target Commerce ./examples/commerce
-go run ./cmd/spice run --target Commerce ./examples/commerce -- -check
-go run ./cmd/spice run --target Commerce ./examples/commerce
+spice generate --check --target Commerce .
+spice run --target Commerce . -- -check
+spice run --target Commerce .
 ```
 
 The server binds `127.0.0.1:8081` by default. Set
@@ -85,7 +88,7 @@ bean, so traffic cannot start against an unreconciled schema. The
 reopening the PostgreSQL pool:
 
 ```text
-SPICE_TEST_POSTGRES_URL=postgres://... go test -tags=integration -run PostgreSQLPersistence ./examples/commerce/storage
+SPICE_TEST_POSTGRES_URL=postgres://... go test -tags=integration -run PostgreSQLPersistence ./storage
 ```
 
 Mail configuration is typed and instance-owned. `test` is the default
