@@ -71,7 +71,7 @@ github.com/spice-framework/starter-postgres
 # github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a
 ## explicit; go 1.26.0
 github.com/spice-framework/starter-smtp
-# github.com/spice-framework/toolchain v0.0.0-20260805222344-fd87027fc195
+# github.com/spice-framework/toolchain v0.0.0-20260805230546-150f8ae62c13
 ## explicit; go 1.26.0
 github.com/spice-framework/toolchain/cmd/spice
 github.com/spice-framework/toolchain/cmd/spice-annotation-core

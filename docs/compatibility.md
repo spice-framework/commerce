@@ -15,9 +15,11 @@ Branch names, aliases such as `latest`, malformed versions, undeclared tools,
 missing requirements, and mismatched MVS selection fail closed.
 
 The initial published minimum and current entries intentionally name the same
-exact pair. `-line=all` collapses that duplicate to one verification run. A
-future preview advances one or both explicitly recorded coordinates; the
-schema never infers a toolchain version from a core-only version change.
+exact pair: core `v0.0.0-20260805222830-a2ecd56df246` and bridged toolchain
+`v0.0.0-20260805230546-150f8ae62c13`. `-line=all` collapses that duplicate to
+one verification run. A future preview advances one or both explicitly
+recorded coordinates; the schema never infers a toolchain version from a
+core-only version change.
 
 For each boundary the compatibility runner:
 
