@@ -19,7 +19,7 @@ import (
 	"github.com/spice-framework/spice/data/repository"
 	"github.com/spice-framework/spice/lifecycle"
 	"github.com/spice-framework/spice/migration"
-	"github.com/spice-framework/spice/starter/postgres"
+	postgres "github.com/spice-framework/starter-postgres"
 )
 
 const (

@@ -54,9 +54,9 @@ the concrete delivery directly. `SystemClock` is a second explicit interface
 binding, keeping message dates caller-owned and deterministic in tests.
 
 Commerce is a real consuming Go module. Its `go.mod` authorizes the annotation
-and CLI tools, pins immutable Spice and standalone SMTP starter pseudo-versions
-without local replacements, and owns its generated target, manifest, acceptance tests, and
-vendor tree. From this directory:
+and CLI tools, pins immutable Spice plus standalone PostgreSQL and SMTP starter
+pseudo-versions without local replacements, and owns its generated target,
+manifest, acceptance tests, and vendor tree. From this directory:
 
 ```text
 go tool spice generate --check --target Commerce .

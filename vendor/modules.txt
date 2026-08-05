@@ -22,7 +22,7 @@ github.com/jackc/pgx/v5/stdlib
 ## explicit; go 1.19
 github.com/jackc/puddle/v2
 github.com/jackc/puddle/v2/internal/genstack
-# github.com/spice-framework/spice v0.0.0-20260805162230-a0bbb964bf6b
+# github.com/spice-framework/spice v0.0.0-20260805175412-383c17744300
 ## explicit; go 1.26.0
 github.com/spice-framework/spice/annotation
 github.com/spice-framework/spice/annotation/async
@@ -108,9 +108,11 @@ github.com/spice-framework/spice/schedule
 github.com/spice-framework/spice/security
 github.com/spice-framework/spice/spicetest
 github.com/spice-framework/spice/starter
-github.com/spice-framework/spice/starter/postgres
 github.com/spice-framework/spice/validation
 github.com/spice-framework/spice/web
+# github.com/spice-framework/starter-postgres v0.0.0-20260805180915-528cd5a1255f
+## explicit; go 1.26.0
+github.com/spice-framework/starter-postgres
 # github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a
 ## explicit; go 1.26.0
 github.com/spice-framework/starter-smtp
