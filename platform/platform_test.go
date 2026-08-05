@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/spice-framework/spice/examples/commerce/storage"
+	"github.com/spice-framework/commerce/storage"
 	"github.com/spice-framework/spice/security"
 )
 

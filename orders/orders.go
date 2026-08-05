@@ -3,7 +3,7 @@
 
 // Package orders owns order placement.
 //
-// @Module(allowedDependencies=["github.com/spice-framework/spice/examples/commerce/inventory", "github.com/spice-framework/spice/examples/commerce/notifications", "github.com/spice-framework/spice/examples/commerce/payments", "github.com/spice-framework/spice/examples/commerce/storage"])
+// @Module(allowedDependencies=["github.com/spice-framework/commerce/inventory", "github.com/spice-framework/commerce/notifications", "github.com/spice-framework/commerce/payments", "github.com/spice-framework/commerce/storage"])
 package orders
 
 import (
@@ -13,11 +13,11 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/spice-framework/commerce/inventory"
+	"github.com/spice-framework/commerce/payments"
+	"github.com/spice-framework/commerce/storage"
 	"github.com/spice-framework/spice/data"
 	"github.com/spice-framework/spice/event"
-	"github.com/spice-framework/spice/examples/commerce/inventory"
-	"github.com/spice-framework/spice/examples/commerce/payments"
-	"github.com/spice-framework/spice/examples/commerce/storage"
 )
 
 var (

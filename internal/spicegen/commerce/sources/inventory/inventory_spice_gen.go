@@ -9,29 +9,29 @@ package spicegen
 import (
 	fmt "fmt"
 
+	inventory "github.com/spice-framework/commerce/inventory"
 	spiceconfig "github.com/spice-framework/spice/config"
-	inventory "github.com/spice-framework/spice/examples/commerce/inventory"
 	spicelifecycle "github.com/spice-framework/spice/lifecycle"
 )
 
-// ConstructService_79951d75 performs the direct construction selected for bean "newService".
-// Spice source identity: spice:symbol:v1|function|60:github.com/spice-framework/spice/examples/commerce/inventory|0:|10:NewService.
-func ConstructService_79951d75(dependency0 inventory.Settings) (*inventory.Service, spicelifecycle.Cleanup, error) {
+// ConstructService_f442bac0 performs the direct construction selected for bean "newService".
+// Spice source identity: spice:symbol:v1|function|45:github.com/spice-framework/commerce/inventory|0:|10:NewService.
+func ConstructService_f442bac0(dependency0 inventory.Settings) (*inventory.Service, spicelifecycle.Cleanup, error) {
 	value, err := inventory.NewService(dependency0)
 	if err != nil {
 		var zero *inventory.Service
-		return zero, nil, fmt.Errorf("construct bean newService (*github.com/spice-framework/spice/examples/commerce/inventory.Service, source spice:symbol:v1|function|60:github.com/spice-framework/spice/examples/commerce/inventory|0:|10:NewService): %w", err)
+		return zero, nil, fmt.Errorf("construct bean newService (*github.com/spice-framework/commerce/inventory.Service, source spice:symbol:v1|function|45:github.com/spice-framework/commerce/inventory|0:|10:NewService): %w", err)
 	}
 	return value, nil, nil
 }
 
-// BindSettings_224b83e8 binds the validated configuration declared by spice:symbol:v1|type|60:github.com/spice-framework/spice/examples/commerce/inventory|0:|8:Settings.
-func BindSettings_224b83e8(configurationSnapshot spiceconfig.Snapshot) (inventory.Settings, error) {
+// BindSettings_fdf91604 binds the validated configuration declared by spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.
+func BindSettings_fdf91604(configurationSnapshot spiceconfig.Snapshot) (inventory.Settings, error) {
 	value := inventory.Settings{}
 	if _, configured := configurationSnapshot.Lookup("commerce.inventory.sku"); configured {
 		rawValue, valueErr := configurationSnapshot.RequiredString("commerce.inventory.sku")
 		if valueErr != nil {
-			return inventory.Settings{}, fmt.Errorf("decode configuration property commerce.inventory.sku for github.com/spice-framework/spice/examples/commerce/inventory.Settings.SKU: %w", valueErr)
+			return inventory.Settings{}, fmt.Errorf("decode configuration property commerce.inventory.sku for github.com/spice-framework/commerce/inventory.Settings.SKU: %w", valueErr)
 		}
 		convertedValue := string(rawValue)
 		value.SKU = convertedValue
@@ -39,11 +39,11 @@ func BindSettings_224b83e8(configurationSnapshot spiceconfig.Snapshot) (inventor
 	if _, configured := configurationSnapshot.Lookup("commerce.inventory.initial-stock"); configured {
 		rawValue, valueErr := configurationSnapshot.Integer("commerce.inventory.initial-stock")
 		if valueErr != nil {
-			return inventory.Settings{}, fmt.Errorf("decode configuration property commerce.inventory.initial-stock for github.com/spice-framework/spice/examples/commerce/inventory.Settings.InitialStock: %w", valueErr)
+			return inventory.Settings{}, fmt.Errorf("decode configuration property commerce.inventory.initial-stock for github.com/spice-framework/commerce/inventory.Settings.InitialStock: %w", valueErr)
 		}
 		convertedValue := int(rawValue)
 		if int64(convertedValue) != rawValue {
-			return inventory.Settings{}, fmt.Errorf("decode configuration property commerce.inventory.initial-stock for github.com/spice-framework/spice/examples/commerce/inventory.Settings.InitialStock: value is outside int")
+			return inventory.Settings{}, fmt.Errorf("decode configuration property commerce.inventory.initial-stock for github.com/spice-framework/commerce/inventory.Settings.InitialStock: value is outside int")
 		}
 		value.InitialStock = convertedValue
 	}

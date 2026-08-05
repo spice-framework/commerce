@@ -6,13 +6,13 @@
 package spicegen
 
 import (
-	orders "github.com/spice-framework/spice/examples/commerce/orders"
+	orders "github.com/spice-framework/commerce/orders"
 	spicelifecycle "github.com/spice-framework/spice/lifecycle"
 )
 
-// ConstructViewAudit_87ee915f performs the direct construction selected for bean "newViewAudit".
-// Spice source identity: spice:symbol:v1|function|57:github.com/spice-framework/spice/examples/commerce/orders|0:|12:NewViewAudit.
-func ConstructViewAudit_87ee915f() (*orders.ViewAudit, spicelifecycle.Cleanup, error) {
+// ConstructViewAudit_170cdfbe performs the direct construction selected for bean "newViewAudit".
+// Spice source identity: spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit.
+func ConstructViewAudit_170cdfbe() (*orders.ViewAudit, spicelifecycle.Cleanup, error) {
 	value := orders.NewViewAudit()
 	return value, nil, nil
 }

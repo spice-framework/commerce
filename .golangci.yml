@@ -1,0 +1,126 @@
+version: "2"
+
+run:
+  timeout: 10m
+  tests: true
+  modules-download-mode: vendor
+
+linters:
+  default: none
+  enable:
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - containedctx
+    - cyclop
+    - durationcheck
+    - errcheck
+    - errorlint
+    - exhaustive
+    - fatcontext
+    - forbidigo
+    - forcetypeassert
+    - gocheckcompilerdirectives
+    - gocritic
+    - godoclint
+    - gomoddirectives
+    - govet
+    - ineffassign
+    - maintidx
+    - modernize
+    - nilerr
+    - nilnesserr
+    - nilnil
+    - noctx
+    - nolintlint
+    - nosprintfhostport
+    - predeclared
+    - recvcheck
+    - revive
+    - rowserrcheck
+    - sloglint
+    - sqlclosecheck
+    - staticcheck
+    - testableexamples
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - wastedassign
+  settings:
+    cyclop:
+      max-complexity: 15
+      package-average: 10
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+      exclude-functions:
+        - "(io.Closer).Close"
+    exhaustive:
+      default-signifies-exhaustive: false
+    forbidigo:
+      analyze-types: true
+      forbid:
+        - pattern: '^fmt\.Print(f|ln)?$'
+          msg: "write through an injected io.Writer or structured logger"
+        - pattern: '^log\.Fatal(f|ln)?$'
+          msg: "return an error to the entrypoint"
+        - pattern: '^os\.Exit$'
+          msg: "return an error and let an entrypoint select the exit code"
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment
+    maintidx:
+      under: 20
+    nolintlint:
+      require-specific: true
+      require-explanation: true
+    revive:
+      severity: warning
+      rules:
+        - name: comment-spacings
+          arguments:
+            - "@"
+    sloglint:
+      no-global: all
+      context: scope
+      static-msg: true
+      key-naming-case: snake
+    staticcheck:
+      checks:
+        - all
+  exclusions:
+    generated: strict
+    warn-unused: true
+    rules:
+      - path: "_test\\.go$"
+        linters:
+          - cyclop
+          - forbidigo
+          - maintidx
+          - noctx
+      - path: "(^|.*[/\\\\])(main|internal[/\\\\]qualitygate[/\\\\]main)\\.go$"
+        text: 'use of `os\.Exit`'
+        linters:
+          - forbidigo
+
+formatters:
+  enable:
+    - gofumpt
+    - goimports
+  settings:
+    gofumpt:
+      module-path: github.com/spice-framework/commerce
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  uniq-by-line: true
+
+output:
+  sort-order:
+    - file
+    - linter

@@ -22,7 +22,7 @@ github.com/jackc/pgx/v5/stdlib
 ## explicit; go 1.19
 github.com/jackc/puddle/v2
 github.com/jackc/puddle/v2/internal/genstack
-# github.com/spice-framework/spice v0.0.0 => ../..
+# github.com/spice-framework/spice v0.0.0-20260805134512-286352035ecd
 ## explicit; go 1.26.0
 github.com/spice-framework/spice/annotation
 github.com/spice-framework/spice/annotation/async
@@ -45,7 +45,40 @@ github.com/spice-framework/spice/async
 github.com/spice-framework/spice/batch
 github.com/spice-framework/spice/bean
 github.com/spice-framework/spice/cache
+github.com/spice-framework/spice/cmd/spice
 github.com/spice-framework/spice/cmd/spice-annotation-core
+github.com/spice-framework/spice/compiler/annotationcatalog
+github.com/spice-framework/spice/compiler/annotationhost
+github.com/spice-framework/spice/compiler/annotationimport
+github.com/spice-framework/spice/compiler/annotationinstall
+github.com/spice-framework/spice/compiler/application
+github.com/spice-framework/spice/compiler/async
+github.com/spice-framework/spice/compiler/autoconfigure
+github.com/spice-framework/spice/compiler/bootstrap
+github.com/spice-framework/spice/compiler/cache
+github.com/spice-framework/spice/compiler/configuration
+github.com/spice-framework/spice/compiler/controller
+github.com/spice-framework/spice/compiler/descriptor
+github.com/spice-framework/spice/compiler/diagnostic
+github.com/spice-framework/spice/compiler/diagnostic/adapt
+github.com/spice-framework/spice/compiler/event
+github.com/spice-framework/spice/compiler/generate
+github.com/spice-framework/spice/compiler/graph
+github.com/spice-framework/spice/compiler/internal/moduleenv
+github.com/spice-framework/spice/compiler/lifecycle
+github.com/spice-framework/spice/compiler/load
+github.com/spice-framework/spice/compiler/modulith
+github.com/spice-framework/spice/compiler/parser
+github.com/spice-framework/spice/compiler/provider
+github.com/spice-framework/spice/compiler/resolve
+github.com/spice-framework/spice/compiler/scan
+github.com/spice-framework/spice/compiler/schedule
+github.com/spice-framework/spice/compiler/service
+github.com/spice-framework/spice/compiler/signature
+github.com/spice-framework/spice/compiler/starter
+github.com/spice-framework/spice/compiler/targetid
+github.com/spice-framework/spice/compiler/transaction
+github.com/spice-framework/spice/compiler/validate
 github.com/spice-framework/spice/config
 github.com/spice-framework/spice/conversion
 github.com/spice-framework/spice/data
@@ -55,6 +88,15 @@ github.com/spice-framework/spice/event/outbox
 github.com/spice-framework/spice/expression
 github.com/spice-framework/spice/intercept
 github.com/spice-framework/spice/internal/annotationcore
+github.com/spice-framework/spice/internal/autoconfigure
+github.com/spice-framework/spice/internal/cli
+github.com/spice-framework/spice/internal/devloop
+github.com/spice-framework/spice/internal/genfs
+github.com/spice-framework/spice/internal/lsp
+github.com/spice-framework/spice/internal/scaffold
+github.com/spice-framework/spice/internal/spicegen/spice
+github.com/spice-framework/spice/internal/spicegen/spice/sources/internal_/autoconfigure
+github.com/spice-framework/spice/internal/spicegen/spice/sources/internal_/spiceapp
 github.com/spice-framework/spice/lifecycle
 github.com/spice-framework/spice/mail
 github.com/spice-framework/spice/mail/mailtest
@@ -70,9 +112,19 @@ github.com/spice-framework/spice/starter/postgres
 github.com/spice-framework/spice/starter/smtp
 github.com/spice-framework/spice/validation
 github.com/spice-framework/spice/web
+# golang.org/x/mod v0.38.0
+## explicit; go 1.25.0
+golang.org/x/mod/internal/lazyregexp
+golang.org/x/mod/modfile
+golang.org/x/mod/module
+golang.org/x/mod/semver
 # golang.org/x/sync v0.22.0
 ## explicit; go 1.25.0
+golang.org/x/sync/errgroup
 golang.org/x/sync/semaphore
+# golang.org/x/sys v0.47.0
+## explicit; go 1.25.0
+golang.org/x/sys/windows
 # golang.org/x/text v0.40.0
 ## explicit; go 1.25.0
 golang.org/x/text/cases
@@ -88,4 +140,24 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
-# github.com/spice-framework/spice => ../..
+# golang.org/x/tools v0.48.0
+## explicit; go 1.25.0
+golang.org/x/tools/go/ast/edge
+golang.org/x/tools/go/ast/inspector
+golang.org/x/tools/go/gcexportdata
+golang.org/x/tools/go/packages
+golang.org/x/tools/go/types/objectpath
+golang.org/x/tools/go/types/typeutil
+golang.org/x/tools/internal/aliases
+golang.org/x/tools/internal/event
+golang.org/x/tools/internal/event/core
+golang.org/x/tools/internal/event/keys
+golang.org/x/tools/internal/event/label
+golang.org/x/tools/internal/gcimporter
+golang.org/x/tools/internal/gocommand
+golang.org/x/tools/internal/packagesinternal
+golang.org/x/tools/internal/pkgbits
+golang.org/x/tools/internal/stdlib
+golang.org/x/tools/internal/typeparams
+golang.org/x/tools/internal/typesinternal
+golang.org/x/tools/internal/versions

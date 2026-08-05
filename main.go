@@ -3,13 +3,13 @@ package main
 import (
 	"os"
 
-	spiceapp "github.com/spice-framework/spice/examples/commerce/internal/spicegen/commerce"
-	_ "github.com/spice-framework/spice/examples/commerce/inventory"
-	_ "github.com/spice-framework/spice/examples/commerce/notifications"
-	_ "github.com/spice-framework/spice/examples/commerce/orders"
-	_ "github.com/spice-framework/spice/examples/commerce/payments"
-	_ "github.com/spice-framework/spice/examples/commerce/platform"
-	_ "github.com/spice-framework/spice/examples/commerce/storage"
+	spiceapp "github.com/spice-framework/commerce/internal/spicegen/commerce"
+	_ "github.com/spice-framework/commerce/inventory"
+	_ "github.com/spice-framework/commerce/notifications"
+	_ "github.com/spice-framework/commerce/orders"
+	_ "github.com/spice-framework/commerce/payments"
+	_ "github.com/spice-framework/commerce/platform"
+	_ "github.com/spice-framework/commerce/storage"
 )
 
 // @import { Application } from "github.com/spice-framework/spice/annotation/core"

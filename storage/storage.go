@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	moduleID        = "github.com/spice-framework/spice/examples/commerce/storage"
+	moduleID        = "github.com/spice-framework/commerce/storage"
 	memoryURL       = "memory://commerce"
 	migrationNumber = 202607280001
 )

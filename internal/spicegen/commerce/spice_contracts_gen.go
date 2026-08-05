@@ -13,19 +13,19 @@ import (
 	strings "strings"
 	time "time"
 
+	spiceentrypoint "github.com/spice-framework/commerce/internal/spicegen/commerce/sources/_root"
+	inventory "github.com/spice-framework/commerce/inventory"
+	notifications "github.com/spice-framework/commerce/notifications"
+	orders "github.com/spice-framework/commerce/orders"
+	payments "github.com/spice-framework/commerce/payments"
+	platform "github.com/spice-framework/commerce/platform"
+	storage "github.com/spice-framework/commerce/storage"
 	spiceasync "github.com/spice-framework/spice/async"
 	spicebean "github.com/spice-framework/spice/bean"
 	spicecache "github.com/spice-framework/spice/cache"
 	spiceconfig "github.com/spice-framework/spice/config"
 	spicedata "github.com/spice-framework/spice/data"
 	spiceevent "github.com/spice-framework/spice/event"
-	spiceentrypoint "github.com/spice-framework/spice/examples/commerce/internal/spicegen/commerce/sources/_root"
-	inventory "github.com/spice-framework/spice/examples/commerce/inventory"
-	notifications "github.com/spice-framework/spice/examples/commerce/notifications"
-	orders "github.com/spice-framework/spice/examples/commerce/orders"
-	payments "github.com/spice-framework/spice/examples/commerce/payments"
-	platform "github.com/spice-framework/spice/examples/commerce/platform"
-	storage "github.com/spice-framework/spice/examples/commerce/storage"
 	spiceintercept "github.com/spice-framework/spice/intercept"
 	spicelifecycle "github.com/spice-framework/spice/lifecycle"
 	spiceschedule "github.com/spice-framework/spice/schedule"
@@ -33,7 +33,7 @@ import (
 	spiceweb "github.com/spice-framework/spice/web"
 )
 
-const TargetID = spiceentrypoint.ApplicationTargetCommerce_16450fb1
+const TargetID = spiceentrypoint.ApplicationTargetCommerce_f6b95006
 
 const (
 	ExitSuccess = 0

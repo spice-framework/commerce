@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/spice-framework/commerce/inventory"
+	"github.com/spice-framework/commerce/notifications"
+	"github.com/spice-framework/commerce/payments"
 	"github.com/spice-framework/spice/data"
-	"github.com/spice-framework/spice/examples/commerce/inventory"
-	"github.com/spice-framework/spice/examples/commerce/notifications"
-	"github.com/spice-framework/spice/examples/commerce/payments"
 	"github.com/spice-framework/spice/web"
 )
 

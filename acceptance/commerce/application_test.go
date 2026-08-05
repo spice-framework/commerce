@@ -10,11 +10,11 @@ import (
 	"testing"
 	"time"
 
+	commercegen "github.com/spice-framework/commerce/internal/spicegen/commerce"
+	"github.com/spice-framework/commerce/orders"
 	spiceasync "github.com/spice-framework/spice/async"
 	"github.com/spice-framework/spice/bean"
 	"github.com/spice-framework/spice/config"
-	commercegen "github.com/spice-framework/spice/examples/commerce/internal/spicegen/commerce"
-	"github.com/spice-framework/spice/examples/commerce/orders"
 	"github.com/spice-framework/spice/lifecycle"
 	"github.com/spice-framework/spice/security"
 	"github.com/spice-framework/spice/spicetest"

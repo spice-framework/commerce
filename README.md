@@ -1,6 +1,6 @@
-# Commerce reference application
+# Spice Commerce reference application
 
-The commerce example is Spice's production-shaped reference application. It
+Commerce is Spice's standalone production-shaped reference application. It
 uses six explicit application modules:
 
 - `inventory` owns stock and compensated reservations;
@@ -54,15 +54,21 @@ the concrete delivery directly. `SystemClock` is a second explicit interface
 binding, keeping message dates caller-owned and deterministic in tests.
 
 Commerce is a real consuming Go module. Its `go.mod` authorizes the annotation
-tool, uses a local `replace` only while co-located with the framework source,
-and owns its generated target, manifest, acceptance tests, and vendor tree.
-From this directory with the `spice` CLI on `PATH`:
+and CLI tools, pins one immutable Spice pseudo-version without a local
+replacement, and owns its generated target, manifest, acceptance tests, and
+vendor tree. From this directory:
 
 ```text
-spice generate --check --target Commerce .
-spice run --target Commerce . -- -check
-spice run --target Commerce .
+go tool spice generate --check --target Commerce .
+go tool spice build --target Commerce .
+go tool spice run --target Commerce . -- -check
+go tool spice run --target Commerce .
 ```
+
+Go 1.26.5 is exact. `make verify` (or
+`go run ./internal/qualitygate` on every platform) runs the complete local
+quality gate, including deterministic generation, offline vendor execution,
+security analysis, race tests, and the executable zero-network workflow.
 
 The server binds `127.0.0.1:8081` by default. Set
 `SPICE_COMMERCE_ADDRESS=127.0.0.1:0` for an ephemeral test listener. The command
@@ -154,4 +160,5 @@ notifications tests inspect the exact decoded message, attachment, envelope,
 cancellation, and sanitized delivery failures.
 
 The complete edit/save/restart/HTTP walkthrough and its automated evidence map
-are documented in `docs/developer-proof.md`.
+are documented in the
+[Spice developer proof](https://github.com/spice-framework/spice/blob/main/docs/developer-proof.md).

@@ -10,45 +10,45 @@ package spicegen
 import (
 	fmt "fmt"
 
+	payments "github.com/spice-framework/commerce/payments"
 	spiceconfig "github.com/spice-framework/spice/config"
-	payments "github.com/spice-framework/spice/examples/commerce/payments"
 	spicelifecycle "github.com/spice-framework/spice/lifecycle"
 )
 
-// ConstructOfflineProcessor_713bc812 performs the direct construction selected for bean "offlineProcessor".
-// Spice source identity: spice:symbol:v1|type|59:github.com/spice-framework/spice/examples/commerce/payments|0:|16:OfflineProcessor.
-func ConstructOfflineProcessor_713bc812() (*payments.OfflineProcessor, spicelifecycle.Cleanup, error) {
+// ConstructOfflineProcessor_cef093bf performs the direct construction selected for bean "offlineProcessor".
+// Spice source identity: spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor.
+func ConstructOfflineProcessor_cef093bf() (*payments.OfflineProcessor, spicelifecycle.Cleanup, error) {
 	return new(payments.OfflineProcessor), nil, nil
 }
 
-// spiceImplementsOfflineProcessorAsProcessor_629317a7 identifies the explicit @Implements binding for spice:symbol:v1|type|59:github.com/spice-framework/spice/examples/commerce/payments|0:|16:OfflineProcessor.
+// spiceImplementsOfflineProcessorAsProcessor_ac5ba89f identifies the explicit @Implements binding for spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor.
 var _ payments.Processor = (*payments.OfflineProcessor)(nil)
 
-// ConstructStripeProcessor_dfa08a08 performs the direct construction selected for bean "stripeProcessor".
-// Spice source identity: spice:symbol:v1|type|59:github.com/spice-framework/spice/examples/commerce/payments|0:|7:Service.
-func ConstructStripeProcessor_dfa08a08(dependency0 payments.Settings) (*payments.Service, spicelifecycle.Cleanup, error) {
+// ConstructStripeProcessor_7def5e1d performs the direct construction selected for bean "stripeProcessor".
+// Spice source identity: spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service.
+func ConstructStripeProcessor_7def5e1d(dependency0 payments.Settings) (*payments.Service, spicelifecycle.Cleanup, error) {
 	value, err := payments.NewService(dependency0)
 	if err != nil {
 		var zero *payments.Service
-		return zero, nil, fmt.Errorf("construct bean stripeProcessor (*github.com/spice-framework/spice/examples/commerce/payments.Service, source spice:symbol:v1|type|59:github.com/spice-framework/spice/examples/commerce/payments|0:|7:Service): %w", err)
+		return zero, nil, fmt.Errorf("construct bean stripeProcessor (*github.com/spice-framework/commerce/payments.Service, source spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service): %w", err)
 	}
 	return value, nil, nil
 }
 
-// spiceImplementsStripeProcessorAsProcessor_678a04c2 identifies the explicit @Implements binding for spice:symbol:v1|type|59:github.com/spice-framework/spice/examples/commerce/payments|0:|7:Service.
+// spiceImplementsStripeProcessorAsProcessor_ab8defeb identifies the explicit @Implements binding for spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service.
 var _ payments.Processor = (*payments.Service)(nil)
 
-// BindSettings_20c0dec1 binds the validated configuration declared by spice:symbol:v1|type|59:github.com/spice-framework/spice/examples/commerce/payments|0:|8:Settings.
-func BindSettings_20c0dec1(configurationSnapshot spiceconfig.Snapshot) (payments.Settings, error) {
+// BindSettings_71d9f317 binds the validated configuration declared by spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings.
+func BindSettings_71d9f317(configurationSnapshot spiceconfig.Snapshot) (payments.Settings, error) {
 	value := payments.Settings{}
 	if _, configured := configurationSnapshot.Lookup("commerce.payments.maximum-cents"); configured {
 		rawValue, valueErr := configurationSnapshot.Integer("commerce.payments.maximum-cents")
 		if valueErr != nil {
-			return payments.Settings{}, fmt.Errorf("decode configuration property commerce.payments.maximum-cents for github.com/spice-framework/spice/examples/commerce/payments.Settings.MaximumCents: %w", valueErr)
+			return payments.Settings{}, fmt.Errorf("decode configuration property commerce.payments.maximum-cents for github.com/spice-framework/commerce/payments.Settings.MaximumCents: %w", valueErr)
 		}
 		convertedValue := int(rawValue)
 		if int64(convertedValue) != rawValue {
-			return payments.Settings{}, fmt.Errorf("decode configuration property commerce.payments.maximum-cents for github.com/spice-framework/spice/examples/commerce/payments.Settings.MaximumCents: value is outside int")
+			return payments.Settings{}, fmt.Errorf("decode configuration property commerce.payments.maximum-cents for github.com/spice-framework/commerce/payments.Settings.MaximumCents: value is outside int")
 		}
 		value.MaximumCents = convertedValue
 	}

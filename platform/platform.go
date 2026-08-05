@@ -4,7 +4,7 @@
 
 // Package platform owns the commerce application's HTTP transport lifecycle.
 //
-// @Module(allowedDependencies=["github.com/spice-framework/spice/examples/commerce/storage"])
+// @Module(allowedDependencies=["github.com/spice-framework/commerce/storage"])
 package platform
 
 import (
@@ -18,7 +18,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/spice-framework/spice/examples/commerce/storage"
+	"github.com/spice-framework/commerce/storage"
 	"github.com/spice-framework/spice/security"
 )
 

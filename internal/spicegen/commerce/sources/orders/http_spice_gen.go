@@ -8,18 +8,18 @@ package spicegen
 import (
 	fmt "fmt"
 
-	notifications "github.com/spice-framework/spice/examples/commerce/notifications"
-	orders "github.com/spice-framework/spice/examples/commerce/orders"
+	notifications "github.com/spice-framework/commerce/notifications"
+	orders "github.com/spice-framework/commerce/orders"
 	spicelifecycle "github.com/spice-framework/spice/lifecycle"
 )
 
-// ConstructController_d96c36b3 performs the direct construction selected for bean "controller".
-// Spice source identity: spice:symbol:v1|type|57:github.com/spice-framework/spice/examples/commerce/orders|0:|10:Controller.
-func ConstructController_d96c36b3(dependency0 *orders.Service, dependency1 *notifications.Notifier) (*orders.Controller, spicelifecycle.Cleanup, error) {
+// ConstructController_0ae5a0bd performs the direct construction selected for bean "controller".
+// Spice source identity: spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller.
+func ConstructController_0ae5a0bd(dependency0 *orders.Service, dependency1 *notifications.Notifier) (*orders.Controller, spicelifecycle.Cleanup, error) {
 	value, err := orders.NewController(dependency0, dependency1)
 	if err != nil {
 		var zero *orders.Controller
-		return zero, nil, fmt.Errorf("construct bean controller (*github.com/spice-framework/spice/examples/commerce/orders.Controller, source spice:symbol:v1|type|57:github.com/spice-framework/spice/examples/commerce/orders|0:|10:Controller): %w", err)
+		return zero, nil, fmt.Errorf("construct bean controller (*github.com/spice-framework/commerce/orders.Controller, source spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller): %w", err)
 	}
 	return value, nil, nil
 }

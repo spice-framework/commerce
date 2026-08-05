@@ -1,0 +1,6 @@
+/bin/
+/coverage.out
+/.idea/
+/.vscode/
+*.test
+*.prof
