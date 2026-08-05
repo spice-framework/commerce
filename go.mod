@@ -9,7 +9,7 @@ tool (
 	github.com/spice-framework/spice/cmd/spice-annotation-core
 )
 
-require github.com/spice-framework/spice v0.0.0-20260805134512-286352035ecd
+require github.com/spice-framework/spice v0.0.0-20260805142518-e5b8eef446d7
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
