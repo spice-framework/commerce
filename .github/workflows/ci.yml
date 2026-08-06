@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
       - name: Set up exact Go toolchain
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
@@ -54,6 +56,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
       - name: Set up exact Go toolchain
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
@@ -83,6 +87,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
       - name: Set up exact Go toolchain
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
@@ -94,3 +100,23 @@ jobs:
         env:
           SPICE_TEST_POSTGRES_URL: postgres://commerce:commerce@127.0.0.1:5432/commerce?sslmode=disable
         run: go test -tags=integration -race -count=1 ./storage
+
+  required:
+    name: Required CI
+    if: ${{ always() }}
+    needs: [verify, core-compatibility, postgres]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    permissions: {}
+    steps:
+      - name: Require every CI job to succeed
+        env:
+          VERIFY_RESULT: ${{ needs.verify.result }}
+          CORE_COMPATIBILITY_RESULT: ${{ needs.core-compatibility.result }}
+          POSTGRES_RESULT: ${{ needs.postgres.result }}
+        run: |
+          if [ "$VERIFY_RESULT" != "success" ] || \
+             [ "$CORE_COMPATIBILITY_RESULT" != "success" ] || \
+             [ "$POSTGRES_RESULT" != "success" ]; then
+            exit 1
+          fi
