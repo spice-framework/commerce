@@ -14,11 +14,12 @@ pair is a pinned forward-compatibility signal, not a moving dependency.
 Branch names, aliases such as `latest`, malformed versions, undeclared tools,
 missing requirements, and mismatched MVS selection fail closed.
 
-The initial published minimum and current entries intentionally name the same
-exact pair: core `v0.0.0-20260805222830-a2ecd56df246` and bridged toolchain
-`v0.0.0-20260805230546-150f8ae62c13`. `-line=all` collapses that duplicate to
-one verification run. A future preview advances one or both explicitly
-recorded coordinates; the schema never infers a toolchain version from a
+The minimum remains the first independently consumable pair: core
+`v0.0.0-20260805222830-a2ecd56df246` and bridged toolchain
+`v0.0.0-20260805230546-150f8ae62c13`. The current line independently proves
+core `v0.0.0-20260806143541-fde1793832bd` with toolchain
+`v0.0.0-20260806133530-71211498297c`. `-line=all` therefore performs two real
+verification runs. The schema never infers a toolchain version from a
 core-only version change.
 
 For each boundary the compatibility runner:
