@@ -1,5 +1,7 @@
 # Spice Commerce reference application
 
+Unified documentation: [spiceframework.dev/examples/commerce](https://spiceframework.dev/examples/commerce/).
+
 Commerce is Spice's standalone production-shaped reference application. It
 uses six explicit application modules:
 
