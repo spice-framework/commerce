@@ -24,6 +24,7 @@ const (
 	toolchainModulePath = "github.com/spice-framework/toolchain"
 	spiceToolPath       = toolchainModulePath + "/cmd/spice"
 	annotationToolPath  = toolchainModulePath + "/cmd/spice-annotation-core"
+	styleToolPath       = toolchainModulePath + "/cmd/spicestyle"
 )
 
 type compatibilityContract struct {
@@ -115,7 +116,7 @@ func validateContract(result compatibilityContract) error {
 	if !slices.IsSorted(result.Toolchain.Tools) {
 		return fmt.Errorf("%s tool paths must be sorted", compatibilityFile)
 	}
-	requiredTools := []string{spiceToolPath, annotationToolPath}
+	requiredTools := []string{spiceToolPath, annotationToolPath, styleToolPath}
 	slices.Sort(requiredTools)
 	if !slices.Equal(result.Toolchain.Tools, requiredTools) {
 		return fmt.Errorf(

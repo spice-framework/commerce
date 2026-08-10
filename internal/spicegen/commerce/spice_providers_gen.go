@@ -26,6 +26,7 @@ import (
 	spicedata "github.com/spice-framework/spice/data"
 	spiceevent "github.com/spice-framework/spice/event"
 	spicelifecycle "github.com/spice-framework/spice/lifecycle"
+	spicesecurity "github.com/spice-framework/spice/security"
 )
 
 type applicationDependencies struct {
@@ -35,7 +36,7 @@ type applicationDependencies struct {
 	ordersSettings        orders.Settings
 	orderRepository       *storage.OrderRepository
 	storageSettings       storage.Settings
-	openDatabase          *storage.Database
+	database              *storage.Database
 	native                *sql.DB
 	readExecutor          spicedata.Executor
 	transactions          *spicedata.Manager
@@ -59,6 +60,7 @@ func constructApplicationDependencies(
 	application *Application,
 	options ApplicationOptions,
 	configurationSnapshot spiceconfig.Snapshot,
+	authorizer *spicesecurity.Authorizer,
 ) (*applicationDependencies, error) {
 	_ = ctx
 	_ = application
@@ -103,14 +105,14 @@ func constructApplicationDependencies(
 		if options.Overrides.Mux.Enabled() {
 			return options.Overrides.Mux.Acquire(ctx)
 		}
-		return spicePlatform.ConstructMux_becaf993()
+		return spicePlatform.ConstructMux_86b57071()
 	}()
 	if err != nil {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct bean mux (*net/http.ServeMux, source spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|3:Mux): %w", err))
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct bean newMux (*net/http.ServeMux, source spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|6:NewMux): %w", err))
 	}
 	if muxCleanup != nil {
-		if err := application.coordinator.RegisterModuleCleanup("github.com/spice-framework/commerce/platform", "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|3:Mux", muxCleanup); err != nil {
-			return nil, application.coordinator.Abort(ctx, fmt.Errorf("register cleanup for bean mux (source spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|3:Mux): %w", err))
+		if err := application.coordinator.RegisterModuleCleanup("github.com/spice-framework/commerce/platform", "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|6:NewMux", muxCleanup); err != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("register cleanup for bean newMux (source spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|6:NewMux): %w", err))
 		}
 	}
 	_ = mux
@@ -139,26 +141,26 @@ func constructApplicationDependencies(
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("bind configuration github.com/spice-framework/commerce/storage.Settings for bean Settings (source spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings): %w", err))
 	}
 	_ = storageSettings
-	openDatabase, openDatabaseCleanup, err := func() (*storage.Database, spicelifecycle.Cleanup, error) {
-		if options.Overrides.OpenDatabase.Enabled() {
-			return options.Overrides.OpenDatabase.Acquire(ctx)
+	database, databaseCleanup, err := func() (*storage.Database, spicelifecycle.Cleanup, error) {
+		if options.Overrides.Database.Enabled() {
+			return options.Overrides.Database.Acquire(ctx)
 		}
-		return spiceStorage.ConstructOpenDatabase_38018081(storageSettings)
+		return spiceStorage.ConstructDatabase_c187a5fe(storageSettings)
 	}()
 	if err != nil {
-		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct bean openDatabase (*github.com/spice-framework/commerce/storage.Database, source spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:OpenDatabase): %w", err))
+		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct bean newDatabase (*github.com/spice-framework/commerce/storage.Database, source spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase): %w", err))
 	}
-	if openDatabaseCleanup != nil {
-		if err := application.coordinator.RegisterModuleCleanup("github.com/spice-framework/commerce/storage", "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:OpenDatabase", openDatabaseCleanup); err != nil {
-			return nil, application.coordinator.Abort(ctx, fmt.Errorf("register cleanup for bean openDatabase (source spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:OpenDatabase): %w", err))
+	if databaseCleanup != nil {
+		if err := application.coordinator.RegisterModuleCleanup("github.com/spice-framework/commerce/storage", "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase", databaseCleanup); err != nil {
+			return nil, application.coordinator.Abort(ctx, fmt.Errorf("register cleanup for bean newDatabase (source spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase): %w", err))
 		}
 	}
-	_ = openDatabase
+	_ = database
 	native, nativeCleanup, err := func() (*sql.DB, spicelifecycle.Cleanup, error) {
 		if options.Overrides.Native.Enabled() {
 			return options.Overrides.Native.Acquire(ctx)
 		}
-		return spiceStorage.ConstructNative_d70bbe3b(openDatabase)
+		return spiceStorage.ConstructNative_d70bbe3b(database)
 	}()
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct bean native (*database/sql.DB, source spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|6:Native): %w", err))
@@ -243,7 +245,7 @@ func constructApplicationDependencies(
 		if options.Overrides.Server.Enabled() {
 			return options.Overrides.Server.Acquire(ctx)
 		}
-		return spicePlatform.ConstructServer_54b531b9(platformSettings, mux, openDatabase)
+		return spicePlatform.ConstructServer_54b531b9(platformSettings, mux, database)
 	}()
 	if err != nil {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("construct bean newServer (*github.com/spice-framework/commerce/platform.Server, source spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer): %w", err))
@@ -361,7 +363,7 @@ func constructApplicationDependencies(
 		ordersSettings:        ordersSettings,
 		orderRepository:       orderRepository,
 		storageSettings:       storageSettings,
-		openDatabase:          openDatabase,
+		database:              database,
 		native:                native,
 		readExecutor:          readExecutor,
 		transactions:          transactions,

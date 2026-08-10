@@ -20,9 +20,10 @@ Go 1.26.5 is exact and mandatory. Every commit must pass `make verify`, which
 is implemented by the cross-platform Go program in `internal/qualitygate` and
 also runs directly on Windows as `go run ./internal/qualitygate`.
 
-The gate checks identity, formatting, module and vendor reproducibility, vet,
-the allowlisted linter policy, NilAway, gosec, govulncheck, shuffled and race
-tests, an 85% business-source coverage floor, vendor-offline tests, current
+The gate checks identity, formatting, module and vendor reproducibility,
+canonical Spice application style, vet, the allowlisted linter policy,
+NilAway, gosec, govulncheck, shuffled and race tests, an 85% business-source
+coverage floor, vendor-offline tests, current
 Spice generation, ordinary builds, and an executable zero-network smoke path.
 It also verifies immutable minimum and pinned current paired Spice
 core/toolchain boundaries without changing handwritten source, generated
@@ -34,6 +35,8 @@ present; it never starts or downloads services.
 
 ## Application invariants
 
+- Handwritten application source conforms to `.spice/style.json` and the
+  canonical Spice `CODE_STYLE.md`; `spicestyle` runs offline in every check.
 - Handwritten source remains ordinary valid Go.
 - Annotations remain declaration comments resolved through explicit imports.
 - Generated code mirrors source ownership under `internal/spicegen/commerce`

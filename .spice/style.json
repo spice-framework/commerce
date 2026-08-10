@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "profile": "java-structured",
+  "sourceRoots": [
+    "inventory",
+    "notifications",
+    "orders",
+    "payments",
+    "platform",
+    "storage"
+  ],
+  "generatedRoots": [
+    "internal/spicegen"
+  ],
+  "rules": {
+    "onePrimaryTypePerFile": "error",
+    "methodsInPrimaryTypeFile": "error",
+    "fileNameMatchesType": "error",
+    "packageFunctions": "error",
+    "explicitConstructors": "error",
+    "explicitManagedScopes": "error",
+    "banInit": "error",
+    "banMutablePackageState": "error",
+    "privateManagedFields": "error",
+    "moduleOwnership": "error",
+    "routeClassification": "error",
+    "contextFirst": "error",
+    "errorLast": "error",
+    "maxTypeFileLines": 500
+  },
+  "publicRoutes": [],
+  "allowedBoundaryFiles": [
+    "**/doc.go",
+    "**/main.go",
+    "**/*_bean.go",
+    "**/*_topic.go",
+    "inventory/errors.go",
+    "notifications/errors.go",
+    "orders/errors.go",
+    "payments/errors.go",
+    "storage/errors.go",
+    "storage/order_sql.go",
+    "**/*_test.go",
+    "internal/spicegen/**"
+  ],
+  "packageFunctionExceptions": [
+    {
+      "glob": "**/main.go",
+      "symbol": "main",
+      "reason": "Go process entrypoint"
+    },
+    {
+      "glob": "**/*_bean.go",
+      "contributionKind": "provider",
+      "maximum": 1,
+      "reason": "Exact Spice provider boundary"
+    },
+    {
+      "glob": "**/*_topic.go",
+      "contributionKind": "event-topic",
+      "maximum": 1,
+      "reason": "Typed Spice event topic marker"
+    },
+    {
+      "glob": "**/*_test.go",
+      "symbolPattern": "^(Test|Benchmark|Fuzz|Example|TestMain)",
+      "reason": "Go testing entrypoint"
+    }
+  ],
+  "packageVariableExceptions": [
+    {
+      "glob": "inventory/errors.go",
+      "symbol": "ErrInvalidReservation",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    },
+    {
+      "glob": "inventory/errors.go",
+      "symbol": "ErrInsufficientStock",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    },
+    {
+      "glob": "notifications/errors.go",
+      "symbol": "ErrInvalidReceipt",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    },
+    {
+      "glob": "notifications/errors.go",
+      "symbol": "ErrDelivery",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    },
+    {
+      "glob": "orders/errors.go",
+      "symbol": "ErrInvalidOrder",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    },
+    {
+      "glob": "orders/errors.go",
+      "symbol": "ErrOrderRejected",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    },
+    {
+      "glob": "payments/errors.go",
+      "symbol": "ErrInvalidPayment",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    },
+    {
+      "glob": "payments/errors.go",
+      "symbol": "ErrDeclined",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    },
+    {
+      "glob": "storage/errors.go",
+      "symbol": "ErrInvalidRecord",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    },
+    {
+      "glob": "storage/errors.go",
+      "symbol": "ErrDuplicate",
+      "type": "error",
+      "reason": "Public errors.Is sentinel preserves module interoperability",
+      "issue": "COMMERCE-STYLE-001"
+    }
+  ]
+}

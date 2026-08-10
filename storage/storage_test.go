@@ -18,9 +18,9 @@ var errRollbackProbe = errors.New("rollback probe")
 
 func TestMemoryDatabaseMigratesAndPersistsTransactions(t *testing.T) {
 	t.Parallel()
-	database, cleanup, err := OpenDatabase(Settings{URL: memoryURL})
+	database, cleanup, err := NewDatabase(Settings{URL: memoryURL})
 	if err != nil {
-		t.Fatalf("OpenDatabase() error = %v", err)
+		t.Fatalf("NewDatabase() error = %v", err)
 	}
 	t.Cleanup(func() {
 		if cleanupErr := cleanup(context.Background()); cleanupErr != nil {
@@ -127,9 +127,9 @@ func TestMemoryDatabaseRollsBackAndRejectsDuplicates(t *testing.T) {
 
 func TestMemoryDatabaseConcurrentMigrationIsDeterministic(t *testing.T) {
 	t.Parallel()
-	database, cleanup, err := OpenDatabase(Settings{URL: memoryURL})
+	database, cleanup, err := NewDatabase(Settings{URL: memoryURL})
 	if err != nil {
-		t.Fatalf("OpenDatabase() error = %v", err)
+		t.Fatalf("NewDatabase() error = %v", err)
 	}
 	t.Cleanup(func() {
 		if cleanupErr := cleanup(context.Background()); cleanupErr != nil {
@@ -163,8 +163,8 @@ func TestStorageValidationAndCancellation(t *testing.T) {
 		{URL: "file://commerce"},
 		{URL: "postgres://incomplete"},
 	} {
-		if _, _, err := OpenDatabase(settings); err == nil {
-			t.Fatalf("OpenDatabase(%#v) error = nil", settings)
+		if _, _, err := NewDatabase(settings); err == nil {
+			t.Fatalf("NewDatabase(%#v) error = nil", settings)
 		}
 	}
 	if _, err := Native(nil); err == nil {
@@ -218,7 +218,7 @@ func TestStorageValidationAndCancellation(t *testing.T) {
 
 func TestMemoryDriverRejectsUnsupportedAndInvalidOperations(t *testing.T) {
 	t.Parallel()
-	database := newMemoryDatabase()
+	database := &memoryDatabase{records: make(map[string]Record), schema: true}
 	connector := memoryConnector{database: database}
 
 	canceled, cancel := context.WithCancel(context.Background())
@@ -291,7 +291,7 @@ func TestMemoryDriverRejectsUnsupportedAndInvalidOperations(t *testing.T) {
 
 func TestMemoryDriverTransactionAndRowsBoundaries(t *testing.T) {
 	t.Parallel()
-	database := newMemoryDatabase()
+	database := &memoryDatabase{records: make(map[string]Record), schema: true}
 	connection := &memoryConnection{database: database}
 	txValue, err := connection.Begin()
 	if err != nil {
@@ -342,7 +342,7 @@ func TestMemoryDriverTransactionAndRowsBoundaries(t *testing.T) {
 
 func TestMemoryDriverValidatesSchemaArgumentsAndMigrationBackend(t *testing.T) {
 	t.Parallel()
-	database := newMemoryDatabase()
+	database := &memoryDatabase{records: make(map[string]Record), schema: true}
 	database.schema = false
 	connection := &memoryConnection{database: database}
 	if _, err := connection.insert(testRecord("order-before-schema")); !errors.Is(
@@ -360,18 +360,18 @@ func TestMemoryDriverValidatesSchemaArgumentsAndMigrationBackend(t *testing.T) {
 	if _, err := connection.createSchema(); err != nil {
 		t.Fatalf("createSchema() error = %v", err)
 	}
-	if _, err := recordArguments(nil); err == nil {
+	if _, err := connection.recordArguments(nil); err == nil {
 		t.Fatal("recordArguments(short) error = nil")
 	}
 	invalidArguments := recordNamedValues(testRecord("order-invalid"))
 	invalidArguments[2].Value = "two"
-	if _, err := recordArguments(invalidArguments); err == nil {
+	if _, err := connection.recordArguments(invalidArguments); err == nil {
 		t.Fatal("recordArguments(invalid type) error = nil")
 	}
-	if value, ok := integerArgument("one"); ok || value != 0 {
+	if value, ok := connection.integerArgument("one"); ok || value != 0 {
 		t.Fatalf("integerArgument(string) = %d, %t", value, ok)
 	}
-	if normalized := normalizeSQL(" SELECT \n  1 "); normalized != "SELECT 1" {
+	if normalized := connection.normalizeSQL(" SELECT \n  1 "); normalized != "SELECT 1" {
 		t.Fatalf("normalizeSQL() = %q", normalized)
 	}
 
@@ -420,7 +420,7 @@ func TestStorageMetadataBoundaries(t *testing.T) {
 		t.Fatalf("nil Database.AppliedMigrations() = %d", count)
 	}
 	postgresDatabase := &Database{native: sql.OpenDB(
-		memoryConnector{database: newMemoryDatabase()},
+		memoryConnector{database: &memoryDatabase{records: make(map[string]Record), schema: true}},
 	)}
 	t.Cleanup(func() {
 		if err := postgresDatabase.native.Close(); err != nil {
@@ -445,9 +445,9 @@ func newMemoryRepository(
 	t *testing.T,
 ) (data.Executor, *data.Manager, *OrderRepository) {
 	t.Helper()
-	database, cleanup, err := OpenDatabase(Settings{URL: memoryURL})
+	database, cleanup, err := NewDatabase(Settings{URL: memoryURL})
 	if err != nil {
-		t.Fatalf("OpenDatabase() error = %v", err)
+		t.Fatalf("NewDatabase() error = %v", err)
 	}
 	t.Cleanup(func() {
 		if cleanupErr := cleanup(context.Background()); cleanupErr != nil {

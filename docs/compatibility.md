@@ -14,13 +14,13 @@ pair is a pinned forward-compatibility signal, not a moving dependency.
 Branch names, aliases such as `latest`, malformed versions, undeclared tools,
 missing requirements, and mismatched MVS selection fail closed.
 
-The minimum remains the first independently consumable pair: core
-`v0.0.0-20260805222830-a2ecd56df246` and bridged toolchain
-`v0.0.0-20260805230546-150f8ae62c13`. The current line independently proves
-core `v0.0.0-20260806143541-fde1793832bd` with toolchain
-`v0.0.0-20260806133530-71211498297c`. `-line=all` therefore performs two real
-verification runs. The schema never infers a toolchain version from a
-core-only version change.
+The enforced code-style contract raises the pair to core
+`v0.1.0-preview.1.0.20260807031220-45e4f9d3e12d` and toolchain
+`v0.1.0-preview.2.0.20260810170203-57cf59f2d895`. That Toolchain revision owns
+the strict `spicestyle` command and typed package-state exception schema.
+Minimum and current therefore coincide and `-line=all` performs one combined
+verification run. The schema never infers a toolchain version from a core-only
+version change.
 
 For each boundary the compatibility runner:
 
@@ -29,8 +29,9 @@ For each boundary the compatibility runner:
 2. creates an isolated alternate modfile while preserving every other direct
    application and starter requirement, plus an isolated application mirror
    with a boundary-specific vendor tree for Spice compiler execution;
-3. asserts both exact MVS-selected modules and verifies that both authorized
-   tool packages are `main` packages from the selected toolchain version;
+3. asserts both exact MVS-selected modules and verifies that all three
+   authorized tool packages are `main` packages from the selected toolchain
+   version;
 4. discovers every Commerce product and generated package, then runs `go vet`
    and `go test -race -shuffle=on -count=1`;
 5. executes `go tool github.com/spice-framework/toolchain/cmd/spice` to run

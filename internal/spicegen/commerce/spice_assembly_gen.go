@@ -78,7 +78,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 	if application.shutdownTimeout <= 0 {
 		return nil, application.coordinator.Abort(ctx, fmt.Errorf("decode shutdown timeout for application commerce: duration must be positive"))
 	}
-	dependencies, err := constructApplicationDependencies(ctx, application, options, configurationSnapshot)
+	dependencies, err := constructApplicationDependencies(ctx, application, options, configurationSnapshot, authorizer)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func NewApplicationWithOptions(ctx context.Context, options ApplicationOptions) 
 		OrdersSettings:        dependencies.ordersSettings,
 		OrderRepository:       dependencies.orderRepository,
 		StorageSettings:       dependencies.storageSettings,
-		OpenDatabase:          dependencies.openDatabase,
+		Database:              dependencies.database,
 		Native:                dependencies.native,
 		ReadExecutor:          dependencies.readExecutor,
 		Transactions:          dependencies.transactions,

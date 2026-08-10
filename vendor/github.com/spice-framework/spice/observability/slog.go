@@ -1,5 +1,5 @@
-// Package observability provides instance-owned adapters for Spice's
-// dependency-free lifecycle and HTTP observation seams.
+// Package observability provides instance-owned contracts and adapters for
+// Spice's dependency-free lifecycle, HTTP, and generated method observations.
 package observability
 
 import (

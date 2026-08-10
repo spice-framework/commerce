@@ -110,7 +110,7 @@ func TestDeveloperAuthenticationIsExplicitLoopbackAndScopeBound(t *testing.T) {
 		}
 		writer.WriteHeader(http.StatusNoContent)
 	})
-	handler, err := developerAuthentication(
+	handler, err := new(Server).developerAuthentication(
 		"127.0.0.1:8081",
 		token,
 		downstream,
@@ -160,7 +160,7 @@ func TestDeveloperAuthenticationIsExplicitLoopbackAndScopeBound(t *testing.T) {
 		{address: "127.0.0.1:8081", token: "short"},
 		{address: "127.0.0.1:8081", token: "commerce token with spaces"},
 	} {
-		if _, err := developerAuthentication(
+		if _, err := new(Server).developerAuthentication(
 			test.address,
 			test.token,
 			downstream,
@@ -171,7 +171,7 @@ func TestDeveloperAuthenticationIsExplicitLoopbackAndScopeBound(t *testing.T) {
 			)
 		}
 	}
-	if handler, err := developerAuthentication(
+	if handler, err := new(Server).developerAuthentication(
 		"0.0.0.0:8081",
 		"",
 		downstream,
@@ -196,11 +196,11 @@ func testSettings() Settings {
 
 func testDatabase(t *testing.T) *storage.Database {
 	t.Helper()
-	database, cleanup, err := storage.OpenDatabase(storage.Settings{
+	database, cleanup, err := storage.NewDatabase(storage.Settings{
 		URL: "memory://commerce",
 	})
 	if err != nil {
-		t.Fatalf("storage.OpenDatabase() error = %v", err)
+		t.Fatalf("storage.NewDatabase() error = %v", err)
 	}
 	t.Cleanup(func() {
 		if cleanupErr := cleanup(context.Background()); cleanupErr != nil {

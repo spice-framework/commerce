@@ -311,11 +311,11 @@ func newTestServiceWithPublisher(
 	if err != nil {
 		t.Fatalf("payments.NewService() error = %v", err)
 	}
-	database, cleanup, err := storage.OpenDatabase(storage.Settings{
+	database, cleanup, err := storage.NewDatabase(storage.Settings{
 		URL: "memory://commerce",
 	})
 	if err != nil {
-		t.Fatalf("storage.OpenDatabase() error = %v", err)
+		t.Fatalf("storage.NewDatabase() error = %v", err)
 	}
 	t.Cleanup(func() {
 		if cleanupErr := cleanup(context.Background()); cleanupErr != nil {

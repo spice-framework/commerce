@@ -56,12 +56,13 @@ the concrete delivery directly. `SystemClock` is a second explicit interface
 binding, keeping message dates caller-owned and deterministic in tests.
 
 Commerce is a real consuming Go module. Its `go.mod` authorizes the standalone
-Spice annotation and CLI tools, pins immutable core, toolchain, PostgreSQL, and
-SMTP starter pseudo-versions without local replacements, and owns its
+Spice annotation, CLI, and style tools, pins immutable core, toolchain,
+PostgreSQL, and SMTP starter pseudo-versions without local replacements, and owns its
 generated target, manifest, acceptance tests, and vendor tree. From this
 directory:
 
 ```text
+go tool github.com/spice-framework/toolchain/cmd/spicestyle --config=.spice/style.json ./...
 go tool github.com/spice-framework/toolchain/cmd/spice generate --check --target Commerce .
 go tool github.com/spice-framework/toolchain/cmd/spice build --target Commerce .
 go tool github.com/spice-framework/toolchain/cmd/spice run --target Commerce . -- -check
@@ -72,17 +73,25 @@ The committed direct Spice core and toolchain requirements form Commerce's
 provisional minimum compatibility pair. [`spice-compatibility.json`](spice-compatibility.json)
 also pins a current pair without implying that one module versions the other.
 `make compatibility` resolves both modules through normal Go integrity,
-asserts the exact MVS-selected core and toolchain plus both authorized tool
+asserts the exact MVS-selected core and toolchain plus all three authorized tool
 packages, then runs vet, shuffled race tests, `spice verify`, generation
 freshness, and a Spice build against each paired boundary. It uses isolated
 alternate modfiles and fails if any handwritten, generated, module, manifest,
 artifact, or vendor byte changes. See
 [`docs/compatibility.md`](docs/compatibility.md) for the complete contract.
 
+The application code follows the canonical Spice standard as an enforced
+contract, not an aspiration: one owning type per ordinary production file,
+methods colocated with that type, explicit constructors and managed scopes,
+no loose package helpers, and no mutable package state. The strict policy and
+its narrow public-sentinel/constant-carrier boundaries are documented in
+[`docs/code-style.md`](docs/code-style.md).
+
 Go 1.26.5 is exact. `make verify` (or
 `go run ./internal/qualitygate` on every platform) runs the complete local
-quality gate, including deterministic generation, offline vendor execution,
-security analysis, race tests, and the executable zero-network workflow.
+quality gate, including strict application style, deterministic generation,
+offline vendor execution, security analysis, race tests, and the executable
+zero-network workflow.
 The definitive local gate always includes both paired core/toolchain
 boundaries; CI publishes the same minimum/current evidence as parallel jobs.
 

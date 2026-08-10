@@ -48,7 +48,7 @@ type Components struct {
 	ViewAudit *orders.ViewAudit
 	// OrderEvents is bean "OrderEvents".
 	OrderEvents spiceevent.Publisher[orders.OrderViewed]
-	// Mux is bean "mux".
+	// Mux is bean "newMux".
 	Mux *http.ServeMux
 	// OrdersSettings is bean "Settings".
 	OrdersSettings orders.Settings
@@ -56,8 +56,8 @@ type Components struct {
 	OrderRepository *storage.OrderRepository
 	// StorageSettings is bean "Settings".
 	StorageSettings storage.Settings
-	// OpenDatabase is bean "openDatabase".
-	OpenDatabase *storage.Database
+	// Database is bean "newDatabase".
+	Database *storage.Database
 	// Native is bean "native".
 	Native *sql.DB
 	// ReadExecutor is bean "readExecutor".
@@ -97,12 +97,12 @@ type Components struct {
 type BeanOverrides struct {
 	// ViewAudit replaces bean "newViewAudit".
 	ViewAudit spicebean.Override[*orders.ViewAudit]
-	// Mux replaces bean "mux".
+	// Mux replaces bean "newMux".
 	Mux spicebean.Override[*http.ServeMux]
 	// OrderRepository replaces bean "orderRepository".
 	OrderRepository spicebean.Override[*storage.OrderRepository]
-	// OpenDatabase replaces bean "openDatabase".
-	OpenDatabase spicebean.Override[*storage.Database]
+	// Database replaces bean "newDatabase".
+	Database spicebean.Override[*storage.Database]
 	// Native replaces bean "native".
 	Native spicebean.Override[*sql.DB]
 	// ReadExecutor replaces bean "readExecutor".
@@ -158,8 +158,8 @@ func ComposeBeanOverrides(layers ...BeanOverrideLayer) (BeanOverrides, error) {
 		if layer.Overrides.OrderRepository.Enabled() {
 			result.OrderRepository = layer.Overrides.OrderRepository
 		}
-		if layer.Overrides.OpenDatabase.Enabled() {
-			result.OpenDatabase = layer.Overrides.OpenDatabase
+		if layer.Overrides.Database.Enabled() {
+			result.Database = layer.Overrides.Database
 		}
 		if layer.Overrides.Native.Enabled() {
 			result.Native = layer.Overrides.Native

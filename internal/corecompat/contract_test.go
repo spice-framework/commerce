@@ -21,7 +21,8 @@ const validContract = `{
     "current": "v0.0.0-20260401000000-444444444444",
     "tools": [
       "github.com/spice-framework/toolchain/cmd/spice",
-      "github.com/spice-framework/toolchain/cmd/spice-annotation-core"
+      "github.com/spice-framework/toolchain/cmd/spice-annotation-core",
+      "github.com/spice-framework/toolchain/cmd/spicestyle"
     ]
   }
 }`
@@ -84,7 +85,7 @@ func TestReadContract(t *testing.T) {
 			name: "undeclared tool",
 			content: strings.Replace(
 				validContract,
-				annotationToolPath,
+				styleToolPath,
 				toolchainModulePath+"/cmd/unknown",
 				1,
 			),
@@ -109,7 +110,7 @@ func TestReadContract(t *testing.T) {
 				}
 				if got.Core.Module != coreModulePath ||
 					got.Toolchain.Module != toolchainModulePath ||
-					len(got.Toolchain.Tools) != 2 {
+					len(got.Toolchain.Tools) != 3 {
 					t.Fatalf("readContract() = %#v", got)
 				}
 				return
@@ -212,7 +213,7 @@ func TestCompatibilityPairMayAdvanceOneModuleIndependently(t *testing.T) {
 				Minimum: "v0.3.0",
 				Current: "v0.3.0",
 			},
-			Tools: []string{spiceToolPath, annotationToolPath},
+			Tools: []string{spiceToolPath, annotationToolPath, styleToolPath},
 		},
 	}
 	slices.Sort(base.Toolchain.Tools)
@@ -238,7 +239,7 @@ func TestValidateModuleContract(t *testing.T) {
 				Module:  toolchainModulePath,
 				Minimum: "v0.2.0",
 			},
-			Tools: []string{spiceToolPath, annotationToolPath},
+			Tools: []string{spiceToolPath, annotationToolPath, styleToolPath},
 		},
 	}
 	slices.Sort(contract.Toolchain.Tools)

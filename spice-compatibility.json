@@ -2,16 +2,17 @@
   "schema": 2,
   "core": {
     "module": "github.com/spice-framework/spice",
-    "minimum": "v0.0.0-20260805222830-a2ecd56df246",
-    "current": "v0.0.0-20260806143541-fde1793832bd"
+    "minimum": "v0.1.0-preview.1.0.20260807031220-45e4f9d3e12d",
+    "current": "v0.1.0-preview.1.0.20260807031220-45e4f9d3e12d"
   },
   "toolchain": {
     "module": "github.com/spice-framework/toolchain",
-    "minimum": "v0.0.0-20260805230546-150f8ae62c13",
-    "current": "v0.0.0-20260806133530-71211498297c",
+    "minimum": "v0.1.0-preview.2.0.20260810170203-57cf59f2d895",
+    "current": "v0.1.0-preview.2.0.20260810170203-57cf59f2d895",
     "tools": [
       "github.com/spice-framework/toolchain/cmd/spice",
-      "github.com/spice-framework/toolchain/cmd/spice-annotation-core"
+      "github.com/spice-framework/toolchain/cmd/spice-annotation-core",
+      "github.com/spice-framework/toolchain/cmd/spicestyle"
     ]
   }
 }

@@ -8,6 +8,7 @@ package adapt
 
 import (
 	"go/token"
+	"strings"
 
 	"github.com/spice-framework/toolchain/compiler/application"
 	"github.com/spice-framework/toolchain/compiler/diagnostic"
@@ -17,6 +18,7 @@ import (
 	"github.com/spice-framework/toolchain/compiler/provider"
 	"github.com/spice-framework/toolchain/compiler/resolve"
 	"github.com/spice-framework/toolchain/compiler/starter"
+	"github.com/spice-framework/toolchain/compiler/style"
 	"github.com/spice-framework/toolchain/compiler/validate"
 )
 
@@ -111,6 +113,24 @@ func Provider(
 	items []provider.Diagnostic,
 ) diagnostic.Set {
 	return providerSet(workspaceRoot, "provider", items)
+}
+
+// Style converts optional source-profile diagnostics.
+func Style(
+	workspaceRoot string,
+	items []style.Diagnostic,
+) diagnostic.Set {
+	result := make([]diagnostic.Diagnostic, len(items))
+	for index, item := range items {
+		result[index] = sourceDiagnosticWithCode(
+			workspaceRoot,
+			diagnostic.CodeParts("style", strings.Split(item.Kind, ".")...),
+			item.Message,
+			item.Position,
+			item.PhysicalPosition,
+		)
+	}
+	return diagnostic.NewSet(result...)
 }
 
 // StarterProviders converts provider diagnostics originating from explicitly
@@ -281,6 +301,22 @@ func sourceDiagnostic(
 	display token.Position,
 	physical token.Position,
 ) diagnostic.Diagnostic {
+	return sourceDiagnosticWithCode(
+		workspaceRoot,
+		diagnostic.Code(stage, kind),
+		message,
+		display,
+		physical,
+	)
+}
+
+func sourceDiagnosticWithCode(
+	workspaceRoot string,
+	code string,
+	message string,
+	display token.Position,
+	physical token.Position,
+) diagnostic.Diagnostic {
 	physicalPath := physical.Filename
 	if physicalPath == "" {
 		physicalPath = display.Filename
@@ -298,7 +334,7 @@ func sourceDiagnostic(
 		physicalColumn = display.Column
 	}
 	return diagnostic.New(
-		diagnostic.Code(stage, kind),
+		code,
 		diagnostic.SeverityError,
 		message,
 		diagnostic.SourceMappedLocation(

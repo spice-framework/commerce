@@ -94,9 +94,9 @@ func configureGeneratedLifecycle(
 	}
 	application.hooks = []spicelifecycle.Hook{
 		{
-			ID:     "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:OpenDatabase",
+			ID:     "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase",
 			Module: "github.com/spice-framework/commerce/storage",
-			Start:  dependencies.openDatabase.Migrate,
+			Start:  dependencies.database.Migrate,
 		},
 		{
 			ID:     "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer",

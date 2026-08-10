@@ -21,6 +21,24 @@ type Attempt struct {
 // Retryable decides whether an operation error is safe to retry.
 type Retryable func(error) bool
 
+// TransientError explicitly marks whether an error is safe to retry. Generated
+// policies use this narrow contract when no application classifier is named.
+type TransientError interface {
+	error
+	Transient() bool
+}
+
+// Transient retries only errors that explicitly implement TransientError and
+// return true. Cancellation and deadline errors are never retryable.
+func Transient(err error) bool {
+	if err == nil || errors.Is(err, context.Canceled) ||
+		errors.Is(err, context.DeadlineExceeded) {
+		return false
+	}
+	transient, ok := errors.AsType[TransientError](err)
+	return ok && transient.Transient()
+}
+
 // Jitter explicitly adjusts one computed backoff. It must return a duration
 // between zero and Policy.MaxBackoff.
 type Jitter func(Attempt, time.Duration) time.Duration

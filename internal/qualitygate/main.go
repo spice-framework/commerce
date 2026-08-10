@@ -27,6 +27,7 @@ const (
 	legacyModulePath  = "github.com/spice-framework/spice/examples/" + "commerce"
 	minimumCoverage   = 85.0
 	spiceTool         = "github.com/spice-framework/toolchain/cmd/spice"
+	styleTool         = "github.com/spice-framework/toolchain/cmd/spicestyle"
 )
 
 var output = log.New(os.Stdout, "", 0)
@@ -75,6 +76,7 @@ func stepsForMode(ctx context.Context, root, mode string) ([]verificationStep, e
 	identity := verificationStep{"repository identity", func() error { return checkIdentity(root) }}
 	formatting := verificationStep{"formatting", func() error { return format(ctx, root, false) }}
 	modules := verificationStep{"module and vendor", func() error { return checkModule(ctx, root) }}
+	styleStep := verificationStep{"Spice application style", func() error { return style(ctx, root) }}
 	vet := verificationStep{
 		"go vet",
 		func() error { return command(ctx, root, nil, "go", "vet", "./...") },
@@ -98,7 +100,7 @@ func stepsForMode(ctx context.Context, root, mode string) ([]verificationStep, e
 
 	switch mode {
 	case "check":
-		return []verificationStep{identity, formatting, modules, vet}, nil
+		return []verificationStep{identity, formatting, modules, styleStep, vet}, nil
 	case "fmt":
 		return []verificationStep{{"formatting", func() error { return format(ctx, root, true) }}}, nil
 	case "lint":
@@ -114,6 +116,7 @@ func stepsForMode(ctx context.Context, root, mode string) ([]verificationStep, e
 			identity,
 			formatting,
 			modules,
+			styleStep,
 			vet,
 			lintStep,
 			securityStep,
@@ -333,6 +336,19 @@ func checkModule(ctx context.Context, root string) error {
 		return errors.New("vendor differs from a fresh go mod vendor result")
 	}
 	return nil
+}
+
+func style(ctx context.Context, root string) error {
+	return command(
+		ctx,
+		root,
+		map[string]string{"GOFLAGS": "-mod=vendor"},
+		"go",
+		"tool",
+		styleTool,
+		"--config=.spice/style.json",
+		"./...",
+	)
 }
 
 func removeTree(path string) {

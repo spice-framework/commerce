@@ -2,10 +2,27 @@ package main
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"maps"
+	"os"
+	"path/filepath"
 	"slices"
 	"testing"
 )
+
+type stylePolicy struct {
+	SchemaVersion             int                      `json:"schemaVersion"`
+	Profile                   string                   `json:"profile"`
+	AllowedBoundaryFiles      []string                 `json:"allowedBoundaryFiles"`
+	PackageVariableExceptions []styleVariableException `json:"packageVariableExceptions"`
+}
+
+type styleVariableException struct {
+	Glob   string `json:"glob"`
+	Symbol string `json:"symbol"`
+	Type   string `json:"type"`
+	Issue  string `json:"issue"`
+}
 
 func TestHasModuleDirective(t *testing.T) {
 	t.Parallel()
@@ -97,5 +114,48 @@ func TestEqualDigests(t *testing.T) {
 				t.Fatalf("equalDigests() = %v, want %v", got, test.want)
 			}
 		})
+	}
+}
+
+func TestStylePolicyOwnsOnlyExactInteropBoundaries(t *testing.T) {
+	t.Parallel()
+	root, err := repositoryRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	content, err := os.ReadFile(filepath.Join(root, ".spice", "style.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var policy stylePolicy
+	if err := json.Unmarshal(content, &policy); err != nil {
+		t.Fatal(err)
+	}
+	if policy.SchemaVersion != 1 || policy.Profile != "java-structured" {
+		t.Fatalf("style policy identity = %d/%q", policy.SchemaVersion, policy.Profile)
+	}
+	for _, required := range []string{
+		"inventory/errors.go",
+		"notifications/errors.go",
+		"orders/errors.go",
+		"payments/errors.go",
+		"storage/errors.go",
+		"storage/order_sql.go",
+	} {
+		if !slices.Contains(policy.AllowedBoundaryFiles, required) {
+			t.Errorf("style boundary %q is missing", required)
+		}
+	}
+	if len(policy.PackageVariableExceptions) != 10 {
+		t.Fatalf(
+			"package-variable exception count = %d, want 10",
+			len(policy.PackageVariableExceptions),
+		)
+	}
+	for _, exception := range policy.PackageVariableExceptions {
+		if exception.Type != "error" || exception.Issue != "COMMERCE-STYLE-001" ||
+			exception.Glob == "" || exception.Symbol == "" {
+			t.Errorf("invalid package-variable exception %#v", exception)
+		}
 	}
 }

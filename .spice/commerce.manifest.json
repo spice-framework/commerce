@@ -1,5 +1,5 @@
 {
-  "schema": 5,
+  "schema": 6,
   "target": {
     "id": "commerce",
     "layout": "application-package",
@@ -10,92 +10,92 @@
     "bridge_dir": ".",
     "manifest_path": ".spice/commerce.manifest.json"
   },
-  "generator_version": "0.1.0-dev",
+  "generator_version": "v0.1.0-preview.2",
   "go_format_line": "1.26",
-  "input_sha256": "sha256:f525a741e522fd971920eb8b8d481a61fc1cc8c147851e82e46342719cf3ad77",
+  "input_sha256": "sha256:65e202077c55a317141117e85150affab00f512aab67e882525652513c5e74f3",
   "files": [
     {
       "path": "internal/spicegen/commerce/artifacts/openapi.json",
-      "sha256": "sha256:21f541d7053b3f2f494e1f33faa013cd77e46f156e0a2eee56d129deaca6f412",
+      "sha256": "sha256:79d5245e64aafc8109ec90f9b56d10ea5694b082bc751ccf283aa3a9d7103348",
       "role": "artifact",
       "related_sources": [
         {
-          "path": "orders/http.go",
+          "path": "orders/controller.go",
           "line": 23,
           "column": 4,
           "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller"
         },
         {
-          "path": "orders/http.go",
-          "line": 47,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place.Body"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 68,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get.ID"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 74,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt.ID"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 107,
+          "path": "orders/controller.go",
+          "line": 42,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place"
         },
         {
-          "path": "orders/http.go",
-          "line": 108,
+          "path": "orders/controller.go",
+          "line": 43,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place#transaction"
         },
         {
-          "path": "orders/http.go",
-          "line": 109,
+          "path": "orders/controller.go",
+          "line": 44,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place#authorization"
         },
         {
-          "path": "orders/http.go",
-          "line": 128,
+          "path": "orders/controller.go",
+          "line": 63,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get"
         },
         {
-          "path": "orders/http.go",
-          "line": 129,
+          "path": "orders/controller.go",
+          "line": 64,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get#authorization"
         },
         {
-          "path": "orders/http.go",
-          "line": 150,
+          "path": "orders/controller.go",
+          "line": 85,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog"
         },
         {
-          "path": "orders/http.go",
-          "line": 151,
+          "path": "orders/controller.go",
+          "line": 86,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog#cache"
         },
         {
-          "path": "orders/http.go",
-          "line": 170,
+          "path": "orders/controller.go",
+          "line": 105,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt"
         },
         {
-          "path": "orders/http.go",
-          "line": 171,
+          "path": "orders/controller.go",
+          "line": 106,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt#authorization"
+        },
+        {
+          "path": "orders/get_order_request.go",
+          "line": 5,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get.ID"
+        },
+        {
+          "path": "orders/place_order_request.go",
+          "line": 12,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place.Body"
+        },
+        {
+          "path": "orders/receipt_request.go",
+          "line": 6,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt.ID"
         }
       ]
     },
@@ -129,106 +129,87 @@
       ]
     },
     {
-      "path": "internal/spicegen/commerce/sources/inventory/inventory_spice_gen.go",
-      "sha256": "sha256:6c6e4262f54397586cb4940ad8f586da48deed036b2a3da34284ce2b636fa004",
+      "path": "internal/spicegen/commerce/sources/inventory/service_spice_gen.go",
+      "sha256": "sha256:a4041611be1ba48684f698cdea86c7053302463695584d24bb9fed02773f99ac",
       "role": "source-unit",
       "primary_source": {
-        "path": "inventory/inventory.go",
-        "line": 28,
+        "path": "inventory/service.go",
+        "line": 26,
         "column": 4,
-        "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings"
+        "symbol": "spice:symbol:v1|function|45:github.com/spice-framework/commerce/inventory|0:|10:NewService"
       },
       "mappings": [
         {
           "kind": "provider-construction",
           "contribution": "spice:symbol:v1|function|45:github.com/spice-framework/commerce/inventory|0:|10:NewService",
           "source": {
-            "path": "inventory/inventory.go",
-            "line": 42,
+            "path": "inventory/service.go",
+            "line": 26,
             "column": 4,
             "symbol": "spice:symbol:v1|function|45:github.com/spice-framework/commerce/inventory|0:|10:NewService"
           },
           "generated": {
-            "start_line": 17,
+            "start_line": 15,
             "start_column": 4,
-            "end_line": 17,
+            "end_line": 15,
             "end_column": 29
           }
-        },
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/inventory/settings_spice_gen.go",
+      "sha256": "sha256:1022dad6fe41c2cdcc91ad89b53c53ebc46bc2ae6f7fe71a0587b86f951d8292",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "inventory/settings.go",
+        "line": 7,
+        "column": 4,
+        "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings"
+      },
+      "mappings": [
         {
           "kind": "configuration-binding",
           "contribution": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings",
           "source": {
-            "path": "inventory/inventory.go",
-            "line": 28,
+            "path": "inventory/settings.go",
+            "line": 7,
             "column": 4,
             "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings"
           },
           "generated": {
-            "start_line": 28,
+            "start_line": 15,
             "start_column": 4,
-            "end_line": 28,
+            "end_line": 15,
             "end_column": 25
           }
         }
       ]
     },
     {
-      "path": "internal/spicegen/commerce/sources/notifications/notifications_spice_gen.go",
-      "sha256": "sha256:8beb08805c98f1c1c7436ebc8874b093ba1a17c2b49cf0048ff2ae981d3b00ac",
+      "path": "internal/spicegen/commerce/sources/notifications/delivery_spice_gen.go",
+      "sha256": "sha256:06a60f018c8e4d5d3d6c7c3de5eda5972ed44a82c0bea5644d8841085d48442a",
       "role": "source-unit",
       "primary_source": {
-        "path": "notifications/notifications.go",
-        "line": 39,
+        "path": "notifications/delivery.go",
+        "line": 25,
         "column": 4,
-        "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
+        "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Delivery"
       },
       "mappings": [
         {
           "kind": "provider-construction",
-          "contribution": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock",
-          "source": {
-            "path": "notifications/notifications.go",
-            "line": 62,
-            "column": 4,
-            "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
-          },
-          "generated": {
-            "start_line": 21,
-            "start_column": 4,
-            "end_line": 21,
-            "end_column": 33
-          }
-        },
-        {
-          "kind": "interface-assertion",
-          "contribution": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock#implements:github.com/spice-framework/commerce/notifications.Clock",
-          "source": {
-            "path": "notifications/notifications.go",
-            "line": 62,
-            "column": 4,
-            "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
-          },
-          "generated": {
-            "start_line": 29,
-            "start_column": 7,
-            "end_line": 29,
-            "end_column": 26
-          }
-        },
-        {
-          "kind": "provider-construction",
           "contribution": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Delivery",
           "source": {
-            "path": "notifications/notifications.go",
-            "line": 80,
+            "path": "notifications/delivery.go",
+            "line": 25,
             "column": 4,
             "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Delivery"
           },
           "generated": {
-            "start_line": 31,
+            "start_line": 16,
             "start_column": 4,
-            "end_line": 31,
+            "end_line": 16,
             "end_column": 30
           }
         },
@@ -236,87 +217,129 @@
           "kind": "interface-assertion",
           "contribution": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Delivery#implements:github.com/spice-framework/spice/mail.Sender",
           "source": {
-            "path": "notifications/notifications.go",
-            "line": 80,
+            "path": "notifications/delivery.go",
+            "line": 25,
             "column": 4,
             "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Delivery"
           },
           "generated": {
-            "start_line": 43,
+            "start_line": 28,
             "start_column": 7,
-            "end_line": 43,
+            "end_line": 28,
             "end_column": 18
           }
-        },
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/notifications/notifier_spice_gen.go",
+      "sha256": "sha256:48bd1012d3e2e115f8c1bdccf0663df83791f764984a877842487f16ded8d849",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "notifications/notifier.go",
+        "line": 21,
+        "column": 4,
+        "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Notifier"
+      },
+      "mappings": [
         {
           "kind": "provider-construction",
           "contribution": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Notifier",
           "source": {
-            "path": "notifications/notifications.go",
-            "line": 183,
+            "path": "notifications/notifier.go",
+            "line": 21,
             "column": 4,
             "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Notifier"
           },
           "generated": {
-            "start_line": 45,
+            "start_line": 16,
             "start_column": 4,
-            "end_line": 45,
+            "end_line": 16,
             "end_column": 30
           }
-        },
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/notifications/settings_spice_gen.go",
+      "sha256": "sha256:11d678c56887d7b7d0c9a8be0dfd787b83dd4d46f748b7d4226ff558cd0efef5",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "notifications/settings.go",
+        "line": 10,
+        "column": 4,
+        "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
+      },
+      "mappings": [
         {
           "kind": "configuration-binding",
           "contribution": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings",
           "source": {
-            "path": "notifications/notifications.go",
-            "line": 39,
+            "path": "notifications/settings.go",
+            "line": 10,
             "column": 4,
             "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
           },
           "generated": {
-            "start_line": 56,
+            "start_line": 16,
             "start_column": 4,
-            "end_line": 56,
+            "end_line": 16,
             "end_column": 25
           }
         }
       ]
     },
     {
-      "path": "internal/spicegen/commerce/sources/orders/events_spice_gen.go",
-      "sha256": "sha256:e9bf0948737d61df3d3f9993ff5407bc8f8e049cb995cb0105a80ff281a6ebfb",
+      "path": "internal/spicegen/commerce/sources/notifications/system_clock_spice_gen.go",
+      "sha256": "sha256:ab607b66d4cc7c27df6356eb1db984f4fe48b566af4370c91f1859f1737110fd",
       "role": "source-unit",
       "primary_source": {
-        "path": "orders/events.go",
-        "line": 29,
+        "path": "notifications/system_clock.go",
+        "line": 10,
         "column": 4,
-        "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
+        "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
       },
       "mappings": [
         {
           "kind": "provider-construction",
-          "contribution": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit",
+          "contribution": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock",
           "source": {
-            "path": "orders/events.go",
-            "line": 29,
+            "path": "notifications/system_clock.go",
+            "line": 10,
             "column": 4,
-            "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
+            "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
           },
           "generated": {
             "start_line": 13,
             "start_column": 4,
             "end_line": 13,
-            "end_column": 31
+            "end_column": 33
+          }
+        },
+        {
+          "kind": "interface-assertion",
+          "contribution": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock#implements:github.com/spice-framework/commerce/notifications.Clock",
+          "source": {
+            "path": "notifications/system_clock.go",
+            "line": 10,
+            "column": 4,
+            "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
+          },
+          "generated": {
+            "start_line": 21,
+            "start_column": 7,
+            "end_line": 21,
+            "end_column": 26
           }
         }
       ]
     },
     {
-      "path": "internal/spicegen/commerce/sources/orders/http_spice_gen.go",
-      "sha256": "sha256:304ca20830c879579828105fdc50be5988c7eec789f5d740be68d0b457e25043",
+      "path": "internal/spicegen/commerce/sources/orders/controller_spice_gen.go",
+      "sha256": "sha256:b08bc6b8d67eb7e083427aebf542d8bdd2bc7f24a2019bfbfa8566c898779c30",
       "role": "source-unit",
       "primary_source": {
-        "path": "orders/http.go",
+        "path": "orders/controller.go",
         "line": 23,
         "column": 4,
         "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller"
@@ -326,7 +349,7 @@
           "kind": "provider-construction",
           "contribution": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller",
           "source": {
-            "path": "orders/http.go",
+            "path": "orders/controller.go",
             "line": 23,
             "column": 4,
             "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller"
@@ -341,74 +364,116 @@
       ]
     },
     {
-      "path": "internal/spicegen/commerce/sources/orders/orders_spice_gen.go",
-      "sha256": "sha256:8dd6f92019cad3aaf056b48daf36ad395c7a5f114cc8dd2aa36946bc9b48c8e3",
+      "path": "internal/spicegen/commerce/sources/orders/service_spice_gen.go",
+      "sha256": "sha256:8972852e70cb0fc1b8fd10255b7ec196b6e68eca4f8c64b8c21734c6f460f699",
       "role": "source-unit",
       "primary_source": {
-        "path": "orders/orders.go",
-        "line": 32,
+        "path": "orders/service.go",
+        "line": 37,
         "column": 4,
-        "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
+        "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|10:NewService"
       },
       "mappings": [
         {
           "kind": "provider-construction",
           "contribution": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|10:NewService",
           "source": {
-            "path": "orders/orders.go",
-            "line": 66,
+            "path": "orders/service.go",
+            "line": 37,
             "column": 4,
             "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|10:NewService"
           },
           "generated": {
-            "start_line": 22,
+            "start_line": 20,
             "start_column": 4,
-            "end_line": 22,
+            "end_line": 20,
             "end_column": 29
           }
-        },
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/orders/settings_spice_gen.go",
+      "sha256": "sha256:84bb3b46f29526c5490ff7ba7c787df273e48524b65a9c8bf3d0532c7ee5c3db",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "orders/settings.go",
+        "line": 7,
+        "column": 4,
+        "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
+      },
+      "mappings": [
         {
           "kind": "configuration-binding",
           "contribution": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings",
           "source": {
-            "path": "orders/orders.go",
-            "line": 32,
+            "path": "orders/settings.go",
+            "line": 7,
             "column": 4,
             "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
           },
           "generated": {
-            "start_line": 33,
+            "start_line": 15,
             "start_column": 4,
-            "end_line": 33,
+            "end_line": 15,
             "end_column": 25
           }
         }
       ]
     },
     {
-      "path": "internal/spicegen/commerce/sources/payments/payments_spice_gen.go",
-      "sha256": "sha256:55719bbbff7990708ad5be244d829c7daa3c15ea87669416d177736211938887",
+      "path": "internal/spicegen/commerce/sources/orders/view_audit_spice_gen.go",
+      "sha256": "sha256:74c715c8d394a5d12174263b27013b2503c90fa75fc48a5de071791a6b51ecc1",
       "role": "source-unit",
       "primary_source": {
-        "path": "payments/payments.go",
-        "line": 26,
+        "path": "orders/view_audit.go",
+        "line": 22,
         "column": 4,
-        "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
+        "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
+      },
+      "mappings": [
+        {
+          "kind": "provider-construction",
+          "contribution": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit",
+          "source": {
+            "path": "orders/view_audit.go",
+            "line": 22,
+            "column": 4,
+            "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
+          },
+          "generated": {
+            "start_line": 13,
+            "start_column": 4,
+            "end_line": 13,
+            "end_column": 31
+          }
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/payments/offline_processor_spice_gen.go",
+      "sha256": "sha256:cb2c2251f86e15999523c70efa4bd90e8c9bdaba2ba4a6a62d0378d956472f4a",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "payments/offline_processor.go",
+        "line": 14,
+        "column": 4,
+        "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor"
       },
       "mappings": [
         {
           "kind": "provider-construction",
           "contribution": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor",
           "source": {
-            "path": "payments/payments.go",
-            "line": 63,
+            "path": "payments/offline_processor.go",
+            "line": 14,
             "column": 4,
             "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor"
           },
           "generated": {
-            "start_line": 18,
+            "start_line": 13,
             "start_column": 4,
-            "end_line": 18,
+            "end_line": 13,
             "end_column": 38
           }
         },
@@ -416,31 +481,44 @@
           "kind": "interface-assertion",
           "contribution": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor#implements:github.com/spice-framework/commerce/payments.Processor",
           "source": {
-            "path": "payments/payments.go",
-            "line": 63,
+            "path": "payments/offline_processor.go",
+            "line": 14,
             "column": 4,
             "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor"
           },
           "generated": {
-            "start_line": 25,
+            "start_line": 20,
             "start_column": 7,
-            "end_line": 25,
+            "end_line": 20,
             "end_column": 25
           }
-        },
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/payments/service_spice_gen.go",
+      "sha256": "sha256:8e669f96d52ef2810da0ca3662833da4350e39699182a40f60c587e19e990f4a",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "payments/service.go",
+        "line": 18,
+        "column": 4,
+        "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service"
+      },
+      "mappings": [
         {
           "kind": "provider-construction",
           "contribution": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service",
           "source": {
-            "path": "payments/payments.go",
-            "line": 49,
+            "path": "payments/service.go",
+            "line": 18,
             "column": 4,
             "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service"
           },
           "generated": {
-            "start_line": 27,
+            "start_line": 15,
             "start_column": 4,
-            "end_line": 27,
+            "end_line": 15,
             "end_column": 37
           }
         },
@@ -448,185 +526,218 @@
           "kind": "interface-assertion",
           "contribution": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service#implements:github.com/spice-framework/commerce/payments.Processor",
           "source": {
-            "path": "payments/payments.go",
-            "line": 49,
+            "path": "payments/service.go",
+            "line": 18,
             "column": 4,
             "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service"
           },
           "generated": {
-            "start_line": 39,
+            "start_line": 27,
             "start_column": 7,
-            "end_line": 39,
-            "end_column": 25
-          }
-        },
-        {
-          "kind": "configuration-binding",
-          "contribution": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings",
-          "source": {
-            "path": "payments/payments.go",
-            "line": 26,
-            "column": 4,
-            "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
-          },
-          "generated": {
-            "start_line": 41,
-            "start_column": 4,
-            "end_line": 41,
+            "end_line": 27,
             "end_column": 25
           }
         }
       ]
     },
     {
-      "path": "internal/spicegen/commerce/sources/platform/platform_spice_gen.go",
-      "sha256": "sha256:ba9474a4ae223cc605678edcf19eeb5f7f6129e57e9973ee604726cfb6c7b3e8",
+      "path": "internal/spicegen/commerce/sources/payments/settings_spice_gen.go",
+      "sha256": "sha256:58b097cbde8d016d65e19248bc4a2da560e81abef858734df549a3e41f7f13dc",
       "role": "source-unit",
       "primary_source": {
-        "path": "platform/platform.go",
-        "line": 27,
+        "path": "payments/settings.go",
+        "line": 7,
+        "column": 4,
+        "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
+      },
+      "mappings": [
+        {
+          "kind": "configuration-binding",
+          "contribution": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings",
+          "source": {
+            "path": "payments/settings.go",
+            "line": 7,
+            "column": 4,
+            "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
+          },
+          "generated": {
+            "start_line": 15,
+            "start_column": 4,
+            "end_line": 15,
+            "end_column": 25
+          }
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/platform/mux_spice_gen.go",
+      "sha256": "sha256:4a47088e755206ec866061959d106b4064931c0df1a8baf8a3a793a0c4aec5a2",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "platform/mux.go",
+        "line": 12,
+        "column": 4,
+        "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|6:NewMux"
+      },
+      "mappings": [
+        {
+          "kind": "provider-construction",
+          "contribution": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|6:NewMux",
+          "source": {
+            "path": "platform/mux.go",
+            "line": 12,
+            "column": 4,
+            "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|6:NewMux"
+          },
+          "generated": {
+            "start_line": 15,
+            "start_column": 4,
+            "end_line": 15,
+            "end_column": 25
+          }
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/platform/server_spice_gen.go",
+      "sha256": "sha256:da2496ba205d4ccf5b64b23eec16cb82cc97bd360467774b72fdd59945e03248",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "platform/server.go",
+        "line": 35,
+        "column": 4,
+        "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer"
+      },
+      "mappings": [
+        {
+          "kind": "provider-construction",
+          "contribution": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer",
+          "source": {
+            "path": "platform/server.go",
+            "line": 35,
+            "column": 4,
+            "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer"
+          },
+          "generated": {
+            "start_line": 17,
+            "start_column": 4,
+            "end_line": 17,
+            "end_column": 28
+          }
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/platform/settings_spice_gen.go",
+      "sha256": "sha256:c3b4c7c24d72e0281f6bb8db67e515220f8297fc52b5bd1afd3cc543e03d5d97",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "platform/settings.go",
+        "line": 9,
         "column": 4,
         "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings"
       },
       "mappings": [
         {
-          "kind": "provider-construction",
-          "contribution": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|3:Mux",
-          "source": {
-            "path": "platform/platform.go",
-            "line": 39,
-            "column": 4,
-            "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|3:Mux"
-          },
-          "generated": {
-            "start_line": 21,
-            "start_column": 4,
-            "end_line": 21,
-            "end_column": 25
-          }
-        },
-        {
-          "kind": "provider-construction",
-          "contribution": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer",
-          "source": {
-            "path": "platform/platform.go",
-            "line": 55,
-            "column": 4,
-            "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer"
-          },
-          "generated": {
-            "start_line": 28,
-            "start_column": 4,
-            "end_line": 28,
-            "end_column": 28
-          }
-        },
-        {
           "kind": "configuration-binding",
           "contribution": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings",
           "source": {
-            "path": "platform/platform.go",
-            "line": 27,
+            "path": "platform/settings.go",
+            "line": 9,
             "column": 4,
             "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings"
           },
           "generated": {
-            "start_line": 39,
+            "start_line": 16,
             "start_column": 4,
-            "end_line": 39,
+            "end_line": 16,
             "end_column": 25
           }
         }
       ]
     },
     {
-      "path": "internal/spicegen/commerce/sources/storage/storage_spice_gen.go",
-      "sha256": "sha256:c064bddbbea21476cf54a5b099685f47b16e623685c4f2da3d2d64675e5872bc",
+      "path": "internal/spicegen/commerce/sources/storage/database_spice_gen.go",
+      "sha256": "sha256:5d0bd5b912bdcc45af0063d1b91f7ba73f76289b3359aab4f41c37ab62b5fdc6",
       "role": "source-unit",
       "primary_source": {
-        "path": "storage/storage.go",
-        "line": 66,
+        "path": "storage/database.go",
+        "line": 32,
         "column": 4,
-        "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
+        "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase"
       },
       "mappings": [
         {
           "kind": "provider-construction",
-          "contribution": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:OpenDatabase",
+          "contribution": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase",
           "source": {
-            "path": "storage/storage.go",
-            "line": 96,
+            "path": "storage/database.go",
+            "line": 32,
             "column": 4,
-            "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:OpenDatabase"
+            "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase"
           },
           "generated": {
-            "start_line": 23,
+            "start_line": 15,
             "start_column": 4,
-            "end_line": 23,
-            "end_column": 34
+            "end_line": 15,
+            "end_column": 30
           }
-        },
-        {
-          "kind": "provider-construction",
-          "contribution": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:ReadExecutor",
-          "source": {
-            "path": "storage/storage.go",
-            "line": 205,
-            "column": 4,
-            "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:ReadExecutor"
-          },
-          "generated": {
-            "start_line": 34,
-            "start_column": 4,
-            "end_line": 34,
-            "end_column": 34
-          }
-        },
-        {
-          "kind": "provider-construction",
-          "contribution": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions",
-          "source": {
-            "path": "storage/storage.go",
-            "line": 197,
-            "column": 4,
-            "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions"
-          },
-          "generated": {
-            "start_line": 41,
-            "start_column": 4,
-            "end_line": 41,
-            "end_column": 34
-          }
-        },
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/storage/native_bean_spice_gen.go",
+      "sha256": "sha256:ff16458591c1c595b8079b5e1939f4b4a930eeb2628ba12b2f516f0498c0d93a",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "storage/native_bean.go",
+        "line": 12,
+        "column": 4,
+        "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|6:Native"
+      },
+      "mappings": [
         {
           "kind": "provider-construction",
           "contribution": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|6:Native",
           "source": {
-            "path": "storage/storage.go",
-            "line": 187,
+            "path": "storage/native_bean.go",
+            "line": 12,
             "column": 4,
             "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|6:Native"
           },
           "generated": {
-            "start_line": 52,
+            "start_line": 16,
             "start_column": 4,
-            "end_line": 52,
+            "end_line": 16,
             "end_column": 28
           }
-        },
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/storage/order_repository_spice_gen.go",
+      "sha256": "sha256:92f12fb6538118bf74e316d81eaa7e1e01784fd83a9c15d04b72b401c889e33e",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "storage/order_repository.go",
+        "line": 17,
+        "column": 4,
+        "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository"
+      },
+      "mappings": [
         {
           "kind": "provider-construction",
           "contribution": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository",
           "source": {
-            "path": "storage/storage.go",
-            "line": 212,
+            "path": "storage/order_repository.go",
+            "line": 17,
             "column": 4,
             "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository"
           },
           "generated": {
-            "start_line": 63,
+            "start_line": 15,
             "start_column": 4,
-            "end_line": 63,
+            "end_line": 15,
             "end_column": 37
           }
         },
@@ -634,76 +745,147 @@
           "kind": "interface-assertion",
           "contribution": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository#implements:github.com/spice-framework/commerce/storage.Orders",
           "source": {
-            "path": "storage/storage.go",
-            "line": 212,
+            "path": "storage/order_repository.go",
+            "line": 17,
             "column": 4,
             "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository"
           },
           "generated": {
-            "start_line": 75,
+            "start_line": 27,
             "start_column": 7,
-            "end_line": 75,
+            "end_line": 27,
             "end_column": 21
           }
-        },
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/storage/read_executor_bean_spice_gen.go",
+      "sha256": "sha256:2b1c9b8a70ef427643556b0cc5d69d1bf33b8d9338484f50db50b0a0c8cc7cec",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "storage/read_executor_bean.go",
+        "line": 14,
+        "column": 4,
+        "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:ReadExecutor"
+      },
+      "mappings": [
+        {
+          "kind": "provider-construction",
+          "contribution": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:ReadExecutor",
+          "source": {
+            "path": "storage/read_executor_bean.go",
+            "line": 14,
+            "column": 4,
+            "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:ReadExecutor"
+          },
+          "generated": {
+            "start_line": 16,
+            "start_column": 4,
+            "end_line": 16,
+            "end_column": 34
+          }
+        }
+      ]
+    },
+    {
+      "path": "internal/spicegen/commerce/sources/storage/settings_spice_gen.go",
+      "sha256": "sha256:50e96991d0423cb4ff1f4b2646c7a9761dd03f228c0cc6923edf3a54dedb5948",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "storage/settings.go",
+        "line": 8,
+        "column": 4,
+        "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
+      },
+      "mappings": [
         {
           "kind": "configuration-binding",
           "contribution": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings",
           "source": {
-            "path": "storage/storage.go",
-            "line": 66,
+            "path": "storage/settings.go",
+            "line": 8,
             "column": 4,
             "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
           },
           "generated": {
-            "start_line": 77,
+            "start_line": 15,
             "start_column": 4,
-            "end_line": 77,
+            "end_line": 15,
             "end_column": 25
           }
         }
       ]
     },
     {
+      "path": "internal/spicegen/commerce/sources/storage/transactions_bean_spice_gen.go",
+      "sha256": "sha256:a6b7a8cd9b8110db400b8a324de086d34347e9c9e90b368b106aeb1a7e2519e4",
+      "role": "source-unit",
+      "primary_source": {
+        "path": "storage/transactions_bean.go",
+        "line": 13,
+        "column": 4,
+        "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions"
+      },
+      "mappings": [
+        {
+          "kind": "provider-construction",
+          "contribution": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions",
+          "source": {
+            "path": "storage/transactions_bean.go",
+            "line": 13,
+            "column": 4,
+            "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions"
+          },
+          "generated": {
+            "start_line": 17,
+            "start_column": 4,
+            "end_line": 17,
+            "end_column": 34
+          }
+        }
+      ]
+    },
+    {
       "path": "internal/spicegen/commerce/spice_assembly_gen.go",
-      "sha256": "sha256:4b7a53c56add34874c47f3f507365f0c3627dbf644ca72c5c102c1dd493547c7",
+      "sha256": "sha256:1635b44881da8ed0560e4acfb369eca2ba6c888e298e117658b2fef9aa73f520",
       "role": "target-assembly",
       "related_sources": [
         {
-          "path": "inventory/inventory.go",
-          "line": 28,
-          "column": 4,
-          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings"
-        },
-        {
-          "path": "inventory/inventory.go",
-          "line": 30,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.SKU"
-        },
-        {
-          "path": "inventory/inventory.go",
-          "line": 31,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.InitialStock"
-        },
-        {
-          "path": "inventory/inventory.go",
-          "line": 42,
+          "path": "inventory/service.go",
+          "line": 26,
           "column": 4,
           "symbol": "spice:symbol:v1|function|45:github.com/spice-framework/commerce/inventory|0:|10:NewService"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 107,
+          "path": "inventory/service.go",
+          "line": 91,
           "column": 4,
           "symbol": "spice:symbol:v1|method|45:github.com/spice-framework/commerce/inventory|7:Service|5:Audit"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 129,
+          "path": "inventory/service.go",
+          "line": 113,
           "column": 4,
           "symbol": "spice:symbol:v1|method|45:github.com/spice-framework/commerce/inventory|7:Service|9:VerifySKU"
+        },
+        {
+          "path": "inventory/settings.go",
+          "line": 7,
+          "column": 4,
+          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings"
+        },
+        {
+          "path": "inventory/settings.go",
+          "line": 9,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.SKU"
+        },
+        {
+          "path": "inventory/settings.go",
+          "line": 10,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.InitialStock"
         },
         {
           "path": "main.go",
@@ -712,364 +894,364 @@
           "symbol": "spice:symbol:v1|function|35:github.com/spice-framework/commerce|0:|4:main"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 39,
-          "column": 4,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 41,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Transport"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 42,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.From"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 43,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Recipient"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 44,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.TestCapacity"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 45,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPAddress"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 46,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPServerName"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 47,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPMode"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 48,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPUsername"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 49,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPPassword"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 50,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Timeout"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 51,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.MaxAttempts"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 62,
-          "column": 4,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 80,
+          "path": "notifications/delivery.go",
+          "line": 25,
           "column": 4,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Delivery"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 183,
+          "path": "notifications/notifier.go",
+          "line": 21,
           "column": 4,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Notifier"
         },
         {
-          "path": "orders/events.go",
-          "line": 29,
+          "path": "notifications/settings.go",
+          "line": 10,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
         },
         {
-          "path": "orders/events.go",
-          "line": 36,
+          "path": "notifications/settings.go",
+          "line": 12,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Transport"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 13,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.From"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 14,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Recipient"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 15,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.TestCapacity"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 16,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPAddress"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 17,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPServerName"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 18,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPMode"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 19,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPUsername"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 20,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPPassword"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 21,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Timeout"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 22,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.MaxAttempts"
+        },
+        {
+          "path": "notifications/system_clock.go",
+          "line": 10,
           "column": 4,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|9:ViewAudit|6:Record"
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
         },
         {
-          "path": "orders/events.go",
-          "line": 72,
-          "column": 4,
-          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
-        },
-        {
-          "path": "orders/events.go",
-          "line": 73,
-          "column": 6,
-          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
-        },
-        {
-          "path": "orders/http.go",
+          "path": "orders/controller.go",
           "line": 23,
           "column": 4,
           "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller"
         },
         {
-          "path": "orders/http.go",
-          "line": 47,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place.Body"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 68,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get.ID"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 74,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt.ID"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 107,
+          "path": "orders/controller.go",
+          "line": 42,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place"
         },
         {
-          "path": "orders/http.go",
-          "line": 108,
+          "path": "orders/controller.go",
+          "line": 43,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place#transaction"
         },
         {
-          "path": "orders/http.go",
-          "line": 109,
+          "path": "orders/controller.go",
+          "line": 44,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place#authorization"
         },
         {
-          "path": "orders/http.go",
-          "line": 128,
+          "path": "orders/controller.go",
+          "line": 63,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get"
         },
         {
-          "path": "orders/http.go",
-          "line": 129,
+          "path": "orders/controller.go",
+          "line": 64,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get#authorization"
         },
         {
-          "path": "orders/http.go",
-          "line": 150,
+          "path": "orders/controller.go",
+          "line": 85,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog"
         },
         {
-          "path": "orders/http.go",
-          "line": 151,
+          "path": "orders/controller.go",
+          "line": 86,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog#cache"
         },
         {
-          "path": "orders/http.go",
-          "line": 170,
+          "path": "orders/controller.go",
+          "line": 105,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt"
         },
         {
-          "path": "orders/http.go",
-          "line": 171,
+          "path": "orders/controller.go",
+          "line": 106,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt#authorization"
         },
         {
-          "path": "orders/orders.go",
-          "line": 32,
+          "path": "orders/get_order_request.go",
+          "line": 5,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get.ID"
+        },
+        {
+          "path": "orders/order_events_topic.go",
+          "line": 9,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
+          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
         },
         {
-          "path": "orders/orders.go",
-          "line": 34,
+          "path": "orders/order_events_topic.go",
+          "line": 10,
+          "column": 6,
+          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
+        },
+        {
+          "path": "orders/place_order_request.go",
+          "line": 12,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.SKU"
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place.Body"
         },
         {
-          "path": "orders/orders.go",
-          "line": 35,
+          "path": "orders/receipt_request.go",
+          "line": 6,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.UnitPriceCents"
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt.ID"
         },
         {
-          "path": "orders/orders.go",
-          "line": 66,
+          "path": "orders/service.go",
+          "line": 37,
           "column": 4,
           "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|10:NewService"
         },
         {
-          "path": "payments/payments.go",
-          "line": 26,
+          "path": "orders/settings.go",
+          "line": 7,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
+          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
         },
         {
-          "path": "payments/payments.go",
-          "line": 28,
+          "path": "orders/settings.go",
+          "line": 9,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings.MaximumCents"
+          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.SKU"
         },
         {
-          "path": "payments/payments.go",
-          "line": 49,
+          "path": "orders/settings.go",
+          "line": 10,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.UnitPriceCents"
+        },
+        {
+          "path": "orders/view_audit.go",
+          "line": 22,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service"
+          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
         },
         {
-          "path": "payments/payments.go",
-          "line": 63,
+          "path": "orders/view_audit.go",
+          "line": 29,
+          "column": 4,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|9:ViewAudit|6:Record"
+        },
+        {
+          "path": "payments/offline_processor.go",
+          "line": 14,
           "column": 4,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor"
         },
         {
-          "path": "platform/platform.go",
-          "line": 27,
+          "path": "payments/service.go",
+          "line": 18,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service"
         },
         {
-          "path": "platform/platform.go",
-          "line": 29,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.Address"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 30,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadHeaderTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 31,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 32,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.WriteTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 33,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.IdleTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 34,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.DeveloperToken"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 39,
+          "path": "payments/settings.go",
+          "line": 7,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|3:Mux"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
         },
         {
-          "path": "platform/platform.go",
-          "line": 55,
+          "path": "payments/settings.go",
+          "line": 9,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings.MaximumCents"
+        },
+        {
+          "path": "platform/mux.go",
+          "line": 12,
+          "column": 4,
+          "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|6:NewMux"
+        },
+        {
+          "path": "platform/server.go",
+          "line": 35,
           "column": 4,
           "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer"
         },
         {
-          "path": "platform/platform.go",
-          "line": 173,
+          "path": "platform/server.go",
+          "line": 152,
           "column": 4,
           "symbol": "spice:symbol:v1|method|44:github.com/spice-framework/commerce/platform|6:Server|5:Start"
         },
         {
-          "path": "platform/platform.go",
-          "line": 200,
+          "path": "platform/server.go",
+          "line": 179,
           "column": 4,
           "symbol": "spice:symbol:v1|method|44:github.com/spice-framework/commerce/platform|6:Server|4:Stop"
         },
         {
-          "path": "storage/storage.go",
-          "line": 66,
+          "path": "platform/settings.go",
+          "line": 9,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings"
         },
         {
-          "path": "storage/storage.go",
-          "line": 68,
+          "path": "platform/settings.go",
+          "line": 11,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.URL"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.Address"
         },
         {
-          "path": "storage/storage.go",
-          "line": 69,
+          "path": "platform/settings.go",
+          "line": 12,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.AllowInsecure"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadHeaderTimeout"
         },
         {
-          "path": "storage/storage.go",
-          "line": 96,
+          "path": "platform/settings.go",
+          "line": 13,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadTimeout"
+        },
+        {
+          "path": "platform/settings.go",
+          "line": 14,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.WriteTimeout"
+        },
+        {
+          "path": "platform/settings.go",
+          "line": 15,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.IdleTimeout"
+        },
+        {
+          "path": "platform/settings.go",
+          "line": 16,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.DeveloperToken"
+        },
+        {
+          "path": "storage/database.go",
+          "line": 32,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:OpenDatabase"
+          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase"
         },
         {
-          "path": "storage/storage.go",
-          "line": 140,
+          "path": "storage/database.go",
+          "line": 77,
           "column": 4,
           "symbol": "spice:symbol:v1|method|43:github.com/spice-framework/commerce/storage|8:Database|7:Migrate"
         },
         {
-          "path": "storage/storage.go",
-          "line": 187,
+          "path": "storage/native_bean.go",
+          "line": 12,
           "column": 4,
           "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|6:Native"
         },
         {
-          "path": "storage/storage.go",
-          "line": 197,
+          "path": "storage/order_repository.go",
+          "line": 17,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions"
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository"
         },
         {
-          "path": "storage/storage.go",
-          "line": 205,
+          "path": "storage/read_executor_bean.go",
+          "line": 14,
           "column": 4,
           "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:ReadExecutor"
         },
         {
-          "path": "storage/storage.go",
-          "line": 212,
+          "path": "storage/settings.go",
+          "line": 8,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository"
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
+        },
+        {
+          "path": "storage/settings.go",
+          "line": 10,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.URL"
+        },
+        {
+          "path": "storage/settings.go",
+          "line": 11,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.AllowInsecure"
+        },
+        {
+          "path": "storage/transactions_bean.go",
+          "line": 13,
+          "column": 4,
+          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions"
         }
       ]
     },
@@ -1092,20 +1274,20 @@
       "role": "target-configuration",
       "related_sources": [
         {
-          "path": "inventory/inventory.go",
-          "line": 28,
+          "path": "inventory/settings.go",
+          "line": 7,
           "column": 4,
           "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 30,
+          "path": "inventory/settings.go",
+          "line": 9,
           "column": 2,
           "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.SKU"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 31,
+          "path": "inventory/settings.go",
+          "line": 10,
           "column": 2,
           "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.InitialStock"
         },
@@ -1116,164 +1298,164 @@
           "symbol": "spice:symbol:v1|function|35:github.com/spice-framework/commerce|0:|4:main"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 39,
+          "path": "notifications/settings.go",
+          "line": 10,
           "column": 4,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 41,
+          "path": "notifications/settings.go",
+          "line": 12,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Transport"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 42,
+          "path": "notifications/settings.go",
+          "line": 13,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.From"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 43,
+          "path": "notifications/settings.go",
+          "line": 14,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Recipient"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 44,
+          "path": "notifications/settings.go",
+          "line": 15,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.TestCapacity"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 45,
+          "path": "notifications/settings.go",
+          "line": 16,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPAddress"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 46,
+          "path": "notifications/settings.go",
+          "line": 17,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPServerName"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 47,
+          "path": "notifications/settings.go",
+          "line": 18,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPMode"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 48,
+          "path": "notifications/settings.go",
+          "line": 19,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPUsername"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 49,
+          "path": "notifications/settings.go",
+          "line": 20,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPPassword"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 50,
+          "path": "notifications/settings.go",
+          "line": 21,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Timeout"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 51,
+          "path": "notifications/settings.go",
+          "line": 22,
           "column": 2,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.MaxAttempts"
         },
         {
-          "path": "orders/orders.go",
-          "line": 32,
+          "path": "orders/settings.go",
+          "line": 7,
           "column": 4,
           "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
         },
         {
-          "path": "orders/orders.go",
-          "line": 34,
+          "path": "orders/settings.go",
+          "line": 9,
           "column": 2,
           "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.SKU"
         },
         {
-          "path": "orders/orders.go",
-          "line": 35,
+          "path": "orders/settings.go",
+          "line": 10,
           "column": 2,
           "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.UnitPriceCents"
         },
         {
-          "path": "payments/payments.go",
-          "line": 26,
+          "path": "payments/settings.go",
+          "line": 7,
           "column": 4,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
         },
         {
-          "path": "payments/payments.go",
-          "line": 28,
+          "path": "payments/settings.go",
+          "line": 9,
           "column": 2,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings.MaximumCents"
         },
         {
-          "path": "platform/platform.go",
-          "line": 27,
+          "path": "platform/settings.go",
+          "line": 9,
           "column": 4,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings"
         },
         {
-          "path": "platform/platform.go",
-          "line": 29,
+          "path": "platform/settings.go",
+          "line": 11,
           "column": 2,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.Address"
         },
         {
-          "path": "platform/platform.go",
-          "line": 30,
+          "path": "platform/settings.go",
+          "line": 12,
           "column": 2,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadHeaderTimeout"
         },
         {
-          "path": "platform/platform.go",
-          "line": 31,
+          "path": "platform/settings.go",
+          "line": 13,
           "column": 2,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadTimeout"
         },
         {
-          "path": "platform/platform.go",
-          "line": 32,
+          "path": "platform/settings.go",
+          "line": 14,
           "column": 2,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.WriteTimeout"
         },
         {
-          "path": "platform/platform.go",
-          "line": 33,
+          "path": "platform/settings.go",
+          "line": 15,
           "column": 2,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.IdleTimeout"
         },
         {
-          "path": "platform/platform.go",
-          "line": 34,
+          "path": "platform/settings.go",
+          "line": 16,
           "column": 2,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.DeveloperToken"
         },
         {
-          "path": "storage/storage.go",
-          "line": 66,
+          "path": "storage/settings.go",
+          "line": 8,
           "column": 4,
           "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
         },
         {
-          "path": "storage/storage.go",
-          "line": 68,
+          "path": "storage/settings.go",
+          "line": 10,
           "column": 2,
           "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.URL"
         },
         {
-          "path": "storage/storage.go",
-          "line": 69,
+          "path": "storage/settings.go",
+          "line": 11,
           "column": 2,
           "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.AllowInsecure"
         }
@@ -1281,44 +1463,44 @@
     },
     {
       "path": "internal/spicegen/commerce/spice_contracts_gen.go",
-      "sha256": "sha256:40ee617fe5c4e061c1b5dc4fa9c8b76f87421271910d8d4f22dbbda09cab6de2",
+      "sha256": "sha256:0ef870132a9145c919de353c4c9311788e791a04842eb2ccab4dcb100099bdb8",
       "role": "target-contracts",
       "related_sources": [
         {
-          "path": "inventory/inventory.go",
-          "line": 28,
-          "column": 4,
-          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings"
-        },
-        {
-          "path": "inventory/inventory.go",
-          "line": 30,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.SKU"
-        },
-        {
-          "path": "inventory/inventory.go",
-          "line": 31,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.InitialStock"
-        },
-        {
-          "path": "inventory/inventory.go",
-          "line": 42,
+          "path": "inventory/service.go",
+          "line": 26,
           "column": 4,
           "symbol": "spice:symbol:v1|function|45:github.com/spice-framework/commerce/inventory|0:|10:NewService"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 107,
+          "path": "inventory/service.go",
+          "line": 91,
           "column": 4,
           "symbol": "spice:symbol:v1|method|45:github.com/spice-framework/commerce/inventory|7:Service|5:Audit"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 129,
+          "path": "inventory/service.go",
+          "line": 113,
           "column": 4,
           "symbol": "spice:symbol:v1|method|45:github.com/spice-framework/commerce/inventory|7:Service|9:VerifySKU"
+        },
+        {
+          "path": "inventory/settings.go",
+          "line": 7,
+          "column": 4,
+          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings"
+        },
+        {
+          "path": "inventory/settings.go",
+          "line": 9,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.SKU"
+        },
+        {
+          "path": "inventory/settings.go",
+          "line": 10,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.InitialStock"
         },
         {
           "path": "main.go",
@@ -1327,309 +1509,309 @@
           "symbol": "spice:symbol:v1|function|35:github.com/spice-framework/commerce|0:|4:main"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 39,
-          "column": 4,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 41,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Transport"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 42,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.From"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 43,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Recipient"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 44,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.TestCapacity"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 45,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPAddress"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 46,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPServerName"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 47,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPMode"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 48,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPUsername"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 49,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPPassword"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 50,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Timeout"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 51,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.MaxAttempts"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 62,
-          "column": 4,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 80,
+          "path": "notifications/delivery.go",
+          "line": 25,
           "column": 4,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Delivery"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 183,
+          "path": "notifications/notifier.go",
+          "line": 21,
           "column": 4,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Notifier"
         },
         {
-          "path": "orders/events.go",
-          "line": 29,
+          "path": "notifications/settings.go",
+          "line": 10,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
         },
         {
-          "path": "orders/events.go",
-          "line": 36,
+          "path": "notifications/settings.go",
+          "line": 12,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Transport"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 13,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.From"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 14,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Recipient"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 15,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.TestCapacity"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 16,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPAddress"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 17,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPServerName"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 18,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPMode"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 19,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPUsername"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 20,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPPassword"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 21,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Timeout"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 22,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.MaxAttempts"
+        },
+        {
+          "path": "notifications/system_clock.go",
+          "line": 10,
           "column": 4,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|9:ViewAudit|6:Record"
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
         },
         {
-          "path": "orders/events.go",
-          "line": 72,
-          "column": 4,
-          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
-        },
-        {
-          "path": "orders/events.go",
-          "line": 73,
-          "column": 6,
-          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
-        },
-        {
-          "path": "orders/http.go",
+          "path": "orders/controller.go",
           "line": 23,
           "column": 4,
           "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller"
         },
         {
-          "path": "orders/orders.go",
-          "line": 32,
+          "path": "orders/order_events_topic.go",
+          "line": 9,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
+          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
         },
         {
-          "path": "orders/orders.go",
-          "line": 34,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.SKU"
+          "path": "orders/order_events_topic.go",
+          "line": 10,
+          "column": 6,
+          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
         },
         {
-          "path": "orders/orders.go",
-          "line": 35,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.UnitPriceCents"
-        },
-        {
-          "path": "orders/orders.go",
-          "line": 66,
+          "path": "orders/service.go",
+          "line": 37,
           "column": 4,
           "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|10:NewService"
         },
         {
-          "path": "payments/payments.go",
-          "line": 26,
+          "path": "orders/settings.go",
+          "line": 7,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
+          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
         },
         {
-          "path": "payments/payments.go",
-          "line": 28,
+          "path": "orders/settings.go",
+          "line": 9,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings.MaximumCents"
+          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.SKU"
         },
         {
-          "path": "payments/payments.go",
-          "line": 49,
+          "path": "orders/settings.go",
+          "line": 10,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.UnitPriceCents"
+        },
+        {
+          "path": "orders/view_audit.go",
+          "line": 22,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service"
+          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
         },
         {
-          "path": "payments/payments.go",
-          "line": 63,
+          "path": "orders/view_audit.go",
+          "line": 29,
+          "column": 4,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|9:ViewAudit|6:Record"
+        },
+        {
+          "path": "payments/offline_processor.go",
+          "line": 14,
           "column": 4,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor"
         },
         {
-          "path": "platform/platform.go",
-          "line": 27,
+          "path": "payments/service.go",
+          "line": 18,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service"
         },
         {
-          "path": "platform/platform.go",
-          "line": 29,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.Address"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 30,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadHeaderTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 31,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 32,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.WriteTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 33,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.IdleTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 34,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.DeveloperToken"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 39,
+          "path": "payments/settings.go",
+          "line": 7,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|3:Mux"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
         },
         {
-          "path": "platform/platform.go",
-          "line": 55,
+          "path": "payments/settings.go",
+          "line": 9,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings.MaximumCents"
+        },
+        {
+          "path": "platform/mux.go",
+          "line": 12,
+          "column": 4,
+          "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|6:NewMux"
+        },
+        {
+          "path": "platform/server.go",
+          "line": 35,
           "column": 4,
           "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer"
         },
         {
-          "path": "platform/platform.go",
-          "line": 173,
+          "path": "platform/server.go",
+          "line": 152,
           "column": 4,
           "symbol": "spice:symbol:v1|method|44:github.com/spice-framework/commerce/platform|6:Server|5:Start"
         },
         {
-          "path": "platform/platform.go",
-          "line": 200,
+          "path": "platform/server.go",
+          "line": 179,
           "column": 4,
           "symbol": "spice:symbol:v1|method|44:github.com/spice-framework/commerce/platform|6:Server|4:Stop"
         },
         {
-          "path": "storage/storage.go",
-          "line": 66,
+          "path": "platform/settings.go",
+          "line": 9,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings"
         },
         {
-          "path": "storage/storage.go",
-          "line": 68,
+          "path": "platform/settings.go",
+          "line": 11,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.URL"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.Address"
         },
         {
-          "path": "storage/storage.go",
-          "line": 69,
+          "path": "platform/settings.go",
+          "line": 12,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.AllowInsecure"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadHeaderTimeout"
         },
         {
-          "path": "storage/storage.go",
-          "line": 96,
+          "path": "platform/settings.go",
+          "line": 13,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadTimeout"
+        },
+        {
+          "path": "platform/settings.go",
+          "line": 14,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.WriteTimeout"
+        },
+        {
+          "path": "platform/settings.go",
+          "line": 15,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.IdleTimeout"
+        },
+        {
+          "path": "platform/settings.go",
+          "line": 16,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.DeveloperToken"
+        },
+        {
+          "path": "storage/database.go",
+          "line": 32,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:OpenDatabase"
+          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase"
         },
         {
-          "path": "storage/storage.go",
-          "line": 140,
+          "path": "storage/database.go",
+          "line": 77,
           "column": 4,
           "symbol": "spice:symbol:v1|method|43:github.com/spice-framework/commerce/storage|8:Database|7:Migrate"
         },
         {
-          "path": "storage/storage.go",
-          "line": 187,
+          "path": "storage/native_bean.go",
+          "line": 12,
           "column": 4,
           "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|6:Native"
         },
         {
-          "path": "storage/storage.go",
-          "line": 197,
+          "path": "storage/order_repository.go",
+          "line": 17,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions"
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository"
         },
         {
-          "path": "storage/storage.go",
-          "line": 205,
+          "path": "storage/read_executor_bean.go",
+          "line": 14,
           "column": 4,
           "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:ReadExecutor"
         },
         {
-          "path": "storage/storage.go",
-          "line": 212,
+          "path": "storage/settings.go",
+          "line": 8,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository"
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
+        },
+        {
+          "path": "storage/settings.go",
+          "line": 10,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.URL"
+        },
+        {
+          "path": "storage/settings.go",
+          "line": 11,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.AllowInsecure"
+        },
+        {
+          "path": "storage/transactions_bean.go",
+          "line": 13,
+          "column": 4,
+          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions"
         }
       ]
     },
     {
       "path": "internal/spicegen/commerce/spice_features_gen.go",
-      "sha256": "sha256:e078e406bd9c72262c8c8367a1875a25b8e38743d62b6c6b82333833228f52ae",
+      "sha256": "sha256:56fc2e416e16e2d7e91bbd35a2eb00194df7d3b1cc4bdaa65ff092b06c4a5bac",
       "role": "target-features",
       "related_sources": [
         {
-          "path": "inventory/inventory.go",
-          "line": 107,
+          "path": "inventory/service.go",
+          "line": 91,
           "column": 4,
           "symbol": "spice:symbol:v1|method|45:github.com/spice-framework/commerce/inventory|7:Service|5:Audit"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 129,
+          "path": "inventory/service.go",
+          "line": 113,
           "column": 4,
           "symbol": "spice:symbol:v1|method|45:github.com/spice-framework/commerce/inventory|7:Service|9:VerifySKU"
         },
@@ -1640,20 +1822,20 @@
           "symbol": "spice:symbol:v1|function|35:github.com/spice-framework/commerce|0:|4:main"
         },
         {
-          "path": "platform/platform.go",
-          "line": 173,
+          "path": "platform/server.go",
+          "line": 152,
           "column": 4,
           "symbol": "spice:symbol:v1|method|44:github.com/spice-framework/commerce/platform|6:Server|5:Start"
         },
         {
-          "path": "platform/platform.go",
-          "line": 200,
+          "path": "platform/server.go",
+          "line": 179,
           "column": 4,
           "symbol": "spice:symbol:v1|method|44:github.com/spice-framework/commerce/platform|6:Server|4:Stop"
         },
         {
-          "path": "storage/storage.go",
-          "line": 140,
+          "path": "storage/database.go",
+          "line": 77,
           "column": 4,
           "symbol": "spice:symbol:v1|method|43:github.com/spice-framework/commerce/storage|8:Database|7:Migrate"
         }
@@ -1671,82 +1853,82 @@
           "symbol": "spice:symbol:v1|function|35:github.com/spice-framework/commerce|0:|4:main"
         },
         {
-          "path": "orders/http.go",
+          "path": "orders/controller.go",
           "line": 23,
           "column": 4,
           "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller"
         },
         {
-          "path": "orders/http.go",
-          "line": 47,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place.Body"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 68,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get.ID"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 74,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt.ID"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 107,
+          "path": "orders/controller.go",
+          "line": 42,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place"
         },
         {
-          "path": "orders/http.go",
-          "line": 108,
+          "path": "orders/controller.go",
+          "line": 43,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place#transaction"
         },
         {
-          "path": "orders/http.go",
-          "line": 109,
+          "path": "orders/controller.go",
+          "line": 44,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place#authorization"
         },
         {
-          "path": "orders/http.go",
-          "line": 128,
+          "path": "orders/controller.go",
+          "line": 63,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get"
         },
         {
-          "path": "orders/http.go",
-          "line": 129,
+          "path": "orders/controller.go",
+          "line": 64,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get#authorization"
         },
         {
-          "path": "orders/http.go",
-          "line": 150,
+          "path": "orders/controller.go",
+          "line": 85,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog"
         },
         {
-          "path": "orders/http.go",
-          "line": 151,
+          "path": "orders/controller.go",
+          "line": 86,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog#cache"
         },
         {
-          "path": "orders/http.go",
-          "line": 170,
+          "path": "orders/controller.go",
+          "line": 105,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt"
         },
         {
-          "path": "orders/http.go",
-          "line": 171,
+          "path": "orders/controller.go",
+          "line": 106,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt#authorization"
+        },
+        {
+          "path": "orders/get_order_request.go",
+          "line": 5,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get.ID"
+        },
+        {
+          "path": "orders/place_order_request.go",
+          "line": 12,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place.Body"
+        },
+        {
+          "path": "orders/receipt_request.go",
+          "line": 6,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt.ID"
         }
       ]
     },
@@ -1756,14 +1938,14 @@
       "role": "target-http-route",
       "related_sources": [
         {
-          "path": "orders/http.go",
-          "line": 150,
+          "path": "orders/controller.go",
+          "line": 85,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog"
         },
         {
-          "path": "orders/http.go",
-          "line": 151,
+          "path": "orders/controller.go",
+          "line": 86,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog#cache"
         }
@@ -1773,8 +1955,8 @@
           "kind": "http-route-wiring",
           "contribution": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog",
           "source": {
-            "path": "orders/http.go",
-            "line": 150,
+            "path": "orders/controller.go",
+            "line": 85,
             "column": 4,
             "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|7:Catalog"
           },
@@ -1793,22 +1975,22 @@
       "role": "target-http-route",
       "related_sources": [
         {
-          "path": "orders/http.go",
-          "line": 68,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get.ID"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 128,
+          "path": "orders/controller.go",
+          "line": 63,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get"
         },
         {
-          "path": "orders/http.go",
-          "line": 129,
+          "path": "orders/controller.go",
+          "line": 64,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get#authorization"
+        },
+        {
+          "path": "orders/get_order_request.go",
+          "line": 5,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get.ID"
         }
       ],
       "mappings": [
@@ -1816,10 +1998,10 @@
           "kind": "http-route-wiring",
           "contribution": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get",
           "source": {
-            "path": "orders/http.go",
-            "line": 68,
-            "column": 2,
-            "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get.ID"
+            "path": "orders/controller.go",
+            "line": 63,
+            "column": 4,
+            "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|3:Get"
           },
           "generated": {
             "start_line": 19,
@@ -1836,28 +2018,28 @@
       "role": "target-http-route",
       "related_sources": [
         {
-          "path": "orders/http.go",
-          "line": 47,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place.Body"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 107,
+          "path": "orders/controller.go",
+          "line": 42,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place"
         },
         {
-          "path": "orders/http.go",
-          "line": 108,
+          "path": "orders/controller.go",
+          "line": 43,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place#transaction"
         },
         {
-          "path": "orders/http.go",
-          "line": 109,
+          "path": "orders/controller.go",
+          "line": 44,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place#authorization"
+        },
+        {
+          "path": "orders/place_order_request.go",
+          "line": 12,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place.Body"
         }
       ],
       "mappings": [
@@ -1865,10 +2047,10 @@
           "kind": "http-route-wiring",
           "contribution": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place",
           "source": {
-            "path": "orders/http.go",
-            "line": 47,
-            "column": 2,
-            "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place.Body"
+            "path": "orders/controller.go",
+            "line": 42,
+            "column": 4,
+            "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|5:Place"
           },
           "generated": {
             "start_line": 21,
@@ -1885,22 +2067,22 @@
       "role": "target-http-route",
       "related_sources": [
         {
-          "path": "orders/http.go",
-          "line": 74,
-          "column": 2,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt.ID"
-        },
-        {
-          "path": "orders/http.go",
-          "line": 170,
+          "path": "orders/controller.go",
+          "line": 105,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt"
         },
         {
-          "path": "orders/http.go",
-          "line": 171,
+          "path": "orders/controller.go",
+          "line": 106,
           "column": 4,
           "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt#authorization"
+        },
+        {
+          "path": "orders/receipt_request.go",
+          "line": 6,
+          "column": 2,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt.ID"
         }
       ],
       "mappings": [
@@ -1908,10 +2090,10 @@
           "kind": "http-route-wiring",
           "contribution": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt",
           "source": {
-            "path": "orders/http.go",
-            "line": 74,
-            "column": 2,
-            "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt.ID"
+            "path": "orders/controller.go",
+            "line": 105,
+            "column": 4,
+            "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|10:Controller|11:SendReceipt"
           },
           "generated": {
             "start_line": 19,
@@ -1928,14 +2110,14 @@
       "role": "target-lifecycle",
       "related_sources": [
         {
-          "path": "inventory/inventory.go",
-          "line": 107,
+          "path": "inventory/service.go",
+          "line": 91,
           "column": 4,
           "symbol": "spice:symbol:v1|method|45:github.com/spice-framework/commerce/inventory|7:Service|5:Audit"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 129,
+          "path": "inventory/service.go",
+          "line": 113,
           "column": 4,
           "symbol": "spice:symbol:v1|method|45:github.com/spice-framework/commerce/inventory|7:Service|9:VerifySKU"
         },
@@ -1946,20 +2128,20 @@
           "symbol": "spice:symbol:v1|function|35:github.com/spice-framework/commerce|0:|4:main"
         },
         {
-          "path": "platform/platform.go",
-          "line": 173,
+          "path": "platform/server.go",
+          "line": 152,
           "column": 4,
           "symbol": "spice:symbol:v1|method|44:github.com/spice-framework/commerce/platform|6:Server|5:Start"
         },
         {
-          "path": "platform/platform.go",
-          "line": 200,
+          "path": "platform/server.go",
+          "line": 179,
           "column": 4,
           "symbol": "spice:symbol:v1|method|44:github.com/spice-framework/commerce/platform|6:Server|4:Stop"
         },
         {
-          "path": "storage/storage.go",
-          "line": 140,
+          "path": "storage/database.go",
+          "line": 77,
           "column": 4,
           "symbol": "spice:symbol:v1|method|43:github.com/spice-framework/commerce/storage|8:Database|7:Migrate"
         }
@@ -1967,32 +2149,32 @@
     },
     {
       "path": "internal/spicegen/commerce/spice_providers_gen.go",
-      "sha256": "sha256:3b52ac8b6a259be12a04f0f12af9982d94529845202ae83c5968fd3e8ad752fe",
+      "sha256": "sha256:5205b57a2b44cd8497307dd51236356943e0c8aee3b6fe4c71029048cb613fbe",
       "role": "target-providers",
       "related_sources": [
         {
-          "path": "inventory/inventory.go",
-          "line": 28,
+          "path": "inventory/service.go",
+          "line": 26,
+          "column": 4,
+          "symbol": "spice:symbol:v1|function|45:github.com/spice-framework/commerce/inventory|0:|10:NewService"
+        },
+        {
+          "path": "inventory/settings.go",
+          "line": 7,
           "column": 4,
           "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 30,
+          "path": "inventory/settings.go",
+          "line": 9,
           "column": 2,
           "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.SKU"
         },
         {
-          "path": "inventory/inventory.go",
-          "line": 31,
+          "path": "inventory/settings.go",
+          "line": 10,
           "column": 2,
           "symbol": "spice:symbol:v1|type|45:github.com/spice-framework/commerce/inventory|0:|8:Settings.InitialStock"
-        },
-        {
-          "path": "inventory/inventory.go",
-          "line": 42,
-          "column": 4,
-          "symbol": "spice:symbol:v1|function|45:github.com/spice-framework/commerce/inventory|0:|10:NewService"
         },
         {
           "path": "main.go",
@@ -2001,274 +2183,274 @@
           "symbol": "spice:symbol:v1|function|35:github.com/spice-framework/commerce|0:|4:main"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 39,
-          "column": 4,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 41,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Transport"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 42,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.From"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 43,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Recipient"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 44,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.TestCapacity"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 45,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPAddress"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 46,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPServerName"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 47,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPMode"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 48,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPUsername"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 49,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPPassword"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 50,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Timeout"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 51,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.MaxAttempts"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 62,
-          "column": 4,
-          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
-        },
-        {
-          "path": "notifications/notifications.go",
-          "line": 80,
+          "path": "notifications/delivery.go",
+          "line": 25,
           "column": 4,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Delivery"
         },
         {
-          "path": "notifications/notifications.go",
-          "line": 183,
+          "path": "notifications/notifier.go",
+          "line": 21,
           "column": 4,
           "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Notifier"
         },
         {
-          "path": "orders/events.go",
-          "line": 29,
+          "path": "notifications/settings.go",
+          "line": 10,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings"
         },
         {
-          "path": "orders/events.go",
-          "line": 36,
+          "path": "notifications/settings.go",
+          "line": 12,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Transport"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 13,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.From"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 14,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Recipient"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 15,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.TestCapacity"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 16,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPAddress"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 17,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPServerName"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 18,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPMode"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 19,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPUsername"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 20,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.SMTPPassword"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 21,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.Timeout"
+        },
+        {
+          "path": "notifications/settings.go",
+          "line": 22,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|8:Settings.MaxAttempts"
+        },
+        {
+          "path": "notifications/system_clock.go",
+          "line": 10,
           "column": 4,
-          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|9:ViewAudit|6:Record"
+          "symbol": "spice:symbol:v1|type|49:github.com/spice-framework/commerce/notifications|0:|11:SystemClock"
         },
         {
-          "path": "orders/events.go",
-          "line": 72,
-          "column": 4,
-          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
-        },
-        {
-          "path": "orders/events.go",
-          "line": 73,
-          "column": 6,
-          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
-        },
-        {
-          "path": "orders/http.go",
+          "path": "orders/controller.go",
           "line": 23,
           "column": 4,
           "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|10:Controller"
         },
         {
-          "path": "orders/orders.go",
-          "line": 32,
+          "path": "orders/order_events_topic.go",
+          "line": 9,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
+          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
         },
         {
-          "path": "orders/orders.go",
-          "line": 34,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.SKU"
+          "path": "orders/order_events_topic.go",
+          "line": 10,
+          "column": 6,
+          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|11:OrderEvents"
         },
         {
-          "path": "orders/orders.go",
-          "line": 35,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.UnitPriceCents"
-        },
-        {
-          "path": "orders/orders.go",
-          "line": 66,
+          "path": "orders/service.go",
+          "line": 37,
           "column": 4,
           "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|10:NewService"
         },
         {
-          "path": "payments/payments.go",
-          "line": 26,
+          "path": "orders/settings.go",
+          "line": 7,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
+          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings"
         },
         {
-          "path": "payments/payments.go",
-          "line": 28,
+          "path": "orders/settings.go",
+          "line": 9,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings.MaximumCents"
+          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.SKU"
         },
         {
-          "path": "payments/payments.go",
-          "line": 49,
+          "path": "orders/settings.go",
+          "line": 10,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|42:github.com/spice-framework/commerce/orders|0:|8:Settings.UnitPriceCents"
+        },
+        {
+          "path": "orders/view_audit.go",
+          "line": 22,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service"
+          "symbol": "spice:symbol:v1|function|42:github.com/spice-framework/commerce/orders|0:|12:NewViewAudit"
         },
         {
-          "path": "payments/payments.go",
-          "line": 63,
+          "path": "orders/view_audit.go",
+          "line": 29,
+          "column": 4,
+          "symbol": "spice:symbol:v1|method|42:github.com/spice-framework/commerce/orders|9:ViewAudit|6:Record"
+        },
+        {
+          "path": "payments/offline_processor.go",
+          "line": 14,
           "column": 4,
           "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|16:OfflineProcessor"
         },
         {
-          "path": "platform/platform.go",
-          "line": 27,
+          "path": "payments/service.go",
+          "line": 18,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|7:Service"
         },
         {
-          "path": "platform/platform.go",
-          "line": 29,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.Address"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 30,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadHeaderTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 31,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 32,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.WriteTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 33,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.IdleTimeout"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 34,
-          "column": 2,
-          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.DeveloperToken"
-        },
-        {
-          "path": "platform/platform.go",
-          "line": 39,
+          "path": "payments/settings.go",
+          "line": 7,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|3:Mux"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings"
         },
         {
-          "path": "platform/platform.go",
-          "line": 55,
+          "path": "payments/settings.go",
+          "line": 9,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/payments|0:|8:Settings.MaximumCents"
+        },
+        {
+          "path": "platform/mux.go",
+          "line": 12,
+          "column": 4,
+          "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|6:NewMux"
+        },
+        {
+          "path": "platform/server.go",
+          "line": 35,
           "column": 4,
           "symbol": "spice:symbol:v1|function|44:github.com/spice-framework/commerce/platform|0:|9:NewServer"
         },
         {
-          "path": "storage/storage.go",
-          "line": 66,
+          "path": "platform/settings.go",
+          "line": 9,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings"
         },
         {
-          "path": "storage/storage.go",
-          "line": 68,
+          "path": "platform/settings.go",
+          "line": 11,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.URL"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.Address"
         },
         {
-          "path": "storage/storage.go",
-          "line": 69,
+          "path": "platform/settings.go",
+          "line": 12,
           "column": 2,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.AllowInsecure"
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadHeaderTimeout"
         },
         {
-          "path": "storage/storage.go",
-          "line": 96,
+          "path": "platform/settings.go",
+          "line": 13,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.ReadTimeout"
+        },
+        {
+          "path": "platform/settings.go",
+          "line": 14,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.WriteTimeout"
+        },
+        {
+          "path": "platform/settings.go",
+          "line": 15,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.IdleTimeout"
+        },
+        {
+          "path": "platform/settings.go",
+          "line": 16,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|44:github.com/spice-framework/commerce/platform|0:|8:Settings.DeveloperToken"
+        },
+        {
+          "path": "storage/database.go",
+          "line": 32,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:OpenDatabase"
+          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|11:NewDatabase"
         },
         {
-          "path": "storage/storage.go",
-          "line": 187,
+          "path": "storage/native_bean.go",
+          "line": 12,
           "column": 4,
           "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|6:Native"
         },
         {
-          "path": "storage/storage.go",
-          "line": 197,
+          "path": "storage/order_repository.go",
+          "line": 17,
           "column": 4,
-          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions"
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository"
         },
         {
-          "path": "storage/storage.go",
-          "line": 205,
+          "path": "storage/read_executor_bean.go",
+          "line": 14,
           "column": 4,
           "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:ReadExecutor"
         },
         {
-          "path": "storage/storage.go",
-          "line": 212,
+          "path": "storage/settings.go",
+          "line": 8,
           "column": 4,
-          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|15:OrderRepository"
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings"
+        },
+        {
+          "path": "storage/settings.go",
+          "line": 10,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.URL"
+        },
+        {
+          "path": "storage/settings.go",
+          "line": 11,
+          "column": 2,
+          "symbol": "spice:symbol:v1|type|43:github.com/spice-framework/commerce/storage|0:|8:Settings.AllowInsecure"
+        },
+        {
+          "path": "storage/transactions_bean.go",
+          "line": 13,
+          "column": 4,
+          "symbol": "spice:symbol:v1|function|43:github.com/spice-framework/commerce/storage|0:|12:Transactions"
         }
       ]
     }

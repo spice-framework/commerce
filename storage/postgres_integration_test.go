@@ -24,9 +24,9 @@ func TestPostgreSQLPersistenceSurvivesApplicationDatabaseRestart(t *testing.T) {
 		AllowInsecure: strings.Contains(connectionURL, "sslmode=disable"),
 	}
 
-	first, firstCleanup, err := OpenDatabase(settings)
+	first, firstCleanup, err := NewDatabase(settings)
 	if err != nil {
-		t.Fatalf("OpenDatabase(first) error = %v", err)
+		t.Fatalf("NewDatabase(first) error = %v", err)
 	}
 	if err := first.Migrate(ctx); err != nil {
 		t.Fatalf("Migrate(first) error = %v", err)
@@ -49,9 +49,9 @@ func TestPostgreSQLPersistenceSurvivesApplicationDatabaseRestart(t *testing.T) {
 			10*time.Second,
 		)
 		defer cleanupCancel()
-		database, cleanup, openErr := OpenDatabase(settings)
+		database, cleanup, openErr := NewDatabase(settings)
 		if openErr != nil {
-			t.Errorf("OpenDatabase(cleanup) error = %v", openErr)
+			t.Errorf("NewDatabase(cleanup) error = %v", openErr)
 			return
 		}
 		defer func() {
@@ -95,9 +95,9 @@ func TestPostgreSQLPersistenceSurvivesApplicationDatabaseRestart(t *testing.T) {
 		t.Fatalf("first database cleanup error = %v", err)
 	}
 
-	second, secondCleanup, err := OpenDatabase(settings)
+	second, secondCleanup, err := NewDatabase(settings)
 	if err != nil {
-		t.Fatalf("OpenDatabase(second) error = %v", err)
+		t.Fatalf("NewDatabase(second) error = %v", err)
 	}
 	defer func() {
 		if cleanupErr := secondCleanup(context.Background()); cleanupErr != nil {

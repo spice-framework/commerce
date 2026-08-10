@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Commerce API",
-    "version": "0.1.0-dev"
+    "version": "v0.1.0-preview.2"
   },
   "paths": {
     "/catalog": {
