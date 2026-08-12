@@ -17,8 +17,8 @@ github.com/spice-framework/spice v0.1.0-preview.1.0.20260807031220-45e4f9d3e12d 
 github.com/spice-framework/spice v0.1.0-preview.1.0.20260807031220-45e4f9d3e12d/go.mod h1:dBZV5UZcbY6pzhfGNtvAwQIJ8YsFna+jf1SAlmukJfk=
 github.com/spice-framework/starter-postgres v0.0.0-20260805182646-6310c4b4b95e h1:+cOgyPtSYgqMSvCDvnc6sI21KlKYNTNv7E7irMaK63s=
 github.com/spice-framework/starter-postgres v0.0.0-20260805182646-6310c4b4b95e/go.mod h1:a2J43MLPcxTVqrrUhU43KK6AniO1FzOX0rWn4ogMoAE=
-github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a h1:dQg9Bte9MKabGxb6vPVy2OOlbLrDlnQ/aaxGJFBfHQU=
-github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a/go.mod h1:MU8E5X5qmjZAIcHfQ5NRBBFW7YqBhZLSS0mjeXkDZb4=
+github.com/spice-framework/starter-smtp v0.1.0-preview.1 h1:OLqkgf4aCNlQYEvHSfXchAetGcAylfVoN9an3eryF3Q=
+github.com/spice-framework/starter-smtp v0.1.0-preview.1/go.mod h1:dytTPDkO/01B4CVhWaR1D7hCiBG2A0vhlbE4NLQxPLQ=
 github.com/spice-framework/toolchain v0.1.0-preview.2.0.20260810170203-57cf59f2d895 h1:Db+wYxvnOjOqlXRkummvZiI4YjMNsfm5IMehwlhdeFk=
 github.com/spice-framework/toolchain v0.1.0-preview.2.0.20260810170203-57cf59f2d895/go.mod h1:rbGEwM88w4QZc1Aww/uE2B7W8hwY9KW0ts88ox064fE=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
