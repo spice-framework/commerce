@@ -13,7 +13,7 @@ tool (
 require (
 	github.com/spice-framework/spice v0.1.0-preview.1.0.20260807031220-45e4f9d3e12d
 	github.com/spice-framework/starter-postgres v0.0.0-20260805182646-6310c4b4b95e
-	github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a
+	github.com/spice-framework/starter-smtp v0.1.0-preview.1
 )
 
 require (

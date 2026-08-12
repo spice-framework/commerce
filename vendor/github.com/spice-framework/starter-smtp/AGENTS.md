@@ -15,3 +15,11 @@ Mailpit acceptance is an additional release/hosted integration gate; it may
 not replace the deterministic in-process protocol suite. Never commit live
 credentials or production private keys. Test certificates must be visibly
 fixture-only.
+
+Release-parity work must preserve the exact `spice-dev` tool version authorized
+by the root `go.mod`, invoke its full package path, and run both central and
+retained rehearsals with workspace and network resolution disabled in vendor
+mode. The protected central workflow is the production path once its user-owned
+key, reviewed public anchor, and release environments are configured. The
+retained repository builder remains only a parity oracle; unsigned parity must
+never manufacture signatures or key material.

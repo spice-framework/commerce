@@ -69,7 +69,7 @@ github.com/spice-framework/spice/web
 # github.com/spice-framework/starter-postgres v0.0.0-20260805182646-6310c4b4b95e
 ## explicit; go 1.26.0
 github.com/spice-framework/starter-postgres
-# github.com/spice-framework/starter-smtp v0.0.0-20260805164519-90334cc8021a
+# github.com/spice-framework/starter-smtp v0.1.0-preview.1
 ## explicit; go 1.26.0
 github.com/spice-framework/starter-smtp
 # github.com/spice-framework/toolchain v0.1.0-preview.2.0.20260810170203-57cf59f2d895
